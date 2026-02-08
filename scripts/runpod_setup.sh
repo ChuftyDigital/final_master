@@ -37,17 +37,26 @@ clone_node() {
         echo -e "  ${GREEN}✓${NC} ${name}"
     else
         echo -ne "  ↓ ${name}... "
-        if git clone --quiet --depth 1 "$url" "${NODES}/${name}" 2>/dev/null; then
+        if timeout 120 git clone --quiet --depth 1 "$url" "${NODES}/${name}" 2>/dev/null; then
             echo -e "${GREEN}ok${NC}"
         else
-            echo -e "${RED}FAILED${NC}"
+            echo -e "${RED}FAILED${NC} → ${url}"
         fi
     fi
-    [[ -f "${NODES}/${name}/requirements.txt" ]] && pip install -q -r "${NODES}/${name}/requirements.txt" 2>/dev/null || true
-    [[ -f "${NODES}/${name}/install.py" ]] && python3 "${NODES}/${name}/install.py" 2>/dev/null || true
+    if [[ -d "${NODES}/${name}" ]]; then
+        [[ -f "${NODES}/${name}/requirements.txt" ]] && timeout 120 pip install -q -r "${NODES}/${name}/requirements.txt" 2>/dev/null || true
+        if [[ -f "${NODES}/${name}/install.py" ]]; then
+            echo -ne "    installing ${name}... "
+            if timeout 180 python3 "${NODES}/${name}/install.py" 2>/dev/null; then
+                echo -e "${GREEN}done${NC}"
+            else
+                echo -e "${YELLOW}timeout/skip${NC}"
+            fi
+        fi
+    fi
 }
 
-clone_node "SeedVR-ComfyUI"              "https://github.com/SeedVR/SeedVR-ComfyUI.git"
+clone_node "ComfyUI-SeedVR2"             "https://github.com/numz/ComfyUI-SeedVR2_VideoUpscaler.git"
 clone_node "rgthree-comfy"               "https://github.com/rgthree/rgthree-comfy.git"
 clone_node "ComfyUI-Easy-Use"            "https://github.com/yolain/ComfyUI-Easy-Use.git"
 clone_node "ComfyUI-Impact-Pack"         "https://github.com/ltdrdata/ComfyUI-Impact-Pack.git"
