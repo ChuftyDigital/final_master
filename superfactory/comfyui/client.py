@@ -132,6 +132,9 @@ class ComfyUIClient:
         # Try WebSocket-based waiting first, fall back to polling
         try:
             self._wait_ws(prompt_id, on_progress)
+        except RuntimeError:
+            # Execution errors from ComfyUI — re-raise, don't swallow
+            raise
         except Exception as e:
             logger.debug(f"WebSocket unavailable ({e}), falling back to polling")
             self._wait_poll(prompt_id)
@@ -141,7 +144,17 @@ class ComfyUIClient:
         if prompt_id not in history:
             raise RuntimeError(f"Prompt {prompt_id} not found in history after completion")
 
-        return {"prompt_id": prompt_id, "outputs": history[prompt_id].get("outputs", {})}
+        prompt_result = history[prompt_id]
+        status = prompt_result.get("status", {})
+        if status.get("status_str") == "error":
+            msgs = status.get("messages", [])
+            error_detail = ""
+            for msg in msgs:
+                if isinstance(msg, list) and len(msg) >= 2:
+                    error_detail += f" {msg[0]}: {msg[1]}"
+            raise RuntimeError(f"ComfyUI execution failed:{error_detail}")
+
+        return {"prompt_id": prompt_id, "outputs": prompt_result.get("outputs", {})}
 
     def _wait_ws(self, prompt_id: str, on_progress: callable = None):
         """Wait for prompt completion using WebSocket."""
