@@ -135,12 +135,14 @@ class BatchGenerator:
 
                     workflow = build_bulk_workflow(
                         prompt=prompt,
-                        checkpoint=self.config.model("bulk_checkpoint"),
-                        vae=self.config.model("vae"),
-                        text_encoder=self.config.model("text_encoder", "qwen_3_4b_fp8_mixed.safetensors"),
+                        checkpoint=self.config.model("bulk_checkpoint", "flux1-dev-fp8.safetensors"),
+                        vae=self.config.model("vae", "ae.safetensors"),
+                        text_encoder_t5=self.config.model("text_encoder_t5", "t5xxl_fp8_e4m3fn.safetensors"),
+                        text_encoder_clip=self.config.model("text_encoder_clip", "clip_l.safetensors"),
+                        clip_type=self.config.model("clip_type", "flux"),
                         width=self.config.generation("bulk", "resolution", [1024, 1536])[0],
                         height=self.config.generation("bulk", "resolution", [1024, 1536])[1],
-                        steps=self.config.generation("bulk", "steps", 8),
+                        steps=self.config.generation("bulk", "steps", 20),
                         cfg=self.config.generation("bulk", "cfg", 1.0),
                         sampler=self.config.generation("bulk", "sampler", "dpmpp_2m"),
                         scheduler=self.config.generation("bulk", "scheduler", "simple"),

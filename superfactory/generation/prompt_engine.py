@@ -707,8 +707,12 @@ class PromptEngine:
             return self._bulk_casual_story(persona, lane, index)
 
     def negative_prompt(self, lane: str = "sfw") -> str:
-        """Z-Image Turbo works best with NO negative prompts."""
-        return ""
+        """FLUX benefits from negative prompts for quality control."""
+        return (
+            "blurry, low quality, cartoon, anime, distorted face, bad anatomy, "
+            "deformed features, unnatural skin, plastic look, oversaturated, "
+            "jpeg artifacts, watermark, text, logo"
+        )
 
     # ────────────────────────────────────────────────────────────────
     # Internal: Micro-Influencer bulk prompts

@@ -1,10 +1,10 @@
 # Super Factory Ultimate - Master Configuration
-# Optimized for: RunPod + NVIDIA RTX 5090 (Blackwell, 32GB GDDR7)
+# Pipeline: FLUX.1 Dev (FP8) on RunPod + NVIDIA RTX 5090 (Blackwell, 32GB GDDR7)
 # Override via CLI flags or environment variables.
 
 project:
   name: "Super Factory Ultimate"
-  version: "2.0.0"
+  version: "3.0.0"
   base_dir: "."  # auto-detected at runtime
 
 comfyui:
@@ -25,27 +25,27 @@ gpu:
   # 5090-specific flags
   disable_xformers: true  # incompatible with Blackwell
   disable_sage_attention: true  # causes errors on 5090
-  fp8_enabled: true       # 2x speedup on Blackwell
+  fp8_enabled: true       # 2x speedup on Blackwell with FP8 model
   memory_config: "max_split_size_mb:512"
 
 generation:
-  # Reference images (Z-Image Base, quality focus)
-  # Z-Image Base: ~28 steps, CFG 1.0, dpmpp_2m sampler, simple scheduler
+  # Reference images (FLUX.1 Dev, maximum quality + consistency)
+  # FLUX Dev: 20 steps, CFG 1.0, dpmpp_2m, simple scheduler
+  # ~30 seconds per image on RTX 5090 with FP8
   reference:
     count_per_character: 3
     poses: ["front", "angle", "natural"]
     resolution: [1024, 1024]
-    steps: 28
+    steps: 20
     cfg: 1.0
     sampler: "dpmpp_2m"
     scheduler: "simple"
 
-  # Bulk content (Z-Image Turbo, speed focus)
-  # Z-Image Turbo: 8 steps, CFG 1.0, NO negative prompts, natural sentences
-  # RTX 5090: ~10-12s per image vs ~15-20s on 4090
+  # Bulk content (FLUX.1 Dev, same quality pipeline)
+  # RTX 5090 FP8: ~25-30s per image at 1024x1536
   bulk:
     resolution: [1024, 1536]  # portrait orientation
-    steps: 8
+    steps: 20
     cfg: 1.0
     sampler: "dpmpp_2m"
     scheduler: "simple"
@@ -70,14 +70,15 @@ generation:
       bundles: { one_off: 80, "3x": 10, "5x": 10, "10x": 4 }
 
 models:
-  # Checkpoint for reference generation (quality focus)
-  reference_checkpoint: "z_image_bf16.safetensors"
-  # Checkpoint for bulk generation (speed focus)
-  bulk_checkpoint: "z_image_turbo_bf16.safetensors"
-  # VAE (shared between all Z-Image models)
+  # FLUX.1 Dev FP8 — primary model for all generation
+  reference_checkpoint: "flux1-dev-fp8.safetensors"
+  bulk_checkpoint: "flux1-dev-fp8.safetensors"
+  # VAE (shared, same ae.safetensors works for FLUX)
   vae: "ae.safetensors"
-  # Z-Image text encoder (Qwen 3.4B for Lumina2 architecture, loaded via CLIPLoader)
-  text_encoder: "qwen_3_4b_fp8_mixed.safetensors"
+  # FLUX text encoders (DualCLIPLoader: T5-XXL + CLIP-L)
+  text_encoder_t5: "t5xxl_fp8_e4m3fn.safetensors"
+  text_encoder_clip: "clip_l.safetensors"
+  clip_type: "flux"
   # Upscaler
   upscaler: "4x-ClearRealityV1.pth"
 

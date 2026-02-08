@@ -13,27 +13,27 @@ logger = logging.getLogger("superfactory.installer")
 # All required models with verified HuggingFace URLs
 MODELS = [
     {
-        "name": "Z-Image Base (BF16)",
-        "url": "https://huggingface.co/Comfy-Org/z_image/resolve/main/split_files/diffusion_models/z_image_bf16.safetensors",
+        "name": "FLUX.1 Dev (FP8)",
+        "url": "https://huggingface.co/Comfy-Org/flux1-dev/resolve/main/flux1-dev-fp8.safetensors",
         "subdir": "checkpoints",
-        "filename": "z_image_bf16.safetensors",
-        "size_gb": 12.3,
+        "filename": "flux1-dev-fp8.safetensors",
+        "size_gb": 17.2,
         "category": "core",
     },
     {
-        "name": "Z-Image Turbo (BF16)",
-        "url": "https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/diffusion_models/z_image_turbo_bf16.safetensors",
-        "subdir": "checkpoints",
-        "filename": "z_image_turbo_bf16.safetensors",
-        "size_gb": 12.3,
-        "category": "core",
-    },
-    {
-        "name": "Z-Image Qwen 3.4B Text Encoder (FP8)",
-        "url": "https://huggingface.co/Comfy-Org/z_image/resolve/main/split_files/text_encoders/qwen_3_4b_fp8_mixed.safetensors",
+        "name": "T5-XXL Text Encoder (FP8)",
+        "url": "https://huggingface.co/comfyanonymous/flux_text_encoders/resolve/main/t5xxl_fp8_e4m3fn.safetensors",
         "subdir": "clip",
-        "filename": "qwen_3_4b_fp8_mixed.safetensors",
-        "size_gb": 3.6,
+        "filename": "t5xxl_fp8_e4m3fn.safetensors",
+        "size_gb": 4.9,
+        "category": "core",
+    },
+    {
+        "name": "CLIP-L Text Encoder",
+        "url": "https://huggingface.co/comfyanonymous/flux_text_encoders/resolve/main/clip_l.safetensors",
+        "subdir": "clip",
+        "filename": "clip_l.safetensors",
+        "size_gb": 0.24,
         "category": "core",
     },
     {
