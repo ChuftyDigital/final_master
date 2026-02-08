@@ -20,7 +20,7 @@ class WorkflowBuilder:
         wb.load_vae("ae.safetensors")
         wb.set_prompt("Professional portrait photograph of...", "blurry, low quality...")
         wb.set_empty_latent(1024, 1024)
-        wb.sample(steps=20, cfg=1.0, sampler="dpmpp_2m", scheduler="simple")
+        wb.sample(steps=28, cfg=1.0, sampler="dpmpp_2m", scheduler="simple")
         wb.decode()
         wb.save("output_prefix")
         workflow = wb.build()
@@ -107,14 +107,41 @@ class WorkflowBuilder:
         self._vae = (nid, 0)
         return self
 
-    def set_prompt(self, positive: str, negative: str = "") -> "WorkflowBuilder":
-        """Set positive and negative text prompts."""
+    def enhance_prompt(self, text: str, seed: Optional[int] = None) -> str:
+        """Run prompt through FluxPromptEnhance node.
+
+        Requires ComfyUI-Fluxpromptenhancer custom node installed.
+        Returns the node ID whose output 0 is the enhanced STRING.
+        """
+        if seed is None:
+            seed = random.randint(1, 2**31)
+        nid = self._add_node("FluxPromptEnhance", {
+            "prompt": text,
+            "seed": seed,
+        })
+        return nid
+
+    def set_prompt(
+        self, positive: str, negative: str = "", enhance: bool = False, enhance_seed: Optional[int] = None,
+    ) -> "WorkflowBuilder":
+        """Set positive and negative text prompts.
+
+        If enhance=True, the positive prompt is first run through
+        FluxPromptEnhance before CLIP encoding.
+        """
         clip_ref = self._ref(self._clip[0], self._clip[1])
 
-        pos_id = self._add_node("CLIPTextEncode", {
-            "text": positive,
-            "clip": clip_ref,
-        })
+        if enhance:
+            enhancer_id = self.enhance_prompt(positive, seed=enhance_seed)
+            pos_id = self._add_node("CLIPTextEncode", {
+                "text": self._ref(enhancer_id, 0),
+                "clip": clip_ref,
+            })
+        else:
+            pos_id = self._add_node("CLIPTextEncode", {
+                "text": positive,
+                "clip": clip_ref,
+            })
         self._positive = pos_id
 
         neg_id = self._add_node("CLIPTextEncode", {
@@ -137,7 +164,7 @@ class WorkflowBuilder:
 
     def sample(
         self,
-        steps: int = 20,
+        steps: int = 28,
         cfg: float = 1.0,
         sampler: str = "dpmpp_2m",
         scheduler: str = "simple",
@@ -203,28 +230,29 @@ def build_reference_workflow(
     clip_type: str = "flux",
     width: int = 1024,
     height: int = 1024,
-    steps: int = 20,
+    steps: int = 28,
     cfg: float = 1.0,
     sampler: str = "dpmpp_2m",
     scheduler: str = "simple",
     seed: Optional[int] = None,
     filename_prefix: str = "reference",
     negative: str = "blurry, low quality, cartoon, anime, distorted face, bad anatomy, deformed features, unnatural skin, plastic look, oversaturated, jpeg artifacts, watermark, text, logo",
+    enhance_prompt: bool = True,
 ) -> Dict[str, Any]:
     """Build a FLUX reference image generation workflow.
 
     FLUX.1 Dev with FP8 on RTX 5090:
-    - 20 steps with dpmpp_2m + simple scheduler
+    - 28 steps with dpmpp_2m + simple scheduler
     - CFG 1.0
-    - Uses negative prompts (unlike Z-Image)
+    - FluxPromptEnhance for AI-enhanced prompts
     - DualCLIPLoader: T5-XXL + CLIP-L
-    - ~30 seconds per image on RTX 5090
+    - ~45 seconds per image on RTX 5090
     """
     wb = WorkflowBuilder()
     wb.load_checkpoint(checkpoint)
     wb.load_dual_clip(text_encoder_t5, text_encoder_clip, clip_type)
     wb.load_vae(vae)
-    wb.set_prompt(prompt, negative)
+    wb.set_prompt(prompt, negative, enhance=enhance_prompt)
     wb.set_empty_latent(width, height)
     wb.sample(steps=steps, cfg=cfg, sampler=sampler, scheduler=scheduler, seed=seed)
     wb.decode()
@@ -241,24 +269,25 @@ def build_bulk_workflow(
     clip_type: str = "flux",
     width: int = 1024,
     height: int = 1536,
-    steps: int = 20,
+    steps: int = 28,
     cfg: float = 1.0,
     sampler: str = "dpmpp_2m",
     scheduler: str = "simple",
     seed: Optional[int] = None,
     filename_prefix: str = "generated",
     negative: str = "blurry, low quality, cartoon, anime, distorted face, bad anatomy, deformed features, unnatural skin, plastic look, oversaturated, jpeg artifacts, watermark, text, logo",
+    enhance_prompt: bool = True,
 ) -> Dict[str, Any]:
     """Build a FLUX bulk generation workflow.
 
     Same FLUX pipeline as reference but with portrait orientation for
-    content generation. Uses negative prompts for quality control.
+    content generation. FluxPromptEnhance for AI-enhanced prompts.
     """
     wb = WorkflowBuilder()
     wb.load_checkpoint(checkpoint)
     wb.load_dual_clip(text_encoder_t5, text_encoder_clip, clip_type)
     wb.load_vae(vae)
-    wb.set_prompt(prompt, negative)
+    wb.set_prompt(prompt, negative, enhance=enhance_prompt)
     wb.set_empty_latent(width, height)
     wb.sample(steps=steps, cfg=cfg, sampler=sampler, scheduler=scheduler, seed=seed)
     wb.decode()

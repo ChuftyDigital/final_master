@@ -29,23 +29,24 @@ gpu:
   memory_config: "max_split_size_mb:512"
 
 generation:
-  # Reference images (FLUX.1 Dev, maximum quality + consistency)
-  # FLUX Dev: 20 steps, CFG 1.0, dpmpp_2m, simple scheduler
-  # ~30 seconds per image on RTX 5090 with FP8
+  # Reference images (FLUX.1 Dev, maximum quality + FluxPromptEnhance)
+  # FLUX Dev: 28 steps, CFG 1.0, dpmpp_2m, simple scheduler
+  # FluxPromptEnhance AI-enhances prompts before CLIP encoding
+  # ~45 seconds per image on RTX 5090 with FP8
   reference:
     count_per_character: 3
     poses: ["front", "angle", "natural"]
     resolution: [1024, 1024]
-    steps: 20
+    steps: 28
     cfg: 1.0
     sampler: "dpmpp_2m"
     scheduler: "simple"
 
-  # Bulk content (FLUX.1 Dev, same quality pipeline)
-  # RTX 5090 FP8: ~25-30s per image at 1024x1536
+  # Bulk content (FLUX.1 Dev, same quality pipeline + FluxPromptEnhance)
+  # RTX 5090 FP8: ~35-40s per image at 1024x1536
   bulk:
     resolution: [1024, 1536]  # portrait orientation
-    steps: 20
+    steps: 28
     cfg: 1.0
     sampler: "dpmpp_2m"
     scheduler: "simple"

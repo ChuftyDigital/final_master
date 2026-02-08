@@ -73,6 +73,7 @@ MODELS = [
 CUSTOM_NODES = [
     {"name": "ComfyUI-Manager", "url": "https://github.com/ltdrdata/ComfyUI-Manager.git", "requirements": True},
     {"name": "ComfyUI-Impact-Pack", "url": "https://github.com/ltdrdata/ComfyUI-Impact-Pack.git", "requirements": True},
+    {"name": "ComfyUI-Fluxpromptenhancer", "url": "https://github.com/marduk191/ComfyUI-Fluxpromptenhancer.git", "requirements": True},
 ]
 
 

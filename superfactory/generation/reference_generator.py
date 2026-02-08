@@ -65,7 +65,7 @@ class ReferenceGenerator:
                 clip_type=self.config.model("clip_type", "flux"),
                 width=self.config.generation("reference", "resolution", [1024, 1024])[0],
                 height=self.config.generation("reference", "resolution", [1024, 1024])[1],
-                steps=self.config.generation("reference", "steps", 20),
+                steps=self.config.generation("reference", "steps", 28),
                 cfg=self.config.generation("reference", "cfg", 1.0),
                 sampler=self.config.generation("reference", "sampler", "dpmpp_2m"),
                 scheduler=self.config.generation("reference", "scheduler", "simple"),

@@ -142,7 +142,7 @@ class BatchGenerator:
                         clip_type=self.config.model("clip_type", "flux"),
                         width=self.config.generation("bulk", "resolution", [1024, 1536])[0],
                         height=self.config.generation("bulk", "resolution", [1024, 1536])[1],
-                        steps=self.config.generation("bulk", "steps", 20),
+                        steps=self.config.generation("bulk", "steps", 28),
                         cfg=self.config.generation("bulk", "cfg", 1.0),
                         sampler=self.config.generation("bulk", "sampler", "dpmpp_2m"),
                         scheduler=self.config.generation("bulk", "scheduler", "simple"),
