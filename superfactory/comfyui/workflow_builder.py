@@ -195,7 +195,7 @@ class WorkflowBuilder:
 
     # ── Face Detection & Detail ───────────────────────────────────
 
-    def load_face_detector(self, model_name: str = "face_yolov8m.pt") -> "WorkflowBuilder":
+    def load_face_detector(self, model_name: str = "bbox/face_yolov8m.pt") -> "WorkflowBuilder":
         """Load YOLO face detector via UltralyticsDetectorProvider (Impact Pack)."""
         nid = self._add_node("UltralyticsDetectorProvider", {
             "model_name": model_name,
@@ -335,6 +335,7 @@ class WorkflowBuilder:
             "image": self._ref(self._image, 0),
             "upscale_method": method,
             "megapixels": megapixels,
+            "resolution_steps": 8,
         })
         self._image = nid
         return self
