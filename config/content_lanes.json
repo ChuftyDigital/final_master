@@ -46,11 +46,11 @@
     },
     "spicy": {
       "label": "Spicy",
-      "description": "Hot content - lingerie, implied nudity, provocative poses",
-      "clothing_level": "lingerie, underwear, implied undressing",
-      "mood_range": ["seductive", "intimate", "provocative", "sensual", "passionate"],
-      "composition_types": ["close-up intimate", "reclining", "kneeling", "standing provocative", "bed scene"],
-      "lighting_styles": ["moody warm", "dim ambient", "dramatic shadows", "candlelight", "soft backlit"],
+      "description": "Very suggestive content - barely-there lingerie, see-through, topless implied, provocative poses",
+      "clothing_level": "micro lingerie, sheer/see-through, topless with strategic covering, body chains",
+      "mood_range": ["seductive", "provocative", "teasing", "sensual", "intimate", "daring"],
+      "composition_types": ["close-up intimate", "reclining provocative", "kneeling", "standing provocative", "bed scene", "mirror", "shower implied"],
+      "lighting_styles": ["moody warm", "dim ambient", "dramatic shadows", "candlelight", "soft backlit", "silhouette"],
       "distribution": {
         "one_off": 80,
         "bundle_3": {"count": 10, "per_bundle": 3, "total": 30},
@@ -58,18 +58,18 @@
         "bundle_10": {"count": 4, "per_bundle": 10, "total": 40}
       },
       "prompt_modifiers": {
-        "clothing": "wearing {lingerie_or_intimate_wear}, sensual presentation",
-        "mood": "seductive, intimate, provocative expression with desire",
-        "exclusions": "no full nudity, artistic and tasteful framing"
+        "clothing": "barely-there lingerie, sheer fabrics, topless with hands/hair covering, body jewelry only",
+        "mood": "seductive, provocative, daring expression, heavy eye contact, inviting body language",
+        "exclusions": "no full explicit nudity, maintain tease and suggestion"
       }
     },
     "nsfw": {
       "label": "NSFW",
-      "description": "Explicit content - artistic nudity, explicit poses",
-      "clothing_level": "minimal to none, artistic nudity",
-      "mood_range": ["explicit", "raw", "passionate", "uninhibited", "artistic nude"],
-      "composition_types": ["artistic nude", "intimate close-up", "full body", "reclining nude", "shower/bath"],
-      "lighting_styles": ["dramatic chiaroscuro", "soft intimate", "natural body light", "artistic shadow play", "warm golden"],
+      "description": "Explicit adult content - full nudity, explicit poses, graphic intimate content",
+      "clothing_level": "nude, fully naked, no clothing, body only",
+      "mood_range": ["explicit", "raw", "passionate", "uninhibited", "graphic", "fully exposed"],
+      "composition_types": ["full nude", "explicit pose", "spread", "intimate close-up", "shower/bath nude", "bed explicit", "standing nude full reveal"],
+      "lighting_styles": ["dramatic chiaroscuro", "soft intimate", "natural body light", "harsh direct", "warm golden", "flash aesthetic"],
       "distribution": {
         "one_off": 80,
         "bundle_3": {"count": 10, "per_bundle": 3, "total": 30},
@@ -77,9 +77,9 @@
         "bundle_10": {"count": 4, "per_bundle": 10, "total": 40}
       },
       "prompt_modifiers": {
-        "clothing": "minimal clothing or artistic nudity, {character_appropriate_intimate}",
-        "mood": "uninhibited, raw, passionate expression",
-        "exclusions": "maintain artistic quality, professional photography aesthetic"
+        "clothing": "completely nude, naked, no clothing whatsoever",
+        "mood": "uninhibited, explicit, raw and exposed, nothing left to imagination",
+        "exclusions": "maintain professional photography quality"
       }
     }
   },

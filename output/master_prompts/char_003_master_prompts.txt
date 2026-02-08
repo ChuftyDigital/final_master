@@ -1,4 +1,4 @@
-# Giada Valentini - Master Reference Prompts (Z-Image Base v3.0)
+# Giada Valentini - Master Reference Prompts (Z-Image Base v3.1)
 # Character: char_003
 # Model: Z-Image Base | Steps: 40 | CFG: 4.5 | Sampler: DPM++ 2M Karras
 ======================================================================

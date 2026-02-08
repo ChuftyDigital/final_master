@@ -1,12 +1,21 @@
 #!/usr/bin/env python3
 """
-AI Influencer Prompt Engine v3.0
+AI Influencer Prompt Engine v3.1
 ================================
 Narrative-style prompt generation optimized for Z-Image Base (6B parameter model).
 
 Z-Image Base responds best to descriptive, storytelling prompts with specific
 camera/lighting terminology rather than keyword lists. This engine generates
 flowing, cinematic prose that leverages the model's strengths.
+
+Key v3.1 changes from v3.0:
+  - Full outfit sets for ALL 4 lanes (sfw/suggestive/spicy/nsfw) x 21 niches
+  - Custom niche-specific scenarios for ALL 21 niches (no more default fallback)
+  - Hotter spicy lane: barely-there, sheer, see-through, topless implied
+  - Explicit nsfw lane: full nudity, graphic, nothing left to imagination
+  - Enhanced atmosphere descriptions matching lane calibration
+  - Seductive makeup for spicy, raw/minimal for nsfw
+  - Stronger fallback outfit logic per lane
 
 Key v3.0 changes from v2.0:
   - Narrative prose style (not keyword lists)
@@ -15,7 +24,6 @@ Key v3.0 changes from v2.0:
   - Lighting matched to actual setting/environment
   - Character-specific atmosphere and personality in every prompt
   - Fixed negative prompt logic (no self-contradictions)
-  - Niche-specific scenarios for ALL 21 character niches
   - Z-Image Base optimized (CFG 3-7, 30-50 steps, DPM++ 2M Karras)
 """
 
@@ -23,6 +31,9 @@ import json
 import os
 import random
 from pathlib import Path
+
+# Import generated niche scenarios and outfit sets
+from generated_content import GENERATED_NICHE_SCENARIOS, GENERATED_OUTFIT_SETS
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -283,6 +294,9 @@ OUTFIT_SETS = {
     }
 }
 
+# Merge generated outfit sets for suggestive, spicy, nsfw lanes
+OUTFIT_SETS.update(GENERATED_OUTFIT_SETS)
+
 # ---------------------------------------------------------------------------
 # Makeup Descriptions per Character (from persona data)
 # ---------------------------------------------------------------------------
@@ -295,9 +309,15 @@ def build_makeup_description(char: dict, lane: str) -> str:
     elif lane == "suggestive":
         return f"{base_makeup}, slightly enhanced with a touch more definition"
     elif lane == "spicy":
-        return f"sultry version of her signature look - {base_makeup}, with smoky eye enhancement"
+        return (
+            f"seductive, heavy-lidded version of her signature look - {base_makeup}, "
+            f"with dark smoky eye, smudged liner, and lips that dare you closer"
+        )
     elif lane == "nsfw":
-        return f"minimal makeup highlighting natural features, {base_makeup.split(',')[0]}"
+        return (
+            f"raw and minimal - {base_makeup.split(',')[0]}, skin bare and natural, "
+            f"no performance, just her unfiltered face"
+        )
     return base_makeup
 
 
@@ -481,17 +501,21 @@ def build_atmosphere(char: dict, lane: str) -> str:
         )
     elif lane == "spicy":
         return (
-            f"The atmosphere is charged with sensual energy rooted in {vibe}. "
-            f"Shadows and light play across her form, creating an intimate space "
-            f"that feels private and deliberate. Her {trait_str} personality "
-            f"intensifies the scene's magnetic pull."
+            f"The atmosphere is thick with provocative tension rooted in {vibe}. "
+            f"Every shadow teases, every highlight reveals. The barely-there "
+            f"clothing and daring pose create an intimate space charged with "
+            f"deliberate seduction. Her {trait_str} personality pushes the "
+            f"boundaries between suggestion and surrender, leaving the viewer "
+            f"on the edge of what is and isn't shown."
         )
     else:  # nsfw
         return (
-            f"The atmosphere is raw and uninhibited, grounded in the authenticity "
-            f"of {vibe}. There is nothing artificial about this moment - it "
-            f"captures {trait_str} energy with artistic integrity. The lighting "
-            f"and composition elevate this beyond explicit into fine-art territory."
+            f"The atmosphere is raw, explicit, and unapologetically uninhibited, "
+            f"grounded in the authenticity of {vibe}. Nothing is hidden, nothing "
+            f"is left to the imagination. Her {trait_str} energy is fully exposed "
+            f"and unrestrained. The lighting sculpts every detail of her bare body "
+            f"with unflinching honesty, creating an image that is as powerful "
+            f"as it is graphic."
         )
 
 
@@ -627,18 +651,8 @@ NICHE_SCENARIOS = {
     }
 }
 
-# Map all niches to their scenarios (those not explicitly defined use default)
-for niche in [
-    "Luxury Travel/Aviation", "Gaming/E-Sports (Cute/Casual)",
-    "Fitness/Athletic Training", "Cosplay/Anime", "Fashion/Haute Couture",
-    "Amateur/Girl Next Door", "MILF/Mature Latina", "Yoga/Wellness/Spiritual",
-    "Alternative/Tattooed", "ASMR/Girlfriend Experience", "Dominatrix/BDSM",
-    "College/Young Adult (18+)", "MILF/Cougar", "Petite Asian/Feet Content",
-    "Latina Curves/BBW", "BBW/Southern Charm", "Black Beauty/Melanin Content",
-    "Lesbian/Couples Content", "Sexy Japanese Gamer/Competitive Streaming"
-]:
-    if niche not in NICHE_SCENARIOS:
-        NICHE_SCENARIOS[niche] = NICHE_SCENARIOS["default"]
+# Merge generated niche-specific scenarios (19 niches with custom content)
+NICHE_SCENARIOS.update(GENERATED_NICHE_SCENARIOS)
 
 
 # ---------------------------------------------------------------------------
@@ -684,12 +698,23 @@ def select_outfit(char: dict, lane: str) -> str:
         chosen = random.choice(items) if items else random.choice(clothing)
         return f"a flattering {chosen} that accentuates her {char['physical']['build']}"
     elif lane == "spicy":
-        return (
-            f"delicate lingerie that complements her {char['physical']['skin_tone']} skin, "
-            f"the fine lace and silk catching the light"
-        )
+        return random.choice([
+            f"barely-there micro lingerie in sheer fabric that conceals nothing, "
+            f"body chain jewelry the only accent against her {char['physical']['skin_tone']} skin",
+            f"a see-through mesh bodysuit revealing everything beneath, "
+            f"delicate body chains draped across her {char['physical']['skin_tone']} skin",
+            f"topless with only her hands and flowing hair providing strategic coverage, "
+            f"a tiny lace thong the only garment, her {char['physical']['skin_tone']} skin bare and inviting",
+            f"a sheer negligee that hides absolutely nothing, the transparent fabric "
+            f"clinging to every curve, her {char['physical']['skin_tone']} skin glowing through"
+        ])
     else:  # nsfw
-        return "bare skin, natural and unadorned, her body a study in authentic beauty"
+        return random.choice([
+            "completely nude, fully naked, no clothing whatsoever, her bare body exposed in every detail",
+            "fully nude and unadorned, nothing on her body, every inch of bare skin visible and celebrated",
+            "stark naked, no clothing, no accessories, just bare skin and raw uninhibited beauty",
+            "entirely nude, stripped of all garments, her naked body the sole focus in unflinching detail"
+        ])
 
 
 # ---------------------------------------------------------------------------
@@ -1005,7 +1030,7 @@ def export_master_prompts_to_files(output_dir: str = None):
     for char_id, data in all_prompts.items():
         filepath = os.path.join(output_dir, f"{char_id}_master_prompts.txt")
         with open(filepath, "w", encoding="utf-8") as f:
-            f.write(f"# {data['name']} - Master Reference Prompts (Z-Image Base v3.0)\n")
+            f.write(f"# {data['name']} - Master Reference Prompts (Z-Image Base v3.1)\n")
             f.write(f"# Character: {char_id}\n")
             f.write(f"# Model: Z-Image Base | Steps: 40 | CFG: 4.5 | Sampler: DPM++ 2M Karras\n")
             f.write("=" * 70 + "\n\n")
@@ -1056,7 +1081,7 @@ def export_vault_manifest(char_id: str, output_dir: str = None, seed: int = 42):
 # ---------------------------------------------------------------------------
 if __name__ == "__main__":
     import argparse
-    parser = argparse.ArgumentParser(description="AI Influencer Prompt Engine v3.0")
+    parser = argparse.ArgumentParser(description="AI Influencer Prompt Engine v3.1")
     parser.add_argument("command", choices=["master", "vault", "vault-all", "test"])
     parser.add_argument("--char", type=str, help="Character ID (e.g., char_001)")
     parser.add_argument("--seed", type=int, default=42)
@@ -1076,7 +1101,7 @@ if __name__ == "__main__":
     elif args.command == "test":
         chars = load_characters()
         print("=" * 70)
-        print("PROMPT ENGINE v3.0 TEST - Z-Image Base Narrative Style")
+        print("PROMPT ENGINE v3.1 TEST - Z-Image Base Narrative Style")
         print("=" * 70)
         # Test 3 very different characters
         test_chars = ["char_001", "char_011", "char_013"]
