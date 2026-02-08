@@ -104,9 +104,9 @@ class Config:
         """Get a generation config value."""
         return self._get_nested(("generation", section, key), default)
 
-    def model(self, key: str) -> str:
+    def model(self, key: str, default: str = "") -> str:
         """Get a model filename."""
-        return self._get_nested(("models", key), "")
+        return self._get_nested(("models", key), default)
 
     def lane_config(self, lane: str) -> Dict[str, Any]:
         """Get lane-specific configuration."""

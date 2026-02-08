@@ -81,9 +81,12 @@ models:
   bulk_checkpoint: "z_image_turbo_bf16.safetensors"
   # VAE
   vae: "ae.safetensors"
+  # FLUX text encoders (loaded via DualCLIPLoader)
+  clip_t5xxl: "t5xxl_fp8_e4m3fn.safetensors"
+  clip_l: "clip_l.safetensors"
   # IPAdapter
   ipadapter: "ip-adapter-plus_sd15.bin"
-  # CLIP Vision
+  # CLIP Vision (for IPAdapter, separate from text encoders)
   clip_vision: "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors"
   # Upscaler
   upscaler: "4x-ClearRealityV1.pth"

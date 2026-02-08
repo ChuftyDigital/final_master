@@ -29,6 +29,22 @@ MODELS = [
         "category": "core",
     },
     {
+        "name": "FLUX T5-XXL Text Encoder (FP8)",
+        "url": "https://huggingface.co/comfyanonymous/flux_text_encoders/resolve/main/t5xxl_fp8_e4m3fn.safetensors",
+        "subdir": "clip",
+        "filename": "t5xxl_fp8_e4m3fn.safetensors",
+        "size_gb": 4.89,
+        "category": "core",
+    },
+    {
+        "name": "FLUX CLIP-L Text Encoder",
+        "url": "https://huggingface.co/comfyanonymous/flux_text_encoders/resolve/main/clip_l.safetensors",
+        "subdir": "clip",
+        "filename": "clip_l.safetensors",
+        "size_gb": 0.24,
+        "category": "core",
+    },
+    {
         "name": "CLIP Vision (ViT-H)",
         "url": "https://huggingface.co/h94/IP-Adapter/resolve/main/models/image_encoder/model.safetensors",
         "subdir": "clip_vision",

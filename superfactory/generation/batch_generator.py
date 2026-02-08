@@ -140,6 +140,8 @@ class BatchGenerator:
                         reference_images=refs,
                         checkpoint=self.config.model("bulk_checkpoint"),
                         vae=self.config.model("vae"),
+                        clip_name1=self.config.model("clip_t5xxl", "t5xxl_fp8_e4m3fn.safetensors"),
+                        clip_name2=self.config.model("clip_l", "clip_l.safetensors"),
                         ipadapter_model=self.config.model("ipadapter"),
                         clip_vision_model=self.config.model("clip_vision"),
                         ipadapter_weights=self.config.ipadapter_weights(),

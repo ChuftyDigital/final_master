@@ -11,9 +11,11 @@ from typing import Any, Dict, List, Optional, Tuple
 class WorkflowBuilder:
     """Constructs ComfyUI API-format workflows programmatically.
 
-    Usage:
+    Usage (FLUX models):
         wb = WorkflowBuilder()
         wb.load_checkpoint("z_image_bf16.safetensors")
+        wb.load_dual_clip("t5xxl_fp8_e4m3fn.safetensors", "clip_l.safetensors", "flux")
+        wb.load_vae("ae.safetensors")
         wb.set_prompt("A portrait of...")
         wb.set_empty_latent(1024, 1024)
         wb.sample(steps=12, cfg=1.0)
@@ -26,9 +28,10 @@ class WorkflowBuilder:
         self._nodes: Dict[str, Dict[str, Any]] = {}
         self._next_id = 1
         # Track current pipeline state for chaining
-        self._model: Optional[str] = None
-        self._clip: Optional[str] = None
-        self._vae: Optional[str] = None
+        # Each stores (node_id, output_index)
+        self._model: Optional[Tuple[str, int]] = None
+        self._clip: Optional[Tuple[str, int]] = None
+        self._vae: Optional[Tuple[str, int]] = None
         self._positive: Optional[str] = None
         self._negative: Optional[str] = None
         self._latent: Optional[str] = None
@@ -46,38 +49,61 @@ class WorkflowBuilder:
         return [node_id, output_idx]
 
     def load_checkpoint(self, ckpt_name: str) -> "WorkflowBuilder":
-        """Load a checkpoint model. Outputs: MODEL(0), CLIP(1), VAE(2)."""
+        """Load a checkpoint model. Outputs: MODEL(0), CLIP(1), VAE(2).
+
+        For FLUX models, CLIP and VAE will be None — call load_dual_clip()
+        and load_vae() separately.
+        """
         nid = self._add_node("CheckpointLoaderSimple", {"ckpt_name": ckpt_name})
-        self._model = nid
-        self._clip = nid
-        self._vae = nid
+        self._model = (nid, 0)
+        self._clip = (nid, 1)
+        self._vae = (nid, 2)
+        return self
+
+    def load_dual_clip(
+        self, clip_name1: str, clip_name2: str, clip_type: str = "flux"
+    ) -> "WorkflowBuilder":
+        """Load dual CLIP text encoders (required for FLUX models).
+
+        Args:
+            clip_name1: T5-XXL encoder filename (e.g. t5xxl_fp8_e4m3fn.safetensors)
+            clip_name2: CLIP-L encoder filename (e.g. clip_l.safetensors)
+            clip_type: "flux" or "sdxl"
+        """
+        nid = self._add_node("DualCLIPLoader", {
+            "clip_name1": clip_name1,
+            "clip_name2": clip_name2,
+            "type": clip_type,
+        })
+        self._clip = (nid, 0)
         return self
 
     def load_vae(self, vae_name: str) -> "WorkflowBuilder":
         """Load a separate VAE."""
         nid = self._add_node("VAELoader", {"vae_name": vae_name})
-        self._vae = nid
+        self._vae = (nid, 0)
         return self
 
     def set_prompt(self, positive: str, negative: str = "") -> "WorkflowBuilder":
         """Set positive and negative text prompts."""
+        clip_ref = self._ref(self._clip[0], self._clip[1])
+
         pos_id = self._add_node("CLIPTextEncode", {
             "text": positive,
-            "clip": self._ref(self._clip, 1),
+            "clip": clip_ref,
         })
         self._positive = pos_id
 
         if negative:
             neg_id = self._add_node("CLIPTextEncode", {
                 "text": negative,
-                "clip": self._ref(self._clip, 1),
+                "clip": clip_ref,
             })
             self._negative = neg_id
         else:
-            # Empty conditioning for models that don't use negative prompts
             neg_id = self._add_node("CLIPTextEncode", {
                 "text": "",
-                "clip": self._ref(self._clip, 1),
+                "clip": clip_ref,
             })
             self._negative = neg_id
 
@@ -113,7 +139,7 @@ class WorkflowBuilder:
             "sampler_name": sampler,
             "scheduler": scheduler,
             "denoise": denoise,
-            "model": self._ref(self._model, 0),
+            "model": self._ref(self._model[0], self._model[1]),
             "positive": self._ref(self._positive, 0),
             "negative": self._ref(self._negative, 0),
             "latent_image": self._ref(self._latent, 0),
@@ -123,10 +149,9 @@ class WorkflowBuilder:
 
     def decode(self) -> "WorkflowBuilder":
         """Decode latent to image via VAE."""
-        vae_output = 0 if self._nodes[self._vae]["class_type"] == "VAELoader" else 2
         nid = self._add_node("VAEDecode", {
             "samples": self._ref(self._latent, 0),
-            "vae": self._ref(self._vae, vae_output),
+            "vae": self._ref(self._vae[0], self._vae[1]),
         })
         self._image = nid
         return self
@@ -165,7 +190,7 @@ class WorkflowBuilder:
     ) -> "WorkflowBuilder":
         """Apply IPAdapter to the current model for face consistency."""
         nid = self._add_node("IPAdapterAdvanced", {
-            "model": self._ref(self._model, 0),
+            "model": self._ref(self._model[0], self._model[1]),
             "ipadapter": self._ref(ipadapter_id, 0),
             "image": self._ref(image_id, 0),
             "clip_vision": self._ref(clip_vision_id, 0),
@@ -177,7 +202,7 @@ class WorkflowBuilder:
             "combine_embeds": combine,
         })
         # IPAdapter outputs a modified MODEL at index 0
-        self._model = nid
+        self._model = (nid, 0)
         return self
 
     def build(self) -> Dict[str, Dict[str, Any]]:
@@ -189,6 +214,8 @@ def build_reference_workflow(
     prompt: str,
     checkpoint: str = "z_image_bf16.safetensors",
     vae: str = "ae.safetensors",
+    clip_name1: str = "t5xxl_fp8_e4m3fn.safetensors",
+    clip_name2: str = "clip_l.safetensors",
     width: int = 1024,
     height: int = 1024,
     steps: int = 12,
@@ -199,9 +226,10 @@ def build_reference_workflow(
     filename_prefix: str = "reference",
     negative: str = "blurry, low quality, cartoon, anime, distorted face, bad anatomy",
 ) -> Dict[str, Any]:
-    """Build a simple reference image generation workflow."""
+    """Build a FLUX reference image generation workflow."""
     wb = WorkflowBuilder()
     wb.load_checkpoint(checkpoint)
+    wb.load_dual_clip(clip_name1, clip_name2, "flux")
     wb.load_vae(vae)
     wb.set_prompt(prompt, negative)
     wb.set_empty_latent(width, height)
@@ -216,6 +244,8 @@ def build_bulk_workflow(
     reference_images: List[str],
     checkpoint: str = "z_image_turbo_bf16.safetensors",
     vae: str = "ae.safetensors",
+    clip_name1: str = "t5xxl_fp8_e4m3fn.safetensors",
+    clip_name2: str = "clip_l.safetensors",
     ipadapter_model: str = "ip-adapter-plus_sd15.bin",
     clip_vision_model: str = "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
     ipadapter_weights: List[float] = None,
@@ -229,12 +259,13 @@ def build_bulk_workflow(
     filename_prefix: str = "generated",
     negative: str = "blurry, low quality, distorted, bad anatomy, inconsistent face",
 ) -> Dict[str, Any]:
-    """Build a bulk generation workflow with IPAdapter face consistency."""
+    """Build a FLUX bulk generation workflow with IPAdapter face consistency."""
     if ipadapter_weights is None:
         ipadapter_weights = [0.7, 0.5, 0.4]
 
     wb = WorkflowBuilder()
     wb.load_checkpoint(checkpoint)
+    wb.load_dual_clip(clip_name1, clip_name2, "flux")
     wb.load_vae(vae)
 
     # Load IPAdapter and CLIP Vision
