@@ -34,19 +34,19 @@ generation:
     count_per_character: 3
     poses: ["front", "angle", "natural"]
     resolution: [1024, 1024]
-    steps: 12
-    cfg: 1.0
-    sampler: "dpmpp_2m"
-    scheduler: "beta"
+    steps: 30
+    cfg: 4.0
+    sampler: "dpmpp_sde"
+    scheduler: "normal"
 
   # Bulk content (Z-Image Turbo, speed focus)
   # RTX 5090: ~10-12s per image vs ~15-20s on 4090
   bulk:
     resolution: [1024, 1536]  # portrait orientation
     steps: 8
-    cfg: 1.0
-    sampler: "dpmpp_2m"
-    scheduler: "beta"
+    cfg: 4.0
+    sampler: "euler"
+    scheduler: "normal"
 
   # All 4 content lanes active
   lanes:
