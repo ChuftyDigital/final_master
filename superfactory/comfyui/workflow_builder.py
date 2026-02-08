@@ -63,16 +63,30 @@ class WorkflowBuilder:
     def load_dual_clip(
         self, clip_name1: str, clip_name2: str, clip_type: str = "flux"
     ) -> "WorkflowBuilder":
-        """Load dual CLIP text encoders (required for FLUX models).
+        """Load dual CLIP text encoders (for FLUX models).
 
         Args:
-            clip_name1: T5-XXL encoder filename (e.g. t5xxl_fp8_e4m3fn.safetensors)
-            clip_name2: CLIP-L encoder filename (e.g. clip_l.safetensors)
+            clip_name1: T5-XXL encoder filename
+            clip_name2: CLIP-L encoder filename
             clip_type: "flux" or "sdxl"
         """
         nid = self._add_node("DualCLIPLoader", {
             "clip_name1": clip_name1,
             "clip_name2": clip_name2,
+            "type": clip_type,
+        })
+        self._clip = (nid, 0)
+        return self
+
+    def load_clip(self, clip_name: str, clip_type: str = "lumina2") -> "WorkflowBuilder":
+        """Load a single text encoder (for Z-Image/Lumina models).
+
+        Args:
+            clip_name: Text encoder filename (e.g. qwen_3_4b_fp8_mixed.safetensors)
+            clip_type: "lumina2" for Z-Image, "sd1" for SD1.5, etc.
+        """
+        nid = self._add_node("CLIPLoader", {
+            "clip_name": clip_name,
             "type": clip_type,
         })
         self._clip = (nid, 0)
@@ -214,8 +228,7 @@ def build_reference_workflow(
     prompt: str,
     checkpoint: str = "z_image_bf16.safetensors",
     vae: str = "ae.safetensors",
-    clip_name1: str = "t5xxl_fp8_e4m3fn.safetensors",
-    clip_name2: str = "clip_l.safetensors",
+    text_encoder: str = "qwen_3_4b_fp8_mixed.safetensors",
     width: int = 1024,
     height: int = 1024,
     steps: int = 12,
@@ -226,10 +239,10 @@ def build_reference_workflow(
     filename_prefix: str = "reference",
     negative: str = "blurry, low quality, cartoon, anime, distorted face, bad anatomy",
 ) -> Dict[str, Any]:
-    """Build a FLUX reference image generation workflow."""
+    """Build a Z-Image reference image generation workflow."""
     wb = WorkflowBuilder()
     wb.load_checkpoint(checkpoint)
-    wb.load_dual_clip(clip_name1, clip_name2, "flux")
+    wb.load_clip(text_encoder, "lumina2")
     wb.load_vae(vae)
     wb.set_prompt(prompt, negative)
     wb.set_empty_latent(width, height)
@@ -244,8 +257,7 @@ def build_bulk_workflow(
     reference_images: List[str],
     checkpoint: str = "z_image_turbo_bf16.safetensors",
     vae: str = "ae.safetensors",
-    clip_name1: str = "t5xxl_fp8_e4m3fn.safetensors",
-    clip_name2: str = "clip_l.safetensors",
+    text_encoder: str = "qwen_3_4b_fp8_mixed.safetensors",
     ipadapter_model: str = "ip-adapter-plus_sd15.bin",
     clip_vision_model: str = "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
     ipadapter_weights: List[float] = None,
@@ -259,13 +271,13 @@ def build_bulk_workflow(
     filename_prefix: str = "generated",
     negative: str = "blurry, low quality, distorted, bad anatomy, inconsistent face",
 ) -> Dict[str, Any]:
-    """Build a FLUX bulk generation workflow with IPAdapter face consistency."""
+    """Build a Z-Image bulk generation workflow with IPAdapter face consistency."""
     if ipadapter_weights is None:
         ipadapter_weights = [0.7, 0.5, 0.4]
 
     wb = WorkflowBuilder()
     wb.load_checkpoint(checkpoint)
-    wb.load_dual_clip(clip_name1, clip_name2, "flux")
+    wb.load_clip(text_encoder, "lumina2")
     wb.load_vae(vae)
 
     # Load IPAdapter and CLIP Vision

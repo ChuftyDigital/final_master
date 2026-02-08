@@ -29,19 +29,11 @@ MODELS = [
         "category": "core",
     },
     {
-        "name": "FLUX T5-XXL Text Encoder (FP8)",
-        "url": "https://huggingface.co/comfyanonymous/flux_text_encoders/resolve/main/t5xxl_fp8_e4m3fn.safetensors",
+        "name": "Z-Image Qwen 3.4B Text Encoder (FP8)",
+        "url": "https://huggingface.co/Comfy-Org/z_image/resolve/main/split_files/text_encoders/qwen_3_4b_fp8_mixed.safetensors",
         "subdir": "clip",
-        "filename": "t5xxl_fp8_e4m3fn.safetensors",
-        "size_gb": 4.89,
-        "category": "core",
-    },
-    {
-        "name": "FLUX CLIP-L Text Encoder",
-        "url": "https://huggingface.co/comfyanonymous/flux_text_encoders/resolve/main/clip_l.safetensors",
-        "subdir": "clip",
-        "filename": "clip_l.safetensors",
-        "size_gb": 0.24,
+        "filename": "qwen_3_4b_fp8_mixed.safetensors",
+        "size_gb": 3.6,
         "category": "core",
     },
     {

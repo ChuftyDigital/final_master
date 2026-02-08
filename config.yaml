@@ -81,9 +81,8 @@ models:
   bulk_checkpoint: "z_image_turbo_bf16.safetensors"
   # VAE
   vae: "ae.safetensors"
-  # FLUX text encoders (loaded via DualCLIPLoader)
-  clip_t5xxl: "t5xxl_fp8_e4m3fn.safetensors"
-  clip_l: "clip_l.safetensors"
+  # Z-Image text encoder (Qwen 3.4B, loaded via CLIPLoader)
+  text_encoder: "qwen_3_4b_fp8_mixed.safetensors"
   # IPAdapter
   ipadapter: "ip-adapter-plus_sd15.bin"
   # CLIP Vision (for IPAdapter, separate from text encoders)
