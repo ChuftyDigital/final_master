@@ -66,7 +66,7 @@ class ReferenceGenerator:
                 steps=self.config.generation("reference", "steps", 12),
                 cfg=self.config.generation("reference", "cfg", 1.0),
                 sampler=self.config.generation("reference", "sampler", "dpmpp_2m"),
-                scheduler=self.config.generation("reference", "scheduler", "beta"),
+                scheduler=self.config.generation("reference", "scheduler", "simple"),
                 filename_prefix=f"{char_id}_face_{i:02d}",
                 negative=negative,
             )

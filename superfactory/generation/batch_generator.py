@@ -83,10 +83,8 @@ class BatchGenerator:
             self.stats["characters_failed"] += 1
             return {}
 
-        refs = self._get_reference_images(persona)
         logger.info(f"Generating content for {name} ({char_id})")
         logger.info(f"  Lanes: {', '.join(lanes)}")
-        logger.info(f"  References: {len(refs)} images")
 
         results = {}
         state = self._load_state()
@@ -137,19 +135,15 @@ class BatchGenerator:
 
                     workflow = build_bulk_workflow(
                         prompt=prompt,
-                        reference_images=refs,
                         checkpoint=self.config.model("bulk_checkpoint"),
                         vae=self.config.model("vae"),
                         text_encoder=self.config.model("text_encoder", "qwen_3_4b_fp8_mixed.safetensors"),
-                        ipadapter_model=self.config.model("ipadapter"),
-                        clip_vision_model=self.config.model("clip_vision"),
-                        ipadapter_weights=self.config.ipadapter_weights(),
                         width=self.config.generation("bulk", "resolution", [1024, 1536])[0],
                         height=self.config.generation("bulk", "resolution", [1024, 1536])[1],
                         steps=self.config.generation("bulk", "steps", 8),
                         cfg=self.config.generation("bulk", "cfg", 1.0),
                         sampler=self.config.generation("bulk", "sampler", "dpmpp_2m"),
-                        scheduler=self.config.generation("bulk", "scheduler", "beta"),
+                        scheduler=self.config.generation("bulk", "scheduler", "simple"),
                         seed=seed,
                         filename_prefix=f"{char_id}_{lane}_{idx:04d}",
                         negative=negative,

@@ -30,23 +30,25 @@ gpu:
 
 generation:
   # Reference images (Z-Image Base, quality focus)
+  # Z-Image Base: ~28 steps, CFG 1.0, dpmpp_2m sampler, simple scheduler
   reference:
     count_per_character: 3
     poses: ["front", "angle", "natural"]
     resolution: [1024, 1024]
-    steps: 30
-    cfg: 4.0
-    sampler: "dpmpp_sde"
-    scheduler: "normal"
+    steps: 28
+    cfg: 1.0
+    sampler: "dpmpp_2m"
+    scheduler: "simple"
 
   # Bulk content (Z-Image Turbo, speed focus)
+  # Z-Image Turbo: 8 steps, CFG 1.0, NO negative prompts, natural sentences
   # RTX 5090: ~10-12s per image vs ~15-20s on 4090
   bulk:
     resolution: [1024, 1536]  # portrait orientation
     steps: 8
-    cfg: 4.0
-    sampler: "euler"
-    scheduler: "normal"
+    cfg: 1.0
+    sampler: "dpmpp_2m"
+    scheduler: "simple"
 
   # All 4 content lanes active
   lanes:
@@ -67,26 +69,15 @@ generation:
       images_per_character: 200
       bundles: { one_off: 80, "3x": 10, "5x": 10, "10x": 4 }
 
-  # IPAdapter weights for face consistency
-  ipadapter:
-    weights: [0.7, 0.5, 0.4]  # per reference image
-    noise: 0.3
-    weight_type: "original"
-    combine_method: "mean"
-
 models:
   # Checkpoint for reference generation (quality focus)
   reference_checkpoint: "z_image_bf16.safetensors"
   # Checkpoint for bulk generation (speed focus)
   bulk_checkpoint: "z_image_turbo_bf16.safetensors"
-  # VAE
+  # VAE (shared between all Z-Image models)
   vae: "ae.safetensors"
-  # Z-Image text encoder (Qwen 3.4B, loaded via CLIPLoader)
+  # Z-Image text encoder (Qwen 3.4B for Lumina2 architecture, loaded via CLIPLoader)
   text_encoder: "qwen_3_4b_fp8_mixed.safetensors"
-  # IPAdapter
-  ipadapter: "ip-adapter-plus_sd15.bin"
-  # CLIP Vision (for IPAdapter, separate from text encoders)
-  clip_vision: "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors"
   # Upscaler
   upscaler: "4x-ClearRealityV1.pth"
 

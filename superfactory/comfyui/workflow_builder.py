@@ -11,14 +11,14 @@ from typing import Any, Dict, List, Optional, Tuple
 class WorkflowBuilder:
     """Constructs ComfyUI API-format workflows programmatically.
 
-    Usage (FLUX models):
+    Usage (Z-Image / Lumina2 models):
         wb = WorkflowBuilder()
         wb.load_checkpoint("z_image_bf16.safetensors")
-        wb.load_dual_clip("t5xxl_fp8_e4m3fn.safetensors", "clip_l.safetensors", "flux")
+        wb.load_clip("qwen_3_4b_fp8_mixed.safetensors", "lumina2")
         wb.load_vae("ae.safetensors")
-        wb.set_prompt("A portrait of...")
+        wb.set_prompt("Professional portrait photograph of...")
         wb.set_empty_latent(1024, 1024)
-        wb.sample(steps=12, cfg=1.0)
+        wb.sample(steps=28, cfg=1.0, sampler="dpmpp_2m", scheduler="simple")
         wb.decode()
         wb.save("output_prefix")
         workflow = wb.build()
@@ -184,41 +184,6 @@ class WorkflowBuilder:
         self._image = nid
         return nid
 
-    def load_ipadapter(self, model_name: str) -> str:
-        """Load an IPAdapter model. Returns node ID."""
-        return self._add_node("IPAdapterModelLoader", {"ipadapter_file": model_name})
-
-    def load_clip_vision(self, model_name: str) -> str:
-        """Load CLIP Vision model. Returns node ID."""
-        return self._add_node("CLIPVisionLoader", {"clip_name": model_name})
-
-    def apply_ipadapter(
-        self,
-        ipadapter_id: str,
-        clip_vision_id: str,
-        image_id: str,
-        weight: float = 0.7,
-        noise: float = 0.3,
-        weight_type: str = "original",
-        combine: str = "mean",
-    ) -> "WorkflowBuilder":
-        """Apply IPAdapter to the current model for face consistency."""
-        nid = self._add_node("IPAdapterAdvanced", {
-            "model": self._ref(self._model[0], self._model[1]),
-            "ipadapter": self._ref(ipadapter_id, 0),
-            "image": self._ref(image_id, 0),
-            "clip_vision": self._ref(clip_vision_id, 0),
-            "weight": weight,
-            "noise": noise,
-            "start_at": 0.0,
-            "end_at": 1.0,
-            "weight_type": weight_type,
-            "combine_embeds": combine,
-        })
-        # IPAdapter outputs a modified MODEL at index 0
-        self._model = (nid, 0)
-        return self
-
     def build(self) -> Dict[str, Dict[str, Any]]:
         """Return the complete workflow dict ready for the ComfyUI API."""
         return dict(self._nodes)
@@ -231,15 +196,22 @@ def build_reference_workflow(
     text_encoder: str = "qwen_3_4b_fp8_mixed.safetensors",
     width: int = 1024,
     height: int = 1024,
-    steps: int = 12,
+    steps: int = 28,
     cfg: float = 1.0,
     sampler: str = "dpmpp_2m",
-    scheduler: str = "beta",
+    scheduler: str = "simple",
     seed: Optional[int] = None,
     filename_prefix: str = "reference",
-    negative: str = "blurry, low quality, cartoon, anime, distorted face, bad anatomy",
+    negative: str = "",
 ) -> Dict[str, Any]:
-    """Build a Z-Image reference image generation workflow."""
+    """Build a Z-Image reference image generation workflow.
+
+    Z-Image Base works best with:
+    - CFG 1.0
+    - 28 steps with dpmpp_2m + simple scheduler
+    - NO negative prompts (empty string)
+    - Rich natural-language prompts
+    """
     wb = WorkflowBuilder()
     wb.load_checkpoint(checkpoint)
     wb.load_clip(text_encoder, "lumina2")
@@ -254,42 +226,31 @@ def build_reference_workflow(
 
 def build_bulk_workflow(
     prompt: str,
-    reference_images: List[str],
     checkpoint: str = "z_image_turbo_bf16.safetensors",
     vae: str = "ae.safetensors",
     text_encoder: str = "qwen_3_4b_fp8_mixed.safetensors",
-    ipadapter_model: str = "ip-adapter-plus_sd15.bin",
-    clip_vision_model: str = "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
-    ipadapter_weights: List[float] = None,
     width: int = 1024,
     height: int = 1536,
     steps: int = 8,
     cfg: float = 1.0,
     sampler: str = "dpmpp_2m",
-    scheduler: str = "beta",
+    scheduler: str = "simple",
     seed: Optional[int] = None,
     filename_prefix: str = "generated",
-    negative: str = "blurry, low quality, distorted, bad anatomy, inconsistent face",
+    negative: str = "",
 ) -> Dict[str, Any]:
-    """Build a Z-Image bulk generation workflow with IPAdapter face consistency."""
-    if ipadapter_weights is None:
-        ipadapter_weights = [0.7, 0.5, 0.4]
+    """Build a Z-Image Turbo bulk generation workflow.
 
+    Z-Image Turbo works best with:
+    - CFG 1.0 (or 0.0 for pure distillation)
+    - NO negative prompts (empty string)
+    - 8 steps with dpmpp_2m + simple scheduler
+    - Rich natural-language prompts (not tag-based)
+    """
     wb = WorkflowBuilder()
     wb.load_checkpoint(checkpoint)
     wb.load_clip(text_encoder, "lumina2")
     wb.load_vae(vae)
-
-    # Load IPAdapter and CLIP Vision
-    ipa_id = wb.load_ipadapter(ipadapter_model)
-    clip_v_id = wb.load_clip_vision(clip_vision_model)
-
-    # Apply each reference image with decreasing weight
-    for i, ref_img in enumerate(reference_images):
-        weight = ipadapter_weights[i] if i < len(ipadapter_weights) else 0.3
-        img_id = wb.load_image(ref_img)
-        wb.apply_ipadapter(ipa_id, clip_v_id, img_id, weight=weight)
-
     wb.set_prompt(prompt, negative)
     wb.set_empty_latent(width, height)
     wb.sample(steps=steps, cfg=cfg, sampler=sampler, scheduler=scheduler, seed=seed)
