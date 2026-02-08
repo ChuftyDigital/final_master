@@ -24,7 +24,7 @@ class WorkflowBuilder:
         wb.load_vae("ae.safetensors")
         wb.set_prompt("Editorial portrait...", "blurry...", enhance=True)
         wb.set_empty_latent(1024, 1024)
-        wb.sample(steps=28, cfg=1.0, sampler="dpmpp_2m_sde_gpu", scheduler="karras")
+        wb.sample(steps=28, cfg=1.0, sampler="euler", scheduler="normal")
         wb.decode()
         wb.face_detail()          # FaceDetailer pass for realistic faces
         wb.color_match(ref_id)    # Harmonize face lighting with original
@@ -160,8 +160,8 @@ class WorkflowBuilder:
         self,
         steps: int = 28,
         cfg: float = 1.0,
-        sampler: str = "dpmpp_2m_sde_gpu",
-        scheduler: str = "karras",
+        sampler: str = "euler",
+        scheduler: str = "normal",
         seed: Optional[int] = None,
         denoise: float = 1.0,
     ) -> "WorkflowBuilder":
@@ -216,8 +216,8 @@ class WorkflowBuilder:
         self,
         steps: int = 20,
         cfg: float = 1.0,
-        sampler: str = "dpmpp_2m_sde_gpu",
-        scheduler: str = "karras",
+        sampler: str = "euler",
+        scheduler: str = "normal",
         denoise: float = 0.35,
         guide_size: int = 512,
         max_size: int = 1024,
@@ -373,8 +373,8 @@ def build_reference_workflow(
     height: int = 1024,
     steps: int = 28,
     cfg: float = 1.0,
-    sampler: str = "dpmpp_2m_sde_gpu",
-    scheduler: str = "karras",
+    sampler: str = "euler",
+    scheduler: str = "normal",
     seed: Optional[int] = None,
     filename_prefix: str = "reference",
     negative: str = "blurry, low quality, cartoon, anime, distorted face, bad anatomy, deformed features, plastic skin, airbrushed skin, overly smooth skin, studio backdrop, grey background, neutral background, oversaturated, jpeg artifacts, watermark, text, logo, doll-like, mannequin, CGI, 3D render",
@@ -387,11 +387,11 @@ def build_reference_workflow(
 ) -> Dict[str, Any]:
     """Build a FLUX photorealistic reference image workflow.
 
-    Full pipeline: KSampler (dpmpp_2m_sde_gpu/karras)
+    Full pipeline: KSampler (euler/normal)
     → FaceDetailer (Impact Pack) → ColorMatch (KJNodes) → 4x-UltraSharp Upscale → Save
 
     FLUX.1 Dev with FP8 on RTX 5090:
-    - 28 steps with dpmpp_2m_sde_gpu + karras scheduler
+    - 28 steps with euler + normal scheduler
     - CFG 1.0
     - FluxPromptEnhance for AI-enhanced prompts
     - FaceDetailer for realistic face refinement
@@ -441,8 +441,8 @@ def build_bulk_workflow(
     height: int = 1536,
     steps: int = 28,
     cfg: float = 1.0,
-    sampler: str = "dpmpp_2m_sde_gpu",
-    scheduler: str = "karras",
+    sampler: str = "euler",
+    scheduler: str = "normal",
     seed: Optional[int] = None,
     filename_prefix: str = "generated",
     negative: str = "blurry, low quality, cartoon, anime, distorted face, bad anatomy, deformed features, plastic skin, airbrushed skin, overly smooth skin, studio backdrop, grey background, neutral background, oversaturated, jpeg artifacts, watermark, text, logo, doll-like, mannequin, CGI, 3D render",

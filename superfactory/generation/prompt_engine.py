@@ -683,41 +683,60 @@ class PromptEngine:
 
         return ". ".join(parts) + "."
 
-    def reference_prompt(self, persona: Persona, pose: str) -> str:
-        """Generate a cinema-grade reference prompt (3000-4000+ chars).
+    # ── Concise pose descriptions for FLUX ──────────────────────────
 
-        Uses per-pose camera specs from the original enhanced workflow generator.
+    POSE_DESC = {
+        "front": "facing the camera directly, head and shoulders composition, warm direct eye contact, relaxed confident expression",
+        "angle": "three-quarter view with head turned toward camera, dramatic angle showing cheekbones and jawline, windblown hair",
+        "natural": "candid relaxed pose, genuine laugh or running hand through hair, spontaneous natural moment",
+    }
+
+    def reference_prompt(self, persona: Persona, pose: str) -> str:
+        """Generate a concise FLUX-optimized reference prompt (300-500 chars).
+
+        FLUX is a flow-matching model that works best with focused natural
+        language descriptions. Short, clear, non-repetitive prompts produce
+        the sharpest results. Avoid repeating adjectives or concepts.
         """
         p = persona
         name = p.name
         age = p.age
         ethnicity = p.ethnicity
-        nationality = p.nationality
-        style_persona = getattr(p, '_data', {}).get("style_persona", {})
-        aesthetic = style_persona.get("aesthetic", "sophisticated elegance")
-        fashion = style_persona.get("fashion_sense", "elegant contemporary style")
-        niche = getattr(p, '_data', {}).get("niche", "")
-        personality = ""
-        if p.personality_summary:
-            personality = p.personality_summary.split(".")[0]
 
-        physical = self._physical_description(p)
+        # Hair
+        hair = f"{p.hair_color.lower()} {p.hair_length.lower()} {p.hair_texture.lower()} hair"
 
-        sections = [
-            (
-                f"Subject: Editorial fashion photograph of {name}, a {age}-year-old "
-                f"{ethnicity} woman with {nationality} heritage, shot on location during "
-                f"golden hour with natural wind and warm sunlight."
-            ),
-            f"Physical Description: {physical}",
-            f"Composition & Pose: Composition: {self.COMPOSITION[pose].format(name=name)}",
-            f"Lighting: {self.LIGHTING[pose]}",
-            f"Technical Specifications: {self.REFERENCE_TECHNICAL_SPECS}",
-            f"Style & Atmosphere: {self.ATMOSPHERE[pose].format(aesthetic=aesthetic)}",
-            f"Critical Requirements: {self.CRITICAL_REQUIREMENTS}",
-        ]
+        # Eyes
+        eye_color = p.eye_color.lower()
+        eye_shape = p.eye_shape.lower()
 
-        return " ".join(" ".join(s.split()) for s in sections)
+        # Skin
+        skin = p.skin_tone.lower()
+
+        # Build
+        build = p.build.lower() if p.build else "average build"
+
+        # Pose
+        pose_desc = self.POSE_DESC.get(pose, self.POSE_DESC["front"])
+
+        # Distinctive features
+        distinctive = p.distinctive_features
+        distinctive_str = ""
+        if distinctive and distinctive.lower() != "unique natural beauty":
+            distinctive_str = f" {distinctive}."
+
+        prompt = (
+            f"Professional portrait photograph of {name}, a {age}-year-old {ethnicity} woman. "
+            f"She has {skin} skin, {hair}, {eye_color} {eye_shape} eyes, {build}."
+            f"{distinctive_str} "
+            f"{pose_desc}. "
+            f"Shot outdoors in natural light, soft diffused daylight. "
+            f"Sony A7R IV 85mm f/2.0 lens, shallow depth of field, tack-sharp focus on eyes. "
+            f"Natural skin texture with visible pores and subtle freckles. "
+            f"Photorealistic, 8K, editorial fashion photography."
+        )
+
+        return " ".join(prompt.split())
 
     def bulk_prompt(self, persona: Persona, lane: str, index: int = 0) -> str:
         """Generate a rich bulk prompt using Z-Image natural sentence structure.
@@ -734,14 +753,10 @@ class PromptEngine:
             return self._bulk_casual_story(persona, lane, index)
 
     def negative_prompt(self, lane: str = "sfw") -> str:
-        """FLUX benefits from negative prompts for quality control."""
+        """Negative prompt. Note: has no effect with FLUX at CFG 1.0."""
         return (
-            "blurry, low quality, cartoon, anime, distorted face, bad anatomy, "
-            "deformed features, plastic skin, airbrushed skin, overly smooth skin, "
-            "artificially perfect skin, studio backdrop, grey background, white background, "
-            "neutral background, studio lighting, ring light, softbox, "
-            "oversaturated, jpeg artifacts, watermark, text, logo, "
-            "doll-like, mannequin, wax figure, CGI, 3D render"
+            "blurry, cartoon, anime, distorted, deformed, plastic skin, "
+            "airbrushed, CGI, 3D render, watermark, text, logo"
         )
 
     # ────────────────────────────────────────────────────────────────

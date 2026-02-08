@@ -30,17 +30,16 @@ gpu:
 
 generation:
   # Reference images (FLUX.1 Dev, full photorealistic pipeline)
-  # Pipeline: FluxPromptEnhance → KSampler → FaceDetailer → 4x-UltraSharp
-  # Sampler: dpmpp_2m_sde_gpu + karras (best for photorealism)
-  # ~60-90 seconds per image on RTX 5090 with FP8
+  # Pipeline: KSampler → FaceDetailer → ColorMatch → 4x-UltraSharp
+  # Sampler: euler + normal (correct for FLUX flow-matching)
   reference:
     count_per_character: 3
     poses: ["front", "angle", "natural"]
     resolution: [1024, 1024]
     steps: 28
     cfg: 1.0
-    sampler: "dpmpp_2m_sde_gpu"
-    scheduler: "karras"
+    sampler: "euler"
+    scheduler: "normal"
     face_detail: true
     face_detail_denoise: 0.35
     upscale: true
@@ -48,13 +47,12 @@ generation:
     upscale_megapixels: 4.0
 
   # Bulk content (same pipeline, FaceDetailer on, upscale off for speed)
-  # RTX 5090 FP8: ~45-60s per image at 1024x1536
   bulk:
     resolution: [1024, 1536]  # portrait orientation
     steps: 28
     cfg: 1.0
-    sampler: "dpmpp_2m_sde_gpu"
-    scheduler: "karras"
+    sampler: "euler"
+    scheduler: "normal"
     face_detail: true
     face_detail_denoise: 0.35
     upscale: false
