@@ -1,10 +1,10 @@
 {
-  "last_node_id": 45,
-  "last_link_id": 52,
+  "last_node_id": 51,
+  "last_link_id": 81,
   "metadata": {
     "title": "Workflow 1 - Master Reference Image Generator",
-    "description": "Generates 3 master reference images per character for LoRA training. Uses Z-Image Base (6B) with 2-step refinement pipeline, YOLOV11m face detailing, and film grain. Optimized for RTX 5090 (32GB VRAM).",
-    "version": "3.0",
+    "description": "Generates 3 master reference images per character for LoRA training. Uses Z-Image Base (6B) with 2-step refinement pipeline (generate + latent upscale 1.5x + refine at denoise 0.2), YOLOV11m face detailing, and film grain. Optimized for RTX 5090 (32GB VRAM).",
+    "version": "3.1",
     "author": "AI Influencer Pipeline",
     "gpu_target": "RTX 5090 32GB",
     "docker_image": "comfyui:latest-5090"
@@ -14,7 +14,7 @@
       "id": 1,
       "type": "Note",
       "pos": [50, 50],
-      "size": [400, 200],
+      "size": [400, 220],
       "properties": {
         "text": "WORKFLOW 1: MASTER IMAGE GENERATOR (Z-Image Base)\n=====================================================\nGenerates 3 reference images per character:\n  - Face 01: Front-facing portrait (identity anchor)\n  - Face 02: Three-quarter angle (dimensionality)\n  - Face 03: Natural/environmental (personality)\n\n2-STEP PIPELINE:\n  Step 1: Generate at 1024x1024 (40 steps, DPM++ 2M Karras, CFG 4.5)\n  Step 2: Latent upscale 1.5x + refine (20 steps, denoise 0.2)\n  Step 3: FaceDetailer with YOLOV11m-face.pt\n  Step 4: Film grain + SeedVR2 upscale to 2048px\n\nMODEL: Z-Image Base (6B) | NOT Turbo\nOPTIMIZED FOR: RTX 5090 32GB VRAM"
       }
@@ -35,7 +35,7 @@
       "size": [300, 80],
       "properties": {},
       "widgets_values": ["qwen_3_4b.safetensors", "lumina2"],
-      "outputs": [{"name": "CLIP", "type": "CLIP", "links": [2, 3, 50]}]
+      "outputs": [{"name": "CLIP", "type": "CLIP", "links": [2, 50, 51, 3]}]
     },
     {
       "id": 4,
@@ -44,7 +44,7 @@
       "size": [300, 80],
       "properties": {},
       "widgets_values": ["ultraflux_vae.safetensors"],
-      "outputs": [{"name": "VAE", "type": "VAE", "links": [4]}]
+      "outputs": [{"name": "VAE", "type": "VAE", "links": [4, 52, 53]}]
     },
     {
       "id": 5,
@@ -53,7 +53,7 @@
       "size": [300, 80],
       "properties": {},
       "widgets_values": ["seedvr2_ema_7b_fp16.safetensors"],
-      "outputs": [{"name": "DIT_MODEL", "type": "DIT_MODEL", "links": [5]}]
+      "outputs": [{"name": "DIT_MODEL", "type": "DIT_MODEL", "links": [5, 54, 55]}]
     },
     {
       "id": 6,
@@ -62,7 +62,7 @@
       "size": [300, 80],
       "properties": {},
       "widgets_values": ["ema_vae_fp16.safetensors"],
-      "outputs": [{"name": "SEEDVR2_VAE", "type": "SEEDVR2_VAE", "links": [6]}]
+      "outputs": [{"name": "SEEDVR2_VAE", "type": "SEEDVR2_VAE", "links": [6, 56, 57]}]
     },
     {
       "id": 7,
@@ -78,7 +78,7 @@
         "None", 0, 0
       ],
       "inputs": [{"name": "model", "type": "MODEL", "link": 1}],
-      "outputs": [{"name": "MODEL", "type": "MODEL", "links": [7]}]
+      "outputs": [{"name": "MODEL", "type": "MODEL", "links": [7, 58, 59, 70, 71, 72]}]
     },
     {
       "id": 10,
@@ -109,7 +109,7 @@
       "properties": {},
       "widgets_values": ["PASTE FRONT PROMPT FROM master_prompts FILE HERE"],
       "inputs": [{"name": "clip", "type": "CLIP", "link": 2}],
-      "outputs": [{"name": "CONDITIONING", "type": "CONDITIONING", "links": [15]}]
+      "outputs": [{"name": "CONDITIONING", "type": "CONDITIONING", "links": [15, 73]}]
     },
     {
       "id": 16,
@@ -119,8 +119,8 @@
       "title": "Positive Prompt - FACE 02 (Angle)",
       "properties": {},
       "widgets_values": ["PASTE ANGLE PROMPT FROM master_prompts FILE HERE"],
-      "inputs": [{"name": "clip", "type": "CLIP", "link": null}],
-      "outputs": [{"name": "CONDITIONING", "type": "CONDITIONING", "links": [16]}]
+      "inputs": [{"name": "clip", "type": "CLIP", "link": 50}],
+      "outputs": [{"name": "CONDITIONING", "type": "CONDITIONING", "links": [16, 74]}]
     },
     {
       "id": 17,
@@ -130,8 +130,8 @@
       "title": "Positive Prompt - FACE 03 (Natural)",
       "properties": {},
       "widgets_values": ["PASTE NATURAL PROMPT FROM master_prompts FILE HERE"],
-      "inputs": [{"name": "clip", "type": "CLIP", "link": null}],
-      "outputs": [{"name": "CONDITIONING", "type": "CONDITIONING", "links": [17]}]
+      "inputs": [{"name": "clip", "type": "CLIP", "link": 51}],
+      "outputs": [{"name": "CONDITIONING", "type": "CONDITIONING", "links": [17, 75]}]
     },
     {
       "id": 18,
@@ -142,7 +142,7 @@
       "properties": {},
       "widgets_values": ["cartoon, anime style, illustration, painting, drawing, CGI, 3D render, low quality, blurry, distorted features, multiple people, deformed, mutation, extra limbs, text, watermark, signature, frame, border, bad anatomy, unrealistic proportions, different person, inconsistent features, plastic skin, artificial smoothness, overprocessed, HDR artifacts, oversaturated"],
       "inputs": [{"name": "clip", "type": "CLIP", "link": 3}],
-      "outputs": [{"name": "CONDITIONING", "type": "CONDITIONING", "links": [18]}]
+      "outputs": [{"name": "CONDITIONING", "type": "CONDITIONING", "links": [18, 60, 61, 76, 77, 78]}]
     },
     {
       "id": 20,
@@ -151,7 +151,7 @@
       "size": [250, 80],
       "properties": {},
       "widgets_values": [1024, 1024, 1],
-      "outputs": [{"name": "LATENT", "type": "LATENT", "links": [20]}]
+      "outputs": [{"name": "LATENT", "type": "LATENT", "links": [20, 62, 63]}]
     },
     {
       "id": 21,
@@ -171,7 +171,7 @@
       "type": "ClownsharKSampler_Beta",
       "pos": [1400, 300],
       "size": [350, 350],
-      "title": "Primary Sampler - FACE 01",
+      "title": "Step 1 Generate - FACE 01",
       "properties": {},
       "widgets_values": [42, "randomize", 40, 4.5, "dpmpp_2m", "karras", 1.0, "standard", 100006],
       "inputs": [
@@ -180,48 +180,129 @@
         {"name": "negative", "type": "CONDITIONING", "link": 18},
         {"name": "latent_image", "type": "LATENT", "link": 20}
       ],
-      "outputs": [{"name": "LATENT", "type": "LATENT", "links": [25]}]
+      "outputs": [{"name": "LATENT", "type": "LATENT", "links": [64]}]
     },
     {
       "id": 26,
       "type": "ClownsharKSampler_Beta",
       "pos": [1400, 700],
       "size": [350, 350],
-      "title": "Primary Sampler - FACE 02",
+      "title": "Step 1 Generate - FACE 02",
       "properties": {},
       "widgets_values": [43, "randomize", 40, 4.5, "dpmpp_2m", "karras", 1.0, "standard", 100006],
       "inputs": [
-        {"name": "model", "type": "MODEL", "link": null},
+        {"name": "model", "type": "MODEL", "link": 58},
         {"name": "positive", "type": "CONDITIONING", "link": 16},
-        {"name": "negative", "type": "CONDITIONING", "link": null},
-        {"name": "latent_image", "type": "LATENT", "link": null}
+        {"name": "negative", "type": "CONDITIONING", "link": 60},
+        {"name": "latent_image", "type": "LATENT", "link": 62}
       ],
-      "outputs": [{"name": "LATENT", "type": "LATENT", "links": [26]}]
+      "outputs": [{"name": "LATENT", "type": "LATENT", "links": [65]}]
     },
     {
       "id": 27,
       "type": "ClownsharKSampler_Beta",
       "pos": [1400, 1100],
       "size": [350, 350],
-      "title": "Primary Sampler - FACE 03",
+      "title": "Step 1 Generate - FACE 03",
       "properties": {},
       "widgets_values": [44, "randomize", 40, 4.5, "dpmpp_2m", "karras", 1.0, "standard", 100006],
       "inputs": [
-        {"name": "model", "type": "MODEL", "link": null},
+        {"name": "model", "type": "MODEL", "link": 59},
         {"name": "positive", "type": "CONDITIONING", "link": 17},
-        {"name": "negative", "type": "CONDITIONING", "link": null},
-        {"name": "latent_image", "type": "LATENT", "link": null}
+        {"name": "negative", "type": "CONDITIONING", "link": 61},
+        {"name": "latent_image", "type": "LATENT", "link": 63}
       ],
-      "outputs": [{"name": "LATENT", "type": "LATENT", "links": [27]}]
+      "outputs": [{"name": "LATENT", "type": "LATENT", "links": [66]}]
+    },
+    {
+      "id": 46,
+      "type": "LatentUpscaleBy",
+      "pos": [1850, 300],
+      "size": [200, 80],
+      "title": "Latent Upscale 1.5x - FACE 01",
+      "properties": {},
+      "widgets_values": ["nearest-exact", 1.5],
+      "inputs": [{"name": "samples", "type": "LATENT", "link": 64}],
+      "outputs": [{"name": "LATENT", "type": "LATENT", "links": [67]}]
+    },
+    {
+      "id": 47,
+      "type": "ClownsharKSampler_Beta",
+      "pos": [2100, 300],
+      "size": [350, 350],
+      "title": "Step 2 Refine - FACE 01",
+      "properties": {},
+      "widgets_values": [42, "randomize", 20, 4.5, "dpmpp_2m", "karras", 0.2, "standard", 100006],
+      "inputs": [
+        {"name": "model", "type": "MODEL", "link": 70},
+        {"name": "positive", "type": "CONDITIONING", "link": 73},
+        {"name": "negative", "type": "CONDITIONING", "link": 76},
+        {"name": "latent_image", "type": "LATENT", "link": 67}
+      ],
+      "outputs": [{"name": "LATENT", "type": "LATENT", "links": [79]}]
+    },
+    {
+      "id": 48,
+      "type": "LatentUpscaleBy",
+      "pos": [1850, 700],
+      "size": [200, 80],
+      "title": "Latent Upscale 1.5x - FACE 02",
+      "properties": {},
+      "widgets_values": ["nearest-exact", 1.5],
+      "inputs": [{"name": "samples", "type": "LATENT", "link": 65}],
+      "outputs": [{"name": "LATENT", "type": "LATENT", "links": [68]}]
+    },
+    {
+      "id": 49,
+      "type": "ClownsharKSampler_Beta",
+      "pos": [2100, 700],
+      "size": [350, 350],
+      "title": "Step 2 Refine - FACE 02",
+      "properties": {},
+      "widgets_values": [43, "randomize", 20, 4.5, "dpmpp_2m", "karras", 0.2, "standard", 100006],
+      "inputs": [
+        {"name": "model", "type": "MODEL", "link": 71},
+        {"name": "positive", "type": "CONDITIONING", "link": 74},
+        {"name": "negative", "type": "CONDITIONING", "link": 77},
+        {"name": "latent_image", "type": "LATENT", "link": 68}
+      ],
+      "outputs": [{"name": "LATENT", "type": "LATENT", "links": [80]}]
+    },
+    {
+      "id": 50,
+      "type": "LatentUpscaleBy",
+      "pos": [1850, 1100],
+      "size": [200, 80],
+      "title": "Latent Upscale 1.5x - FACE 03",
+      "properties": {},
+      "widgets_values": ["nearest-exact", 1.5],
+      "inputs": [{"name": "samples", "type": "LATENT", "link": 66}],
+      "outputs": [{"name": "LATENT", "type": "LATENT", "links": [69]}]
+    },
+    {
+      "id": 51,
+      "type": "ClownsharKSampler_Beta",
+      "pos": [2100, 1100],
+      "size": [350, 350],
+      "title": "Step 2 Refine - FACE 03",
+      "properties": {},
+      "widgets_values": [44, "randomize", 20, 4.5, "dpmpp_2m", "karras", 0.2, "standard", 100006],
+      "inputs": [
+        {"name": "model", "type": "MODEL", "link": 72},
+        {"name": "positive", "type": "CONDITIONING", "link": 75},
+        {"name": "negative", "type": "CONDITIONING", "link": 78},
+        {"name": "latent_image", "type": "LATENT", "link": 69}
+      ],
+      "outputs": [{"name": "LATENT", "type": "LATENT", "links": [81]}]
     },
     {
       "id": 30,
       "type": "VAEDecode",
-      "pos": [1850, 300],
+      "pos": [2550, 300],
       "size": [200, 60],
       "title": "Decode FACE 01",
       "inputs": [
-        {"name": "samples", "type": "LATENT", "link": 25},
+        {"name": "samples", "type": "LATENT", "link": 79},
         {"name": "vae", "type": "VAE", "link": 4}
       ],
       "outputs": [{"name": "IMAGE", "type": "IMAGE", "links": [30]}]
@@ -229,31 +310,31 @@
     {
       "id": 31,
       "type": "VAEDecode",
-      "pos": [1850, 700],
+      "pos": [2550, 700],
       "size": [200, 60],
       "title": "Decode FACE 02",
       "inputs": [
-        {"name": "samples", "type": "LATENT", "link": 26},
-        {"name": "vae", "type": "VAE", "link": null}
+        {"name": "samples", "type": "LATENT", "link": 80},
+        {"name": "vae", "type": "VAE", "link": 52}
       ],
       "outputs": [{"name": "IMAGE", "type": "IMAGE", "links": [31]}]
     },
     {
       "id": 32,
       "type": "VAEDecode",
-      "pos": [1850, 1100],
+      "pos": [2550, 1100],
       "size": [200, 60],
       "title": "Decode FACE 03",
       "inputs": [
-        {"name": "samples", "type": "LATENT", "link": 27},
-        {"name": "vae", "type": "VAE", "link": null}
+        {"name": "samples", "type": "LATENT", "link": 81},
+        {"name": "vae", "type": "VAE", "link": 53}
       ],
       "outputs": [{"name": "IMAGE", "type": "IMAGE", "links": [32]}]
     },
     {
       "id": 33,
       "type": "easy faceDetailerPipe",
-      "pos": [2150, 300],
+      "pos": [2850, 300],
       "size": [350, 300],
       "title": "Face Detailer - FACE 01",
       "properties": {},
@@ -266,7 +347,7 @@
     {
       "id": 34,
       "type": "easy faceDetailerPipe",
-      "pos": [2150, 700],
+      "pos": [2850, 700],
       "size": [350, 300],
       "title": "Face Detailer - FACE 02",
       "inputs": [{"name": "image", "type": "IMAGE", "link": 31}],
@@ -275,7 +356,7 @@
     {
       "id": 35,
       "type": "easy faceDetailerPipe",
-      "pos": [2150, 1100],
+      "pos": [2850, 1100],
       "size": [350, 300],
       "title": "Face Detailer - FACE 03",
       "inputs": [{"name": "image", "type": "IMAGE", "link": 32}],
@@ -284,7 +365,7 @@
     {
       "id": 36,
       "type": "FastFilmGrain",
-      "pos": [2600, 300],
+      "pos": [3300, 300],
       "size": [250, 100],
       "title": "Film Grain - FACE 01",
       "widgets_values": [0.015, 0.4, 1],
@@ -294,7 +375,7 @@
     {
       "id": 37,
       "type": "FastFilmGrain",
-      "pos": [2600, 700],
+      "pos": [3300, 700],
       "title": "Film Grain - FACE 02",
       "widgets_values": [0.015, 0.4, 2],
       "inputs": [{"name": "image", "type": "IMAGE", "link": 34}],
@@ -303,7 +384,7 @@
     {
       "id": 38,
       "type": "FastFilmGrain",
-      "pos": [2600, 1100],
+      "pos": [3300, 1100],
       "title": "Film Grain - FACE 03",
       "widgets_values": [0.015, 0.4, 3],
       "inputs": [{"name": "image", "type": "IMAGE", "link": 35}],
@@ -312,7 +393,7 @@
     {
       "id": 39,
       "type": "SeedVR2VideoUpscaler",
-      "pos": [2950, 300],
+      "pos": [3650, 300],
       "size": [300, 120],
       "title": "Upscale - FACE 01",
       "widgets_values": [2048, "randomize", "lab"],
@@ -326,33 +407,33 @@
     {
       "id": 40,
       "type": "SeedVR2VideoUpscaler",
-      "pos": [2950, 700],
+      "pos": [3650, 700],
       "title": "Upscale - FACE 02",
       "widgets_values": [2048, "randomize", "lab"],
       "inputs": [
         {"name": "image", "type": "IMAGE", "link": 37},
-        {"name": "dit_model", "type": "DIT_MODEL", "link": null},
-        {"name": "vae", "type": "SEEDVR2_VAE", "link": null}
+        {"name": "dit_model", "type": "DIT_MODEL", "link": 54},
+        {"name": "vae", "type": "SEEDVR2_VAE", "link": 56}
       ],
       "outputs": [{"name": "IMAGE", "type": "IMAGE", "links": [40]}]
     },
     {
       "id": 41,
       "type": "SeedVR2VideoUpscaler",
-      "pos": [2950, 1100],
+      "pos": [3650, 1100],
       "title": "Upscale - FACE 03",
       "widgets_values": [2048, "randomize", "lab"],
       "inputs": [
         {"name": "image", "type": "IMAGE", "link": 38},
-        {"name": "dit_model", "type": "DIT_MODEL", "link": null},
-        {"name": "vae", "type": "SEEDVR2_VAE", "link": null}
+        {"name": "dit_model", "type": "DIT_MODEL", "link": 55},
+        {"name": "vae", "type": "SEEDVR2_VAE", "link": 57}
       ],
       "outputs": [{"name": "IMAGE", "type": "IMAGE", "links": [41]}]
     },
     {
       "id": 42,
       "type": "SaveImage",
-      "pos": [3350, 300],
+      "pos": [4050, 300],
       "size": [300, 250],
       "title": "Save FACE 01 (Front)",
       "widgets_values": ["master_images/char_XXX_face_01"],
@@ -361,7 +442,7 @@
     {
       "id": 43,
       "type": "SaveImage",
-      "pos": [3350, 700],
+      "pos": [4050, 700],
       "size": [300, 250],
       "title": "Save FACE 02 (Angle)",
       "widgets_values": ["master_images/char_XXX_face_02"],
@@ -370,7 +451,7 @@
     {
       "id": 44,
       "type": "SaveImage",
-      "pos": [3350, 1100],
+      "pos": [4050, 1100],
       "size": [300, 250],
       "title": "Save FACE 03 (Natural)",
       "widgets_values": ["master_images/char_XXX_face_03"],
@@ -388,19 +469,48 @@
   "links": [
     [1, 2, 0, 7, 0, "MODEL"],
     [2, 3, 0, 15, 0, "CLIP"],
+    [50, 3, 0, 16, 0, "CLIP"],
+    [51, 3, 0, 17, 0, "CLIP"],
     [3, 3, 0, 18, 0, "CLIP"],
     [4, 4, 0, 30, 1, "VAE"],
+    [52, 4, 0, 31, 1, "VAE"],
+    [53, 4, 0, 32, 1, "VAE"],
     [5, 5, 0, 39, 1, "DIT_MODEL"],
+    [54, 5, 0, 40, 1, "DIT_MODEL"],
+    [55, 5, 0, 41, 1, "DIT_MODEL"],
     [6, 6, 0, 39, 2, "SEEDVR2_VAE"],
+    [56, 6, 0, 40, 2, "SEEDVR2_VAE"],
+    [57, 6, 0, 41, 2, "SEEDVR2_VAE"],
     [7, 7, 0, 25, 0, "MODEL"],
+    [58, 7, 0, 26, 0, "MODEL"],
+    [59, 7, 0, 27, 0, "MODEL"],
+    [70, 7, 0, 47, 0, "MODEL"],
+    [71, 7, 0, 49, 0, "MODEL"],
+    [72, 7, 0, 51, 0, "MODEL"],
     [15, 15, 0, 25, 1, "CONDITIONING"],
     [16, 16, 0, 26, 1, "CONDITIONING"],
     [17, 17, 0, 27, 1, "CONDITIONING"],
+    [73, 15, 0, 47, 1, "CONDITIONING"],
+    [74, 16, 0, 49, 1, "CONDITIONING"],
+    [75, 17, 0, 51, 1, "CONDITIONING"],
     [18, 18, 0, 25, 2, "CONDITIONING"],
+    [60, 18, 0, 26, 2, "CONDITIONING"],
+    [61, 18, 0, 27, 2, "CONDITIONING"],
+    [76, 18, 0, 47, 2, "CONDITIONING"],
+    [77, 18, 0, 49, 2, "CONDITIONING"],
+    [78, 18, 0, 51, 2, "CONDITIONING"],
     [20, 20, 0, 25, 3, "LATENT"],
-    [25, 25, 0, 30, 0, "LATENT"],
-    [26, 26, 0, 31, 0, "LATENT"],
-    [27, 27, 0, 32, 0, "LATENT"],
+    [62, 20, 0, 26, 3, "LATENT"],
+    [63, 20, 0, 27, 3, "LATENT"],
+    [64, 25, 0, 46, 0, "LATENT"],
+    [65, 26, 0, 48, 0, "LATENT"],
+    [66, 27, 0, 50, 0, "LATENT"],
+    [67, 46, 0, 47, 3, "LATENT"],
+    [68, 48, 0, 49, 3, "LATENT"],
+    [69, 50, 0, 51, 3, "LATENT"],
+    [79, 47, 0, 30, 0, "LATENT"],
+    [80, 49, 0, 31, 0, "LATENT"],
+    [81, 51, 0, 32, 0, "LATENT"],
     [30, 30, 0, 33, 0, "IMAGE"],
     [31, 31, 0, 34, 0, "IMAGE"],
     [32, 32, 0, 35, 0, "IMAGE"],
@@ -426,20 +536,25 @@
       "color": "#2a9d8f"
     },
     {
-      "title": "Sampling (3 Parallel Paths)",
+      "title": "Step 1: Primary Sampling (3 Parallel Paths)",
       "bounding": [1350, 250, 600, 1200],
       "color": "#e76f51"
     },
     {
-      "title": "Post-Processing & Output",
-      "bounding": [1800, 250, 1900, 1200],
+      "title": "Step 2: Latent Upscale 1.5x + Refinement (denoise 0.2)",
+      "bounding": [1800, 250, 700, 1200],
+      "color": "#f4a261"
+    },
+    {
+      "title": "Post-Processing: Decode → FaceDetailer → FilmGrain → Upscale → Save",
+      "bounding": [2500, 250, 1900, 1200],
       "color": "#264653"
     }
   ],
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.7,
+      "scale": 0.5,
       "offset": [0, 0]
     },
     "info": {
@@ -447,11 +562,11 @@
       "model": "Z-Image Base (6B) - NOT Turbo",
       "target_gpu": "RTX 5090",
       "vram_requirement": "24-32GB",
-      "sampler": "DPM++ 2M Karras, 40 steps, CFG 4.5",
-      "2_step_refinement": "Latent upscale 1.5x + 20 step refine at denoise 0.2",
-      "face_detector": "YOLOV11m-face.pt",
-      "estimated_time_per_character": "5-8 minutes for all 3 images",
-      "total_time_21_characters": "100-170 minutes"
+      "step1": "Generate 1024x1024, DPM++ 2M Karras, 40 steps, CFG 4.5, denoise 1.0",
+      "step2": "Latent upscale 1.5x (nearest-exact) + Refine 20 steps, denoise 0.2",
+      "post_processing": "FaceDetailer (YOLOV11m) → FilmGrain → SeedVR2 Upscale 2048px",
+      "estimated_time_per_character": "8-12 minutes for all 3 images (2-step)",
+      "total_time_21_characters": "170-250 minutes"
     }
   },
   "version": 0.4
