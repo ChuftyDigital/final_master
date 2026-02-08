@@ -1,0 +1,137 @@
+{
+  "character_id": "char_014",
+  "name": "CHLOE WILLIAMS",
+  "age": 20,
+  "ethnicity": "European",
+  "nationality": "Scottish",
+  "location": "Edinburgh, Scotland",
+  "niche": "College/Young Adult (18+)",
+  "business_tier": "$9.99/month",
+  "physical_description": {
+    "height": "5'6\"",
+    "body_type": "Slim with feminine curves",
+    "skin_tone": "Fair with freckles",
+    "hair": {
+      "color": "Dark brown",
+      "length": "Long",
+      "texture": "Straight"
+    },
+    "eyes": {
+      "color": "Brown",
+      "shape": "Almond"
+    },
+    "face_shape": "Oval with defined features",
+    "distinctive_features": "Unique natural beauty",
+    "build": "Slim with feminine curves"
+  },
+  "style_persona": {
+    "fashion_sense": "Casual cute on a student budget",
+    "color_palette": "Casual neutrals, soft pastels, trendy colors",
+    "signature_looks": [
+      "Cozy sweaters",
+      "Cute dresses",
+      "Casual jeans"
+    ],
+    "aesthetic": "Girl next door authenticity"
+  },
+  "personality_summary": "Art history student, discovering sexuality, lives with roommates. Bubbly, curious, playful with Scottish accent.",
+  "key_appeal": "Youth appeal, innocent discovery, college fantasy, affordable entry point",
+  "content_strategy": {
+    "primary_platforms": [
+      "Instagram",
+      "Twitter/X",
+      "OnlyFans"
+    ],
+    "content_pillars": [
+      "Lifestyle content",
+      "Behind-the-scenes",
+      "Subscriber engagement",
+      "Personal storytelling"
+    ],
+    "posting_frequency": "Daily"
+  },
+  "content_preferences": {
+    "sfw": [
+      "college life",
+      "student lifestyle",
+      "casual"
+    ],
+    "suggestive": [
+      "girlfriend experience",
+      "playful",
+      "innocent"
+    ],
+    "spicy": [
+      "intimate",
+      "lingerie"
+    ],
+    "nsfw": [
+      "explicit",
+      "adult"
+    ]
+  },
+  "locations": [
+    "Modern apartment",
+    "Bedroom with natural light",
+    "Hotel room",
+    "Photography studio",
+    "Dorm room",
+    "University library",
+    "Coffee shop",
+    "Student apartment",
+    "Campus setting"
+  ],
+  "wardrobe": [
+    "Black silk slip dress",
+    "White oversized button-down shirt",
+    "High-waisted tailored trousers",
+    "Minimalist jewelry",
+    "Cozy sweater",
+    "Denim shorts",
+    "Cute sundress",
+    "Casual tank top",
+    "Comfortable jeans"
+  ],
+  "reference_images": {
+    "face_01": "char_014_face_01.png",
+    "face_02": "char_014_face_02.png",
+    "face_03": "char_014_face_03.png"
+  },
+  "base_prompts": {
+    "core_description": "Photorealistic portrait of CHLOE WILLIAMS, 20-year-old European woman from Edinburgh, Scotland",
+    "style_modifiers": "professional photography, 8k resolution, natural lighting, realistic skin texture",
+    "quality_boosters": "shot on Sony A7R IV, 85mm f/1.8 lens, shallow depth of field, film grain"
+  },
+  "generation_notes": {
+    "consistency_priorities": [
+      "Maintain exact facial features",
+      "Keep skin texture realistic",
+      "Preserve body proportions",
+      "Maintain hair color and style",
+      "Reflect European heritage accurately"
+    ],
+    "quality_requirements": [
+      "Photorealistic skin texture",
+      "Natural lighting",
+      "Professional composition",
+      "No artificial plastic look"
+    ],
+    "avoid_list": [
+      "Generic AI smooth skin",
+      "Distorted facial features",
+      "Inconsistent eye color",
+      "Unnatural body proportions",
+      "Stereotypical or fetishized portrayals"
+    ]
+  },
+  "tags": [
+    "college/young_adult_(18+)",
+    "scottish",
+    "european",
+    "model",
+    "influencer"
+  ],
+  "created_date": "2025-02-06",
+  "version": "1.0",
+  "source_file": "CHLOE_WILLIAMS_COMPLETE.txt"
+}

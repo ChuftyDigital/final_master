@@ -1,0 +1,126 @@
+{
+  "character_id": "char_016",
+  "name": "JASMINE NGUYEN",
+  "age": 23,
+  "ethnicity": "Mixed",
+  "nationality": "American",
+  "location": "Orange County, CA",
+  "niche": "Petite Asian/Feet Content",
+  "business_tier": "$17.99/month",
+  "physical_description": {
+    "height": "5'6\"",
+    "body_type": "Petite and slender",
+    "skin_tone": "Porcelain to light olive",
+    "hair": {
+      "color": "Dark brown",
+      "length": "Long",
+      "texture": "Straight"
+    },
+    "eyes": {
+      "color": "Brown",
+      "shape": "Almond"
+    },
+    "face_shape": "Oval with defined features",
+    "distinctive_features": "Unique natural beauty",
+    "build": "Petite and slender"
+  },
+  "style_persona": {
+    "fashion_sense": "Modern chic with personal flair",
+    "color_palette": "Versatile neutrals with statement colors",
+    "signature_looks": [
+      "Classic pieces",
+      "Trendy items",
+      "Personal style"
+    ],
+    "aesthetic": "Contemporary and confident"
+  },
+  "personality_summary": "Nursing student, helps family restaurant, discovered niche market. Shy but curious, sweet, accommodating.",
+  "key_appeal": "Petite frame, feet fetish niche, size comparison, Asian appeal",
+  "content_strategy": {
+    "primary_platforms": [
+      "Instagram",
+      "Twitter/X",
+      "OnlyFans"
+    ],
+    "content_pillars": [
+      "Lifestyle content",
+      "Behind-the-scenes",
+      "Subscriber engagement",
+      "Personal storytelling"
+    ],
+    "posting_frequency": "Daily"
+  },
+  "content_preferences": {
+    "sfw": [
+      "lifestyle",
+      "fashion",
+      "travel"
+    ],
+    "suggestive": [
+      "glamour",
+      "implied"
+    ],
+    "spicy": [
+      "intimate",
+      "lingerie"
+    ],
+    "nsfw": [
+      "explicit",
+      "adult"
+    ]
+  },
+  "locations": [
+    "Modern apartment",
+    "Bedroom with natural light",
+    "Hotel room",
+    "Photography studio"
+  ],
+  "wardrobe": [
+    "Black silk slip dress",
+    "White oversized button-down shirt",
+    "High-waisted tailored trousers",
+    "Minimalist jewelry"
+  ],
+  "reference_images": {
+    "face_01": "char_016_face_01.png",
+    "face_02": "char_016_face_02.png",
+    "face_03": "char_016_face_03.png"
+  },
+  "base_prompts": {
+    "core_description": "Photorealistic portrait of JASMINE NGUYEN, 23-year-old Mixed woman from Orange County, CA",
+    "style_modifiers": "professional photography, 8k resolution, natural lighting, realistic skin texture",
+    "quality_boosters": "shot on Sony A7R IV, 85mm f/1.8 lens, shallow depth of field, film grain"
+  },
+  "generation_notes": {
+    "consistency_priorities": [
+      "Maintain exact facial features",
+      "Keep skin texture realistic",
+      "Preserve body proportions",
+      "Maintain hair color and style",
+      "Reflect Mixed heritage accurately"
+    ],
+    "quality_requirements": [
+      "Photorealistic skin texture",
+      "Natural lighting",
+      "Professional composition",
+      "No artificial plastic look"
+    ],
+    "avoid_list": [
+      "Generic AI smooth skin",
+      "Distorted facial features",
+      "Inconsistent eye color",
+      "Unnatural body proportions",
+      "Stereotypical or fetishized portrayals"
+    ]
+  },
+  "tags": [
+    "petite_asian/feet_content",
+    "american",
+    "mixed",
+    "model",
+    "influencer"
+  ],
+  "created_date": "2025-02-06",
+  "version": "1.0",
+  "source_file": "JASMINE_NGUYEN_COMPLETE.txt"
+}

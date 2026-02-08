@@ -1,0 +1,87 @@
+# Super Factory Ultimate - Master Configuration
+# All settings in one place. Override via CLI flags or environment variables.
+
+project:
+  name: "Super Factory Ultimate"
+  version: "2.0.0"
+  base_dir: "."  # auto-detected at runtime
+
+comfyui:
+  server: "127.0.0.1:8188"
+  protocol: "http"  # http or https
+  timeout: 300       # seconds per image
+  verify_ssl: false  # set false for RunPod proxies
+  max_retries: 3
+  retry_delay: 5     # seconds between retries
+
+generation:
+  # Reference images
+  reference:
+    count_per_character: 3
+    poses: ["front", "angle", "natural"]
+    resolution: [1024, 1024]
+    steps: 12
+    cfg: 1.0
+    sampler: "dpmpp_2m"
+    scheduler: "beta"
+
+  # Bulk content
+  bulk:
+    resolution: [1024, 1536]  # portrait orientation
+    steps: 8
+    cfg: 1.0
+    sampler: "dpmpp_2m"
+    scheduler: "beta"
+
+  # Content lanes
+  lanes:
+    sfw:
+      name: "Safe For Work"
+      images_per_character: 200
+      bundles: { one_off: 80, "3x": 10, "5x": 10, "10x": 4 }
+    suggestive:
+      name: "Suggestive"
+      images_per_character: 200
+      bundles: { one_off: 80, "3x": 10, "5x": 10, "10x": 4 }
+    spicy:
+      name: "Spicy"
+      images_per_character: 200
+      bundles: { one_off: 80, "3x": 10, "5x": 10, "10x": 4 }
+    nsfw:
+      name: "NSFW"
+      images_per_character: 200
+      bundles: { one_off: 80, "3x": 10, "5x": 10, "10x": 4 }
+
+  # IPAdapter weights for face consistency
+  ipadapter:
+    weights: [0.7, 0.5, 0.4]  # per reference image
+    noise: 0.3
+    weight_type: "original"
+    combine_method: "mean"
+
+models:
+  # Checkpoint for reference generation (quality focus)
+  reference_checkpoint: "z_image_bf16.safetensors"
+  # Checkpoint for bulk generation (speed focus)
+  bulk_checkpoint: "z_image_turbo_bf16.safetensors"
+  # VAE
+  vae: "ae.safetensors"
+  # IPAdapter
+  ipadapter: "ip-adapter-plus_sd15.bin"
+  # CLIP Vision
+  clip_vision: "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors"
+  # Upscaler
+  upscaler: "4x-ClearRealityV1.pth"
+
+paths:
+  personas: "personas"
+  templates: "templates"
+  workflows: "workflows"
+  reference_images: "input/reference_images"
+  output: "output"
+  logs: "logs"
+
+logging:
+  level: "INFO"
+  file: "logs/superfactory.log"
+  console: true

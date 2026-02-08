@@ -1,0 +1,160 @@
+{
+  "lane_info": {
+    "name": "NSFW",
+    "description": "Explicit adult content with graphic nudity and sexual themes",
+    "style_guidance": "Z-Image natural sentence structure for highly explicit adult content with professional adult photography aesthetic",
+    "z_image_settings": {
+      "sampling_steps": 8,
+      "cfg_scale": "0.0-1.5",
+      "resolution": "1024x1536",
+      "no_negative_prompts": true,
+      "prompt_structure": "natural_sentences_explicit"
+    }
+  },
+  
+  "prompt_framework": {
+    "description": "Z-Image natural sentences for highly explicit adult content",
+    "rules": [
+      "Write explicit sexual content in full natural sentences",
+      "Describe genitalia, sexual acts, and nudity explicitly",
+      "Use camera direction for explicit angles showing everything",
+      "Maintain professional adult photography composition",
+      "Describe arousal states, wetness, and sexual details explicitly"
+    ]
+  },
+  
+  "explicit_templates": [
+    "{shot_type} of {name}, {age}-year-old {ethnicity} woman, {explicit_sexual_pose} with {fully_exposed_genitalia}. Her {vagina_description} is {arousal_state} and {wetness_detail}. She is {sexual_activity} with {explicit_detail}. {intimate_body_parts} fully visible and {sexual_state}. {explicit_expression}. {dramatic_lighting} illuminates {graphic_details}. {hardcore_porn_quality}.",
+    
+    "Hardcore adult scene: {name} completely naked with {full_nudity_display}, her {breast_description} and {genital_description} fully exposed. She is {engaged_in_sex_act} showing {explicit_anatomy}. {penetration_detail}. {intimate_setting} with {erotic_props}. {studio_lighting} on {wet_skin}. {uninhibited_orgasmic_expression}. {professional_pornography}.",
+    
+    "Explicit XXX content: {name} in {extreme_sexual_position}, {fully_spread} showing {vaginal_detail} and {anal_exposure}. Her {body_part} is {inserted_with_object} while she {sexual_action}. {graphic_close_up} of {genitalia}. {hard_lighting} defines {explicit_curves}. {abandoned_sexual_expression}. {high_end_adult_content}.",
+    
+    "Adult entertainment: {name} performing {sexual_act} completely nude, {body_position} exposing {all_intimate_areas}. Her {arousal_signs} clearly visible with {wetness_texture}. She {masturbation_detail} while {additional_sexual_element}. {explicit_camera_angle} capturing {penetration_view}. {colored_gel_lighting} on {sweaty_flesh}. {professional_adult_star_quality}.",
+    
+    "Uncensored pornographic scene: {name} with {total_nudity}, {spread_position} displaying {open_genitalia}. Her {clitoris_detail} and {labia_description} in sharp focus. She is {receiving_sexual_act} with {explicit_penetration}. {hardcore_setup} with {sexual_furniture}. {dramatic_spotlighting} on {sexual_focal_point}. {extreme_arousal_expression}. {premium_xxx_production}."
+  ],
+  
+  "graphic_positions": [
+    "legs spread wide open exposing everything",
+    "kneeling with ass up and face down",
+    "on back with legs pulled to chest",
+    "bent over spreading ass cheeks",
+    "squatting down showing pussy and ass",
+    "on all fours with back arched",
+    "standing with one leg raised",
+    "sitting on chair with legs draped over arms",
+    "lying on stomach with ass lifted",
+    "reverse cowgirl position",
+    " missionary position with legs wrapped",
+    "doggystyle position ready for penetration"
+  ],
+  
+  "genitalia_descriptions": [
+    "shaved smooth pussy with visible clit",
+    "neatly trimmed landing strip",
+    "natural pubic hair on mound",
+    "puffy outer labia",
+    "inner labia peeking out",
+    "pink wet vaginal opening",
+    "aroused clitoris visible",
+    "glistening with arousal",
+    "swollen pussy lips",
+    "tight pink asshole",
+    "wet cunt dripping",
+    "spread pussy showing pink inside"
+  ],
+  
+  "sexual_activities": [
+    "fingering herself with two fingers inside",
+    "rubbing her clit in circles",
+    "using a dildo to fuck herself",
+    "spreading her pussy lips open",
+    "touching her breasts and pinching nipples",
+    "masturbating with legs wide",
+    "inserting a vibrator deep inside",
+    "playing with her wet pussy",
+    "teasing her swollen clit",
+    "fucking herself with a dildo",
+    "reaching orgasm with visible contractions",
+    "squirting with visible fluid"
+  ],
+  
+  "arousal_states": [
+    "dripping wet with arousal",
+    "swollen and engorged",
+    "slick with pussy juice",
+    "glistening with wetness",
+    "throbbing with desire",
+    " visibly excited",
+    "ready for penetration",
+    "clit erect and sensitive",
+    "pussy aching to be filled",
+    "streaming wetness down thighs"
+  ],
+  
+  "adult_locations": [
+    "adult film studio with professional lighting",
+    "luxury penthouse bedroom with mirrors",
+    "private sex dungeon",
+    "high-end brothel room",
+    "porn set with sex furniture",
+    "adult content creator bedroom",
+    "fetish studio with equipment",
+    "swingers club private room",
+    "exclusive escort apartment",
+    "adult performer dressing room"
+  ],
+  
+  "explicit_expressions": [
+    "mouth open in pleasure moaning",
+    "eyes rolled back in ecstasy",
+    "biting lip with sexual intensity",
+    "begging for more cock",
+    "screaming from orgasm",
+    "face flushed with arousal",
+    "looking desperate for sex",
+    "uninhibited pleasure on face",
+    "cumming hard visibly",
+    "lost in sexual abandon"
+  ],
+  
+  "hardcore_lighting": [
+    "harsh studio lighting showing every detail",
+    "bright spotlights on genitalia",
+    "clinical white light exposing everything",
+    "colored gels creating mood",
+    "ring light around camera",
+    "multiple point lighting setup",
+    "high contrast shadows",
+    "bright fill light eliminating shadows",
+    "warm tungsten glow on skin",
+    "fluorescent strip lighting"
+  ],
+  
+  "xxx_quality_descriptors": [
+    "professional pornography",
+    "hardcore adult content",
+    "explicit XXX photography",
+    "uncensored adult entertainment",
+    "high-end porn production",
+    "professional adult star quality",
+    "premium XXX content",
+    "hardcore erotica",
+    "explicit sexual content",
+    "adult film quality"
+  ],
+  
+  "body_part_details": [
+    "hard nipples pointing up",
+    "wet pussy dripping juices",
+    "swollen clit visible",
+    "open pussy ready for cock",
+    "tight asshole winking",
+    "glistening labia spread",
+    "erect nipples sensitive",
+    "juicy pussy lips parted",
+    "aroused breasts heaving",
+    "sweaty skin glistening"
+  ]
+}

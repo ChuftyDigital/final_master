@@ -1,0 +1,200 @@
+{
+  "lane_info": {
+    "name": "Safe For Work",
+    "description": "Professional, lifestyle, fashion content suitable for all audiences",
+    "style_guidance": "Z-Image natural sentence structure with camera-first approach",
+    "z_image_settings": {
+      "sampling_steps": 8,
+      "cfg_scale": "0.0-1.5",
+      "resolution": "1024x1024 or 1024x1536",
+      "no_negative_prompts": true,
+      "prompt_structure": "natural_sentences_not_tags"
+    }
+  },
+  
+  "prompt_framework": {
+    "description": "Z-Image uses natural sentence structure like camera direction, not SD-style tag spam",
+    "rules": [
+      "Write in full natural sentences with spatial relationships",
+      "NO tag spam: '(masterpiece), (best quality), 4k, trending'",
+      "Treat prompts like camera direction: angles, lighting, composition",
+      "Be specific with details: colors, materials, brands, states",
+      "Z-Image reads semantically like sentences"
+    ]
+  },
+  
+  "micro_influencer_templates": [
+    "{shot_type} of a {age}-year-old {ethnicity} woman with {hair_description} and {eye_description}, {action_pose} in {location}. She wears {outfit_description}. {expression_description}. {lighting_description}. Background shows {environment_details}. {quality_descriptors}.",
+    
+    "{name} posing {pose_type} wearing {clothing}. {location} setting with {background_style}. {lighting_type} illuminating her {skin_description} skin. She has {expression} expression. {camera_specs}. {aesthetic_tags}.",
+    
+    "Professional {photography_style} of {name}, {age}, from {location}. She is {activity} in {outfit}. {face_description}. {lighting_quality} creating {mood} atmosphere. {technical_specs}.",
+    
+    "{shot_type} capturing {name} during {activity}. She wears {wardrobe_item} in {color_palette} tones. {environment_context}. {lighting_description} with {color_grading}. {camera_quality}.",
+    
+    "Lifestyle moment of {name} {doing_action} at {location}. {clothing_description}. {expression} look with {eye_contact}. {lighting_setup}. Background features {background_elements}. {photo_quality}."
+  ],
+  
+  "casual_story_templates": [
+    "{shot_type} of {name}, {age}-year-old {ethnicity} woman with {features}. Currently {state_description}. {hair_state}. She wears {basic_clothing}. {unflattering_pose}. {tired_expression}. {bad_lighting}. Background shows {messy_environment}. {low_quality_camera}.",
+    
+    "Candid {shot_type} of {name} {activity}. {messy_hair}. {worn_clothing}. {natural_expression}. {harsh_lighting} from {light_source}. {real_environment}. {authentic_descriptors}.",
+    
+    "Real moment: {name} {situation}. {appearance_state}. {clothing_condition}. {pose_description}. {expression_state}. {lighting_condition}. {environment_reality}. {unedited_quality}.",
+    
+    "Unfiltered {shot_type} of {name}. {authentic_description}. {hair_reality}. {outfit_reality}. {pose_reality}. {face_reality}. {lighting_reality}. {space_reality}. {raw_quality}."
+  ],
+  
+  "shot_types": [
+    "Close-up portrait",
+    "Medium shot",
+    "Three-quarter view",
+    "Environmental portrait",
+    "Candid moment",
+    "Mirror selfie",
+    "Front camera view",
+    "Over-the-shoulder",
+    "Profile view",
+    "Full body shot"
+  ],
+  
+  "micro_influencer_markers": {
+    "lighting_keywords": [
+      "golden hour sunlight through curtains",
+      "soft natural daylight from window",
+      "warm vanity lighting",
+      "ring light with visible catchlights",
+      "soft diffused lighting, no harsh shadows",
+      "warm tungsten mixed with natural light",
+      "clean studio lighting",
+      "window light with soft shadows"
+    ],
+    
+    "environment_markers": [
+      "aesthetically arranged backgrounds",
+      "trendy decor: pampas grass, fairy lights, plants",
+      "clean mirrors with nice frames",
+      "neutral color palettes",
+      "luxury touches: designer items visible",
+      "organized but lived-in spaces",
+      "minimalist aesthetic",
+      "stylish interior design"
+    ],
+    
+    "appearance_standards": [
+      "no makeup makeup or intentional glam",
+      "hair styled or intentionally effortless",
+      "trendy coordinated outfits",
+      "manicured nails",
+      "delicate gold jewelry",
+      "latest phone model",
+      "good posture and practiced angles",
+      "healthy glowing skin"
+    ],
+    
+    "photo_quality_descriptors": [
+      "latest iPhone quality",
+      "portrait mode subtle background blur",
+      "warm color grading",
+      "slightly lifted blacks VSCO aesthetic",
+      "good exposure balanced highlights",
+      "clean and bright overall",
+      "subtle grain acceptable",
+      "professional photography quality"
+    ]
+  },
+  
+  "casual_story_markers": {
+    "lighting_keywords": [
+      "harsh overhead fluorescent",
+      "single warm bulb creating yellow cast",
+      "overexposed window light",
+      "blue phone screen glow",
+      "mixed color temperatures",
+      "fridge light from below",
+      "direct flash creating flat light",
+      "greenish bathroom fluorescents"
+    ],
+    
+    "environment_markers": [
+      "real mess and clutter",
+      "mismatched items",
+      "public bathrooms with generic tiles",
+      "unmade beds with tangled sheets",
+      "dishes in sink",
+      "clothes on floor",
+      "dirty mirrors with water spots",
+      "everyday lived-in chaos"
+    ],
+    
+    "appearance_standards": [
+      "zero makeup or faded remnants",
+      "hair genuinely messy unbrushed",
+      "old worn comfortable clothing",
+      "chapped lips tired eyes",
+      "old phone cracked screen",
+      "no jewelry",
+      "real skin states",
+      "authentic imperfections"
+    ],
+    
+    "photo_quality_descriptors": [
+      "front camera distortion",
+      "grainy noisy low quality",
+      "slight motion blur",
+      "out of focus",
+      "finger partially in frame",
+      "overexposed or underexposed",
+      "harsh shadows",
+      "unedited raw no filter"
+    ]
+  },
+  
+  "scenario_categories": [
+    "Professional portraits",
+    "Lifestyle moments",
+    "Fashion content",
+    "Travel scenes",
+    "Coffee shop aesthetic",
+    "Home office setup",
+    "Gym or fitness",
+    "Cafe culture",
+    "Bookstore moments",
+    "Street style"
+  ],
+  
+  "camera_directions": [
+    "eye level straight on",
+    "slightly above looking down",
+    "three-quarter angle flattering",
+    "profile side view",
+    "angled 45 degrees",
+    "candid natural angle",
+    "mirror reflection",
+    "overhead flat lay style"
+  ],
+  
+  "lighting_setups": [
+    "soft natural window light",
+    "golden hour warm glow",
+    "studio softbox setup",
+    "overcast diffused daylight",
+    "indoor ambient mixed",
+    "sunset warm backlight",
+    "shaded soft light",
+    "architectural natural light"
+  ],
+  
+  "quality_modifiers": [
+    "photorealistic portrait",
+    "professional photography",
+    "high resolution",
+    "sharp focus on face",
+    "natural skin texture",
+    "film grain texture",
+    "shot on Sony A7R IV",
+    "85mm lens shallow depth of field",
+    "cinematic color grading",
+    "editorial quality"
+  ]
+}

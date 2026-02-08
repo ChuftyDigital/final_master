@@ -1,0 +1,125 @@
+{
+  "lane_info": {
+    "name": "Spicy",
+    "description": "Provocative, steamy content with higher sensuality",
+    "style_guidance": "Z-Image natural sentence structure for steamy, provocative content with artistic quality",
+    "z_image_settings": {
+      "sampling_steps": 8,
+      "cfg_scale": "0.0-1.5",
+      "resolution": "1024x1536",
+      "no_negative_prompts": true,
+      "prompt_structure": "natural_sentences_not_tags"
+    }
+  },
+  
+  "prompt_framework": {
+    "description": "Z-Image natural sentences for provocative steamy content",
+    "rules": [
+      "Use full sentences describing provocative scenes",
+      "Emphasize heat, steam, and sensual atmosphere",
+      "Camera direction focuses on form and curves",
+      "Lighting creates drama and intensity",
+      "Maintain artistic composition even in explicit context"
+    ]
+  },
+  
+  "micro_influencer_templates": [
+    "{shot_type} of {name}, {age}-year-old {ethnicity}, posed {provocative_position} in {steamy_location}. She wears {revealing_outfit} that {accentuates_curves}. {intense_expression}. {dramatic_lighting} highlights {body_features}. {erotic_art_quality}.",
+    
+    "Steamy scene: {name} {sensual_activity} wearing {minimal_clothing}. {location} filled with {atmospheric_element}. {heat_lighting} creates {sweaty_glow} on her {skin}. {passionate_expression}. {adult_photography}.",
+    
+    "Provocative {shot_type}: {name} positioned to {maximize_allure}, wearing {spicy_lingerie}. {intimate_setting} with {private_atmosphere}. {chiaroscuro_lighting} defines {body_contours}. {desire_expression}. {sophisticated_erotic}.",
+    
+    "{name} in moment of {abandoned_sensuality}, {clothing_state} in {steamy_environment}. {pose} reveals {intimate_details} with {artistic_intention}. {warm_lighting} bathes scene in {golden_heat}. {high_end_erotic}.",
+    
+    "Intense portrait: {name} radiating {sexual_confidence}, wearing {barely_there}. {private_location} with {intimate_setup}. {spotlight_effect} focuses on {focal_point}. {smoldering_expression}. {provocative_artistry}."
+  ],
+  
+  "casual_story_templates": [
+    "Candid {shot_type}: {name} caught in {private_moment} of {self_exploration}. {natural_state} without {performance}. {real_lighting} from {source}. {messy_bedroom} background. {authentic_vulnerability}.",
+    
+    "Real intimacy: {name} {casual_nudity} in {personal_space}. {unposed_position} showing {natural_form}. {available_light} creating {real_shadows}. {genuine_expression} not {porn_performance}. {raw_eroticism}.",
+    
+    "Unfiltered moment: {name} during {private_activity}. {comfortable_nudity} rather than {posed_explicit}. {natural_curves} in {relaxed_pose}. {window_light}. {lived_in_setting}. {authentic_sexuality}.",
+    
+    "Behind closed doors: {name} in {personal_intimacy}. {real_body} with {natural_imperfections}. {casual_setting} not {studio_porn}. {natural_lighting}. {private_moment} captured {without_judgment}."
+  ],
+  
+  "provocative_positions": [
+    "reclining with full body on display",
+    "arching back dramatically",
+    "kneeling with inviting posture",
+    "lying on stomach looking back",
+    "seated with legs positioned openly",
+    "standing with hip thrust forward",
+    "hands exploring own body",
+    "back turned looking seductively over shoulder",
+    "body twist accentuating curves",
+    "legs spread in confident display"
+  ],
+  
+  "revealing_outfits": [
+    "strappy lingerie harness",
+    "sheer bodysuit",
+    "crotchless panties",
+    "open cup bra",
+    "wet t-shirt",
+    "micro bikini",
+    "fishnet body stocking",
+    "latex mini dress",
+    "barely-there thong",
+    "straps and chains"
+  ],
+  
+  "steamy_locations": [
+    "steam-filled bathroom",
+    "bedroom with red ambient light",
+    "private jacuzzi",
+    "intimate boudoir",
+    "luxury hotel suite",
+    "sauna room",
+    "shower with glass door",
+    "canopy bed with silk sheets",
+    "modern loft bedroom",
+    "private dressing area"
+  ],
+  
+  "dramatic_lighting": [
+    "dramatic chiaroscuro shadows",
+    "warm red mood lighting",
+    "candlelight flicker",
+    "spotlight focused on body",
+    "steam diffused soft light",
+    "sunset orange glow",
+    "low-key dramatic shadows",
+    "rim light emphasizing form",
+    "colored gel lighting",
+    "intimate pool of warm light"
+  ],
+  
+  "expressions_spicy": [
+    "smoldering with desire",
+    "inviting gaze",
+    "abandoned to pleasure",
+    "confident sexuality",
+    "playful temptation",
+    "intense focus",
+    "vulnerable passion",
+    "uninhibited joy",
+    "sultry invitation",
+    "raw sensuality"
+  ],
+  
+  "quality_descriptors": [
+    "erotic art photography",
+    "sensual boudoir",
+    "intimate portraiture",
+    "artistic erotic",
+    "steamy editorial",
+    "provocative fine art",
+    "adult content photography",
+    "sophisticated erotica",
+    "sensual art",
+    "intimate erotic"
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "lane_info": {
+    "name": "Suggestive",
+    "description": "Flirty, alluring, tasteful sensual content with implied intimacy",
+    "style_guidance": "Z-Image natural sentence structure with camera-first approach for tasteful sensuality",
+    "z_image_settings": {
+      "sampling_steps": 8,
+      "cfg_scale": "0.0-1.5",
+      "resolution": "1024x1536",
+      "no_negative_prompts": true,
+      "prompt_structure": "natural_sentences_not_tags"
+    }
+  },
+  
+  "prompt_framework": {
+    "description": "Z-Image uses natural sentence structure for tasteful sensual content",
+    "rules": [
+      "Write in full natural sentences with spatial relationships",
+      "Focus on allure, confidence, and tasteful sensuality",
+      "Use camera direction: angles that flatter while maintaining elegance",
+      "Describe mood and atmosphere, not explicit acts",
+      "Emphasize lighting that creates intimacy without being explicit"
+    ]
+  },
+  
+  "micro_influencer_templates": [
+    "{shot_type} of {name}, {age}-year-old {ethnicity} woman, {alluring_pose} in {intimate_location}. She wears {suggestive_outfit} that {suggests_without_showing}. {sultry_expression}. {intimate_lighting} caresses her {skin_description}. {boudoir_quality}.",
+    
+    "Sensual portrait: {name} positioned {suggestive_position} wearing {lingerie_or_implied}. {location} setting with {romantic_ambiance}. {soft_lighting} creating {intimate_mood}. She gives {flirty_expression}. {glamour_specs}.",
+    
+    "Alluring shot of {name} during {intimate_activity}. {clothing} reveals {hint_of_skin} while maintaining {tastefulness}. {lighting_setup} emphasizes {feminine_curves}. {expression} invites without demanding. {professional_boudoir}.",
+    
+    "Tasteful boudoir: {name} in {boudoir_setting}, wearing {sensual_wear}. {pose} suggests {intimacy} while remaining {artistic}. {warm_lighting} bathes her {figure} in {golden_glow}. {elegant_quality}.",
+    
+    "{name} captured in moment of {quiet_confidence}, wearing {revealing_but_classy}. {location} backdrop with {private_atmosphere}. {side_lighting} creates {dramatic_shadows} highlighting {silhouette}. {sophisticated_sensuality}."
+  ],
+  
+  "casual_story_templates": [
+    "Candid {shot_type} of {name}, {natural_state}, caught in {unintentional_moment}. {messy_appearance} adds to {authentic_vulnerability}. {comfortable_clothing} suggests {relaxed_intimacy}. {natural_lighting}. {raw_aesthetic}.",
+    
+    "Real moment: {name} {casual_activity} in {private_space}. {unposed_position} reveals {natural_curves} without {intention}. {morning_light} through {window}. {bedhead_hair} and {no_makeup}. {candid_intimacy}.",
+    
+    "Unfiltered {shot_type}: {name} looking {approachable_and_real}. {comfortable_loungewear} that {fits_naturally}. {relaxed_pose} on {casual_furniture}. {natural_expression} rather than {performed_sexy}. {authentic_atmosphere}.",
+    
+    "Behind-the-scenes: {name} during {personal_moment}. {real_clothing} not {costume_lingerie}. {genuine_smile} or {thoughtful_expression}. {available_light} from {source}. {lived_in_space}. {unpolished_authenticity}."
+  ],
+  
+  "pose_descriptors": [
+    "leaning back with relaxed confidence",
+    "side profile showing silhouette",
+    "reclining with subtle curves",
+    "looking over shoulder with invitation",
+    "stretching naturally",
+    "sitting with legs positioned elegantly",
+    "standing with hip popped subtly",
+    "lying on side propped on elbow",
+    "kneeling with grace",
+    "arching back slightly"
+  ],
+  
+  "suggestive_outfits": [
+    "lace bodysuit",
+    "silk slip dress",
+    "sheer robe",
+    "cute lingerie set",
+    "oversized button-down shirt",
+    "satin camisole",
+    "implied nude with strategic draping",
+    "strappy bralette",
+    "high-waisted lace underwear",
+    "soft knit sweater dress"
+  ],
+  
+  "lighting_intimate": [
+    "soft romantic candlelight",
+    "warm bedside lamp glow",
+    "window light with sheer curtains",
+    "sunset golden hour through blinds",
+    "softbox creating gentle shadows",
+    "natural light with reflector fill",
+    "moody low-key dramatic lighting",
+    "rim light defining silhouette"
+  ],
+  
+  "expressions_suggestive": [
+    "soft knowing smile",
+    "direct eye contact with mystery",
+    "slightly parted lips",
+    "playful smirk",
+    "vulnerable but confident gaze",
+    "flirty side glance",
+    "relaxed sensuality",
+    "quiet confidence",
+    "approachable allure",
+    "tasteful invitation"
+  ],
+  
+  "locations_intimate": [
+    "luxury bedroom with soft linens",
+    "hotel room with city view",
+    "boudoir studio setup",
+    "cozy apartment bedroom",
+    "elegant bathroom",
+    "private dressing room",
+    "intimate lounge area",
+    "sunlit bedroom corner",
+    "romantic canopy bed",
+    "modern minimalist bedroom"
+  ],
+  
+  "quality_descriptors": [
+    "glamour photography",
+    "boudoir photography",
+    "tasteful sensuality",
+    "artistic nude implied",
+    "fashion editorial",
+    "intimate portraiture",
+    "soft focus romantic",
+    "cinematic lighting",
+    "professional boudoir",
+    "elegant sensuality"
+  ]
+}

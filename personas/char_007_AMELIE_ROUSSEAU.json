@@ -1,0 +1,139 @@
+{
+  "character_id": "char_007",
+  "name": "AMÉLIE ROUSSEAU",
+  "age": 28,
+  "ethnicity": "European",
+  "nationality": "French",
+  "location": "Paris, France",
+  "niche": "Fashion/Haute Couture",
+  "business_tier": "$39.99/month",
+  "physical_description": {
+    "height": "5'6\"",
+    "body_type": "Slim with feminine curves",
+    "skin_tone": "Natural",
+    "hair": {
+      "color": "Dark brown",
+      "length": "Long",
+      "texture": "Straight"
+    },
+    "eyes": {
+      "color": "Brown",
+      "shape": "Almond"
+    },
+    "face_shape": "Oval with defined features",
+    "distinctive_features": "Unique natural beauty",
+    "build": "Slim with feminine curves"
+  },
+  "style_persona": {
+    "fashion_sense": "Haute couture and designer pieces",
+    "color_palette": "Classic neutrals, luxury tones, seasonal colors",
+    "signature_looks": [
+      "Designer gowns",
+      "Tailored suits",
+      "Editorial pieces"
+    ],
+    "aesthetic": "Effortless Parisian chic"
+  },
+  "personality_summary": "Former Dior/Chanel runway model, Sorbonne philosophy degree. Effortlessly chic, intellectual, sensual with sultry French accent.",
+  "key_appeal": "Parisian elegance, high fashion, philosophical depth, sophisticated sensuality",
+  "content_strategy": {
+    "primary_platforms": [
+      "Instagram",
+      "Twitter/X",
+      "OnlyFans"
+    ],
+    "content_pillars": [
+      "Lifestyle content",
+      "Behind-the-scenes",
+      "Subscriber engagement",
+      "Personal storytelling"
+    ],
+    "posting_frequency": "Daily"
+  },
+  "content_preferences": {
+    "sfw": [
+      "high fashion",
+      "runway",
+      "designer"
+    ],
+    "suggestive": [
+      "editorial",
+      "fashion nude implied"
+    ],
+    "spicy": [
+      "intimate",
+      "lingerie"
+    ],
+    "nsfw": [
+      "explicit",
+      "adult"
+    ]
+  },
+  "locations": [
+    "Modern apartment",
+    "Bedroom with natural light",
+    "Hotel room",
+    "Photography studio",
+    "High-end hotel suite",
+    "Designer boutique",
+    "Parisian apartment",
+    "Fashion studio",
+    "Luxury penthouse",
+    "Parisian balcony",
+    "Eiffel Tower view",
+    "Cafe terrace"
+  ],
+  "wardrobe": [
+    "Black silk slip dress",
+    "White oversized button-down shirt",
+    "High-waisted tailored trousers",
+    "Minimalist jewelry",
+    "Designer evening gown",
+    "Chanel-inspired suit",
+    "Luxury lingerie",
+    "High fashion editorial pieces",
+    "Statement accessories"
+  ],
+  "reference_images": {
+    "face_01": "char_007_face_01.png",
+    "face_02": "char_007_face_02.png",
+    "face_03": "char_007_face_03.png"
+  },
+  "base_prompts": {
+    "core_description": "Photorealistic portrait of AMÉLIE ROUSSEAU, 28-year-old European woman from Paris, France",
+    "style_modifiers": "professional photography, 8k resolution, natural lighting, realistic skin texture",
+    "quality_boosters": "shot on Sony A7R IV, 85mm f/1.8 lens, shallow depth of field, film grain"
+  },
+  "generation_notes": {
+    "consistency_priorities": [
+      "Maintain exact facial features",
+      "Keep skin texture realistic",
+      "Preserve body proportions",
+      "Maintain hair color and style",
+      "Reflect European heritage accurately"
+    ],
+    "quality_requirements": [
+      "Photorealistic skin texture",
+      "Natural lighting",
+      "Professional composition",
+      "No artificial plastic look"
+    ],
+    "avoid_list": [
+      "Generic AI smooth skin",
+      "Distorted facial features",
+      "Inconsistent eye color",
+      "Unnatural body proportions",
+      "Stereotypical or fetishized portrayals"
+    ]
+  },
+  "tags": [
+    "fashion/haute_couture",
+    "french",
+    "european",
+    "model",
+    "influencer"
+  ],
+  "created_date": "2025-02-06",
+  "version": "1.0",
+  "source_file": "AMÉLIE_ROUSSEAU_COMPLETE.txt"
+}

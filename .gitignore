@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.pyo
+.ruff_cache/
+logs/
+output/
+input/reference_images/*.png
+*.egg-info/
+dist/
+build/
+.env
+install_state.json
+batch_state.json

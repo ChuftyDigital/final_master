@@ -1,0 +1,132 @@
+{
+  "character_id": "char_008",
+  "name": "DAKOTA ROSE",
+  "age": 22,
+  "ethnicity": "Mixed",
+  "nationality": "American",
+  "location": "Austin, Texas",
+  "niche": "Amateur/Girl Next Door",
+  "business_tier": "$12.99/month",
+  "physical_description": {
+    "height": "5'6\"",
+    "body_type": "Slim with feminine curves",
+    "skin_tone": "Natural",
+    "hair": {
+      "color": "Dark brown",
+      "length": "Long",
+      "texture": "Straight"
+    },
+    "eyes": {
+      "color": "Brown",
+      "shape": "Almond"
+    },
+    "face_shape": "Oval with defined features",
+    "distinctive_features": "Unique natural beauty",
+    "build": "Slim with feminine curves"
+  },
+  "style_persona": {
+    "fashion_sense": "Modern chic with personal flair",
+    "color_palette": "Versatile neutrals with statement colors",
+    "signature_looks": [
+      "Classic pieces",
+      "Trendy items",
+      "Personal style"
+    ],
+    "aesthetic": "Contemporary and confident"
+  },
+  "personality_summary": "College psychology student, former ranch girl, genuine and sweet. Natural, relatable, curious with Southern drawl.",
+  "key_appeal": "Authentic realness, approachable beauty, sweet personality, amateur aesthetic",
+  "content_strategy": {
+    "primary_platforms": [
+      "Instagram",
+      "Twitter/X",
+      "OnlyFans"
+    ],
+    "content_pillars": [
+      "Lifestyle content",
+      "Behind-the-scenes",
+      "Subscriber engagement",
+      "Personal storytelling"
+    ],
+    "posting_frequency": "Daily"
+  },
+  "content_preferences": {
+    "sfw": [
+      "college life",
+      "student lifestyle",
+      "casual"
+    ],
+    "suggestive": [
+      "girlfriend experience",
+      "playful",
+      "innocent"
+    ],
+    "spicy": [
+      "intimate",
+      "lingerie"
+    ],
+    "nsfw": [
+      "explicit",
+      "adult"
+    ]
+  },
+  "locations": [
+    "Modern apartment",
+    "Bedroom with natural light",
+    "Hotel room",
+    "Photography studio"
+  ],
+  "wardrobe": [
+    "Black silk slip dress",
+    "White oversized button-down shirt",
+    "High-waisted tailored trousers",
+    "Minimalist jewelry",
+    "Cozy sweater",
+    "Denim shorts",
+    "Cute sundress",
+    "Casual tank top",
+    "Comfortable jeans"
+  ],
+  "reference_images": {
+    "face_01": "char_008_face_01.png",
+    "face_02": "char_008_face_02.png",
+    "face_03": "char_008_face_03.png"
+  },
+  "base_prompts": {
+    "core_description": "Photorealistic portrait of DAKOTA ROSE, 22-year-old Mixed woman from Austin, Texas",
+    "style_modifiers": "professional photography, 8k resolution, natural lighting, realistic skin texture",
+    "quality_boosters": "shot on Sony A7R IV, 85mm f/1.8 lens, shallow depth of field, film grain"
+  },
+  "generation_notes": {
+    "consistency_priorities": [
+      "Maintain exact facial features",
+      "Keep skin texture realistic",
+      "Preserve body proportions",
+      "Maintain hair color and style",
+      "Reflect Mixed heritage accurately"
+    ],
+    "quality_requirements": [
+      "Photorealistic skin texture",
+      "Natural lighting",
+      "Professional composition",
+      "No artificial plastic look"
+    ],
+    "avoid_list": [
+      "Generic AI smooth skin",
+      "Distorted facial features",
+      "Inconsistent eye color",
+      "Unnatural body proportions",
+      "Stereotypical or fetishized portrayals"
+    ]
+  },
+  "tags": [
+    "amateur/girl_next_door",
+    "american",
+    "mixed",
+    "model",
+    "influencer"
+  ],
+  "created_date": "2025-02-06",
+  "version": "1.0",
+  "source_file": "DAKOTA_ROSE_COMPLETE.txt"
+}

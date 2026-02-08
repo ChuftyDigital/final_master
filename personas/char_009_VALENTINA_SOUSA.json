@@ -1,0 +1,125 @@
+{
+  "character_id": "char_009",
+  "name": "VALENTINA SOUSA",
+  "age": 33,
+  "ethnicity": "Latina",
+  "nationality": "Brazilian",
+  "location": "Rio de Janeiro, Brazil",
+  "niche": "MILF/Mature Latina",
+  "business_tier": "$27.99/month",
+  "physical_description": {
+    "height": "5'6\"",
+    "body_type": "Curvy with hourglass figure",
+    "skin_tone": "Warm olive",
+    "hair": {
+      "color": "Dark brown",
+      "length": "Long",
+      "texture": "Straight"
+    },
+    "eyes": {
+      "color": "Brown",
+      "shape": "Almond"
+    },
+    "face_shape": "Oval with defined features",
+    "distinctive_features": "Unique natural beauty",
+    "build": "Curvy with hourglass figure"
+  },
+  "style_persona": {
+    "fashion_sense": "Modern chic with personal flair",
+    "color_palette": "Versatile neutrals with statement colors",
+    "signature_looks": [
+      "Classic pieces",
+      "Trendy items",
+      "Personal style"
+    ],
+    "aesthetic": "Contemporary and confident"
+  },
+  "personality_summary": "Divorced mother of two teens, former dance instructor. Confident, seductive, maternal yet sexy with thick Brazilian accent.",
+  "key_appeal": "Mature confidence, experienced sexuality, Brazilian curves, empowerment message",
+  "content_strategy": {
+    "primary_platforms": [
+      "Instagram",
+      "Twitter/X",
+      "OnlyFans"
+    ],
+    "content_pillars": [
+      "Lifestyle content",
+      "Behind-the-scenes",
+      "Subscriber engagement",
+      "Personal storytelling"
+    ],
+    "posting_frequency": "Daily"
+  },
+  "content_preferences": {
+    "sfw": [
+      "mature lifestyle",
+      "sophisticated fashion"
+    ],
+    "suggestive": [
+      "mature glamour",
+      "confident sensuality"
+    ],
+    "spicy": [
+      "intimate",
+      "lingerie"
+    ],
+    "nsfw": [
+      "explicit",
+      "adult"
+    ]
+  },
+  "locations": [
+    "Modern apartment",
+    "Bedroom with natural light",
+    "Hotel room",
+    "Photography studio"
+  ],
+  "wardrobe": [
+    "Black silk slip dress",
+    "White oversized button-down shirt",
+    "High-waisted tailored trousers",
+    "Minimalist jewelry"
+  ],
+  "reference_images": {
+    "face_01": "char_009_face_01.png",
+    "face_02": "char_009_face_02.png",
+    "face_03": "char_009_face_03.png"
+  },
+  "base_prompts": {
+    "core_description": "Photorealistic portrait of VALENTINA SOUSA, 33-year-old Latina woman from Rio de Janeiro, Brazil",
+    "style_modifiers": "professional photography, 8k resolution, natural lighting, realistic skin texture",
+    "quality_boosters": "shot on Sony A7R IV, 85mm f/1.8 lens, shallow depth of field, film grain"
+  },
+  "generation_notes": {
+    "consistency_priorities": [
+      "Maintain exact facial features",
+      "Keep skin texture realistic",
+      "Preserve body proportions",
+      "Maintain hair color and style",
+      "Reflect Latina heritage accurately"
+    ],
+    "quality_requirements": [
+      "Photorealistic skin texture",
+      "Natural lighting",
+      "Professional composition",
+      "No artificial plastic look"
+    ],
+    "avoid_list": [
+      "Generic AI smooth skin",
+      "Distorted facial features",
+      "Inconsistent eye color",
+      "Unnatural body proportions",
+      "Stereotypical or fetishized portrayals"
+    ]
+  },
+  "tags": [
+    "milf/mature_latina",
+    "brazilian",
+    "latina",
+    "model",
+    "influencer"
+  ],
+  "created_date": "2025-02-06",
+  "version": "1.0",
+  "source_file": "VALENTINA_SOUSA_COMPLETE.txt"
+}
