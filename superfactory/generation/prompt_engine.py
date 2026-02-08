@@ -1,19 +1,20 @@
 """
-Cinema-Grade Prompt Engine for Z-Image / Lumina2 Models — Ultimate Edition
+Cinema-Grade Prompt Engine for FLUX.1 Dev — Ultimate Edition
 
-Generates ultra-detailed natural language prompts optimized for Z-Image's
-Qwen 3.4B semantic understanding.
+Generates ultra-detailed natural language prompts optimized for FLUX's
+superior prompt adherence and photorealistic output.
 
-Reference prompts: 3000-4000+ chars, cinema-grade with per-pose camera specs.
+Reference prompts: 3000-4500+ chars, editorial fashion photography quality
+with golden hour lighting, natural environments, and raw skin authenticity.
 Bulk prompts: 400-800+ chars, two styles (micro-influencer + casual story),
 lane-specific building blocks from original template system.
 
-Z-Image reads prompts like camera direction — full sentences with
-spatial relationships, not SD-style tag spam.
+FLUX excels with detailed natural language descriptions — full sentences with
+spatial relationships, lighting direction, and specific photographic technique.
 
 Based on the original Super Factory premium prompt system with all
-techniques from generate_premium_prompts.py, generate_enhanced_flux_workflows.py,
-and the Z-Image Master Prompt guide.
+techniques from generate_premium_prompts.py and generate_enhanced_flux_workflows.py.
+Target quality: Vogue/Elle editorial fashion photography shot on location.
 """
 
 import json
@@ -51,9 +52,9 @@ class PromptEngine:
     # ── Hair detail expansions ──────────────────────────────────────
 
     HAIR_LENGTH_DETAIL = {
-        "Long": "cascading down past her shoulders, flowing naturally with subtle movement and catching highlights that reveal dimensional color and healthy shine",
-        "Medium": "flowing gracefully around her shoulders with soft natural movement, framing her face with effortless elegance and catching the light beautifully",
-        "Short": "styled elegantly and framing her face with modern sophistication, drawing attention to her bone structure and creating a clean, contemporary silhouette",
+        "Long": "cascading down past her shoulders, windblown and naturally tousled with individual strands catching the golden light, baby hairs at the hairline visible, with dimensional color and healthy movement",
+        "Medium": "flowing around her shoulders with natural windblown movement, loose strands framing her face with effortless beauty, catching golden highlights and moving with the breeze",
+        "Short": "styled with natural texture and slight windblown movement, drawing attention to her bone structure with a contemporary silhouette, fine baby hairs visible at the hairline",
     }
 
     EYE_COLOR_DETAIL = {
@@ -67,16 +68,16 @@ class PromptEngine:
     }
 
     SKIN_TONE_DETAIL = {
-        "Warm olive": "a warm olive complexion that glows with natural radiance and health, showing beautiful undertones of gold and bronze that catch the light",
-        "Porcelain": "porcelain skin with delicate, almost translucent quality, showing natural pink undertones and fine texture with luminous clarity",
-        "Caramel": "a rich caramel skin tone that radiates warmth and vitality, with beautiful golden undertones that catch every ray of light",
-        "Bronze": "a stunning bronze complexion that catches the light beautifully, with warm copper undertones and healthy luminosity",
-        "Fair": "fair, luminous skin with natural warmth, showing subtle rosy undertones and fine, even texture that photographs beautifully",
-        "Golden": "golden-toned skin that glows with natural warmth, catching light beautifully with honey undertones and healthy radiance",
-        "Deep brown": "rich deep brown skin with beautiful warm undertones, showing extraordinary luminosity and even texture that is stunning on camera",
-        "Tan": "sun-kissed tan skin with warm golden undertones, radiating health and natural vitality with beautiful even texture",
-        "Ivory": "ivory skin with delicate, refined texture, showing subtle pink warmth and natural luminosity that creates beautiful contrast",
-        "Light brown": "light brown skin with warm honey undertones, glowing with natural health and beautiful even texture that catches the light",
+        "Warm olive": "a warm olive complexion with visible pores and natural texture, scattered light freckles across the nose and cheeks from sun exposure, beautiful undertones of gold and bronze that glow in natural light, with the real lived-in quality of skin that has seen sunshine",
+        "Porcelain": "porcelain skin with delicate translucent quality, showing natural pink undertones, visible fine veins at the temples, scattered freckles and sun marks, and the beautiful imperfect texture of real skin with fine peach fuzz catching the light",
+        "Caramel": "a rich caramel skin tone with beautiful natural texture showing visible pores and subtle tonal variations, warm golden undertones that catch every ray of golden hour light, with the authentic luminosity of real sun-kissed skin",
+        "Bronze": "a stunning bronze complexion with rich natural texture, visible pores and subtle sun marks, warm copper undertones creating depth, and the healthy authentic glow of real skin that has been kissed by sunlight",
+        "Fair": "fair luminous skin with natural warmth, visible freckles scattered across the nose and cheeks, subtle rosy undertones, fine peach fuzz along the jawline catching the light, and the authentic delicate texture of real skin",
+        "Golden": "golden-toned skin with natural texture and visible pores, honey undertones that glow magnificently in warm light, subtle sun freckles and the authentic radiant quality of real skin illuminated by golden hour",
+        "Deep brown": "rich deep brown skin with extraordinary natural luminosity, visible fine texture and pores, warm undertones that catch and reflect golden light beautifully, with the stunning authentic quality of real skin in natural sunlight",
+        "Tan": "sun-kissed tan skin with visible freckles and sun marks from real outdoor living, warm golden undertones, natural texture with visible pores, and the authentic healthy glow of skin that knows sunshine",
+        "Ivory": "ivory skin with delicate visible texture, scattered natural freckles, subtle pink warmth with fine veins visible at the temples, and the beautiful raw quality of real fair skin in warm natural light",
+        "Light brown": "light brown skin with warm honey undertones, natural texture with visible pores and subtle tonal variations, the authentic glow of real skin catching golden hour light beautifully",
     }
 
     # ── Camera + post-processing (same for all reference poses for consistency) ──
@@ -85,20 +86,19 @@ class PromptEngine:
         "Captured with professional-grade equipment using a Sony A7R IV full-frame "
         "mirrorless camera paired with a Zeiss Batis 85mm f/1.8 lens, the gold standard "
         "for portrait photography. The lens is set to f/2.0 to create a beautifully shallow "
-        "depth of field that isolates the subject from the background while maintaining "
-        "tack-sharp focus on the eyes. ISO is set to 100 for maximum image quality and "
-        "dynamic range. Shutter speed is 1/160s to eliminate any motion blur while "
-        "maintaining natural appearance. The image is rendered in photorealistic 8K "
-        "resolution with exceptional detail in every element - individual strands of hair, "
-        "the subtle texture of skin with visible pores and natural imperfections, fine "
-        "details in fabric and accessories. The color grading maintains natural skin tones "
-        "with subtle warmth, professional contrast that adds depth without looking "
-        "overprocessed. The background is a smooth, neutral gradient that provides "
-        "separation without distraction. Post-processing includes subtle skin retouching "
-        "that maintains natural texture while removing temporary blemishes, color correction "
-        "for accurate representation, and contrast optimization that enhances depth. The "
-        "final image has the quality of a high-end editorial portrait suitable for magazine "
-        "covers or luxury brand campaigns."
+        "depth of field with gorgeous creamy bokeh in the background while maintaining "
+        "tack-sharp focus on the eyes. ISO is set to 200 for maximum image quality in "
+        "natural light conditions. Shutter speed is 1/250s to freeze windblown hair and "
+        "natural movement. The image is rendered in photorealistic 8K resolution with "
+        "exceptional detail in every element — individual windblown strands of hair catching "
+        "golden light, the rich texture of real skin with visible pores, natural freckles, "
+        "fine lines, sun marks, and authentic imperfections that tell the story of a real "
+        "person. The color grading is warm and golden with rich amber tones, emphasizing "
+        "the golden hour warmth on skin while maintaining accurate but sun-kissed skin "
+        "tones. No skin retouching — all natural texture, blemishes, and imperfections "
+        "are preserved. The final image has the quality of a high-end editorial fashion "
+        "photograph shot on location for Vogue or Sports Illustrated, with the raw "
+        "authenticity and warmth of natural golden hour light."
     )
 
     # Keep per-pose camera specs for BULK generation variety
@@ -139,34 +139,34 @@ class PromptEngine:
 
     LIGHTING = {
         "front": (
-            "Soft diffused studio lighting setup with a large octagonal softbox "
-            "positioned directly in front and slightly above eye level, approximately 45 degrees "
-            "from camera axis. A white reflector positioned below chin level provides subtle fill, "
-            "eliminating harsh shadows while maintaining natural dimensionality. The key light "
-            "creates gentle, flattering illumination that emphasizes cheekbones without creating "
-            "deep shadows. Color temperature is calibrated to 5600K daylight balance, ensuring "
-            "accurate skin tone reproduction. Background receives minimal light, creating subtle "
-            "separation between subject and backdrop."
+            "Stunning golden hour sunlight approximately 20 minutes before sunset, with the "
+            "warm low-angle sun creating gorgeous directional light that wraps around her face and "
+            "body. The golden light paints her skin with warm amber and honey tones, emphasizing "
+            "every natural texture — freckles, pores, and fine peach fuzz catching the light. The "
+            "warm color temperature of approximately 3200K-3800K creates that coveted golden hour "
+            "glow on skin. Natural environmental light with no artificial fill — shadows are soft "
+            "and warm, not harsh. The sun creates natural catchlights in the eyes and a warm "
+            "luminosity across the skin that cannot be replicated in a studio."
         ),
         "angle": (
-            "Rembrandt-style lighting with key light positioned at 45 degrees to the "
-            "subject's left side and elevated 30 degrees above eye level. This creates the "
-            "characteristic triangular highlight on the cheek opposite the light source, adding "
-            "depth and dimension to the facial structure. A silver reflector on the shadow side "
-            "provides controlled fill at approximately 2:1 lighting ratio. A subtle hair light "
-            "from behind and above adds separation and dimension to the hair. The lighting sculpts "
-            "the face, emphasizing cheekbones and creating a sense of three-dimensionality while "
-            "maintaining a flattering, approachable quality."
+            "Dramatic golden hour backlighting with the low sun positioned behind and to the "
+            "side of the subject, creating a stunning warm rim light that outlines her hair and "
+            "silhouette with a glowing golden halo. Individual strands of windblown hair are "
+            "illuminated and backlit like golden threads. The backlighting creates beautiful lens "
+            "flare and warm atmospheric haze. Her face is lit by the soft warm bounce light from "
+            "the surrounding environment — sand, water, or warm surfaces reflecting golden light "
+            "back as natural fill. This creates dimensional sculpting of her facial features with "
+            "warm shadows and luminous highlights."
         ),
         "natural": (
-            "Natural window light from a large north-facing window providing soft, "
-            "diffused illumination with no harsh shadows. The light wraps around the subject "
-            "creating gentle transitions between highlights and shadows. Positioned at approximately "
-            "30 degrees from camera axis, the window light creates subtle modeling while maintaining "
-            "an authentic, lifestyle feel. A white v-board reflector opposite the window adds soft "
-            "fill to shadow areas. The color temperature of 5500K natural daylight renders skin "
-            "tones with perfect accuracy. This lighting creates an intimate, approachable atmosphere "
-            "that feels genuine and unforced."
+            "Late golden hour sunlight creating a warm, glowing atmosphere with the sun very low "
+            "on the horizon. The light is soft, directional, and deeply warm, casting long gentle "
+            "shadows and bathing everything in rich amber and golden tones. A natural warm breeze "
+            "adds movement to hair and any loose fabric. The environmental light wraps around the "
+            "subject with beautiful warmth, creating the intimate feeling of a perfect sunset "
+            "moment. The quality of light is ephemeral and magical — the kind of natural illumination "
+            "that makes everything look beautiful and alive. No artificial lighting whatsoever, "
+            "pure natural golden hour magic."
         ),
     }
 
@@ -174,35 +174,37 @@ class PromptEngine:
 
     COMPOSITION = {
         "front": (
-            "Classic head-and-shoulders portrait with {name} positioned squarely facing "
-            "the camera, shoulders aligned with the frame. The composition follows the rule of thirds "
-            "with eyes positioned along the upper horizontal third line, creating a naturally engaging "
-            "focal point. The frame captures from mid-chest upward, providing context while keeping "
-            "focus on facial features. Head is straight with minimal tilt, creating a sense of directness "
-            "and confidence. Expression is neutral with a soft, natural smile — lips gently closed, "
-            "eyes alert and engaged with the camera. This frontal approach creates the most accurate "
-            "representation for facial recognition and reference purposes."
+            "Head-and-shoulders portrait with {name} facing the camera in a natural outdoor "
+            "setting. The composition follows the rule of thirds with eyes positioned along the "
+            "upper horizontal third line. The frame captures from mid-chest upward with the "
+            "natural environment softly blurred behind her. Her hair has natural movement from "
+            "a gentle breeze, with loose strands catching the golden light. Expression is warm "
+            "and direct — a natural, unforced look with slightly parted lips and intense eye "
+            "contact that draws the viewer in. Skin shows natural texture with visible pores, "
+            "light freckles or sun marks, and authentic warmth from the golden light. This is "
+            "an editorial fashion portrait, not a studio headshot — it feels alive and present."
         ),
         "angle": (
-            "Elegant three-quarter view with {name}'s body at a 45-degree angle to the "
-            "camera while head turns back toward the lens, creating a dynamic yet natural pose. This "
-            "positioning reveals the full structure of the face while maintaining eye contact with "
-            "the viewer. The composition emphasizes cheekbones and jawline through the angular "
-            "perspective, adding dimension and visual interest. Shoulders remain relaxed with a subtle "
-            "turn that creates elegant lines. Expression features a gentle, engaging smile that "
-            "reaches the eyes, creating warmth and approachability. This angle is universally "
-            "flattering and provides excellent reference for three-dimensional facial structure."
+            "Dynamic three-quarter view with {name}'s body angled away from the camera "
+            "while her head turns back toward the lens with intense eye contact. The composition "
+            "emphasizes her cheekbones and jawline through the angular perspective with dramatic "
+            "golden hour backlighting creating a glowing rim light around her hair and shoulders. "
+            "Windblown hair adds energy and movement to the frame, with individual strands backlit "
+            "like golden threads. Shoulders are relaxed and natural, not posed stiffly. Her "
+            "expression is captivating — a slight knowing smile with eyes that communicate "
+            "confidence and personality. Visible skin texture with natural warmth from the "
+            "golden light. The background shows a soft, dreamy outdoor environment."
         ),
         "natural": (
-            "Candid-inspired portrait capturing {name} in a relaxed, natural moment. "
-            "The pose is asymmetrical and organic, with a slight lean that creates visual interest "
-            "without appearing posed. Head is gently tilted, creating a sense of spontaneity and "
-            "approachability. The frame captures a three-quarter view that shows personality while "
-            "maintaining clarity of features. Expression is warm and genuine with a natural smile "
-            "that lights up the face — eyes crinkled slightly at the corners, genuine happiness "
-            "evident. This composition prioritizes personality and authenticity, creating an image "
-            "that feels like a captured moment rather than a formal portrait, perfect for showing "
-            "the subject's natural charisma and warmth."
+            "Candid editorial portrait capturing {name} in a genuine, relaxed moment outdoors. "
+            "The pose is organic and spontaneous — perhaps running a hand through her windblown "
+            "hair, or caught mid-laugh with authentic joy. The frame is slightly wider, showing "
+            "more of the natural environment and body language. Her hair is tousled naturally by "
+            "the wind, messy in a beautiful way. Expression radiates genuine warmth and personality "
+            "— this is the real her, unguarded and naturally beautiful. Skin glows with golden hour "
+            "warmth, showing every natural freckle and texture. The composition feels like a "
+            "perfect candid moment captured by a fashion photographer — spontaneous yet stunning, "
+            "the kind of shot that becomes a magazine cover."
         ),
     }
 
@@ -210,25 +212,29 @@ class PromptEngine:
 
     ATMOSPHERE = {
         "front": (
-            "The image embodies {aesthetic} with a timeless, editorial quality. "
-            "The overall mood is sophisticated and confident, conveying professionalism while maintaining "
-            "approachability. The aesthetic is clean and modern with subtle luxury undertones. "
-            "This is the definitive reference image — the most important of the three for maintaining "
-            "consistency across all future generations."
+            "The image embodies {aesthetic} with the raw, editorial quality of a Vogue or "
+            "Elle fashion spread shot on location during golden hour. The overall mood is warm, "
+            "confident, and magnetically present — she owns the moment completely. The aesthetic "
+            "is natural luxury — no artificial studio perfection, but the effortless beauty of a "
+            "real woman in beautiful natural light. The golden hour warmth suffuses the entire image "
+            "with amber and honey tones. This is the definitive reference image — capturing her "
+            "essence with the authenticity and warmth that makes a viewer feel connected."
         ),
         "angle": (
-            "Capturing {aesthetic} with emphasis on dimensionality and structure. "
-            "The mood is engaging and dynamic, showing the subject's charisma from a new perspective. "
-            "The aesthetic maintains the luxury feel while adding depth and sophistication. "
-            "This angle provides crucial three-dimensional information that helps maintain consistency "
-            "when the subject is viewed from different perspectives in generated content."
+            "Capturing {aesthetic} with the dramatic, cinematic quality of a high-fashion "
+            "editorial shot at magic hour. The mood is captivating and dynamic, with the backlit "
+            "golden light creating a dreamlike atmosphere. The aesthetic feels like the best frame "
+            "from a fashion film — alive with movement, warmth, and personality. The dramatic "
+            "rim lighting and windblown hair create visual poetry. This angle provides crucial "
+            "three-dimensional reference while showing her personality and natural charisma."
         ),
         "natural": (
-            "Authentic {aesthetic} with emphasis on genuine personality and warmth. "
-            "The mood is inviting and approachable, capturing the subject's natural charm. The aesthetic "
-            "feels candid and real, as if photographed during a genuine moment of happiness. "
-            "This image is essential for showing the subject's personality and ensuring generated "
-            "content has emotional authenticity and warmth."
+            "Authentic {aesthetic} with the intimate, warm quality of a moment captured between "
+            "posed shots — the genuine, unguarded beauty that fashion photographers live for. "
+            "The mood is warm, genuine, and irresistibly human. The aesthetic is raw editorial "
+            "beauty — imperfect in the most beautiful way, like a candid frame that becomes the "
+            "magazine's hero image. Golden light, natural wind, authentic expression — everything "
+            "combines to create an image that feels effortlessly beautiful and deeply personal."
         ),
     }
 
@@ -236,41 +242,48 @@ class PromptEngine:
 
     COLOR_GRADING = {
         "front": (
-            "The color grading maintains natural skin tones with subtle warmth, professional "
-            "contrast that adds depth without looking overprocessed. The background is a smooth, "
-            "neutral gradient that provides separation without distraction. Post-processing includes "
-            "subtle skin retouching that maintains natural texture while removing temporary blemishes, "
-            "color correction for accurate representation, and contrast optimization that enhances "
-            "depth. The final image has the quality of a high-end editorial portrait suitable for "
-            "magazine covers or luxury brand campaigns."
+            "The color grading leans into the golden hour warmth with rich amber and honey "
+            "tones painting the skin, while maintaining enough accuracy that her natural "
+            "complexion reads true. Shadows are warm, not cool — filled with reflected golden "
+            "light from the environment. The background is a natural outdoor setting rendered in "
+            "soft bokeh with warm golden tones. Zero skin retouching — natural pores, freckles, "
+            "fine lines, and sun marks are all visible and beautiful. The final image has the "
+            "warm, lived-in quality of the best editorial fashion photography — real, raw, and "
+            "stunning."
         ),
         "angle": (
-            "The color science prioritizes accurate and flattering skin tones, with the "
-            "complexion rendered beautifully through careful white balance and color grading. The "
-            "image has a cinematic quality with film-like color response, subtle contrast curves "
-            "that add depth, and highlight roll-off that mimics the organic quality of analog "
-            "photography. The overall aesthetic evokes high-fashion editorial photography with "
-            "the technical precision of modern digital capture."
+            "The color science embraces the dramatic warmth of backlit golden hour, with skin "
+            "tones glowing with amber and gold undertones. The rim light creates warm highlight "
+            "edges while shadows remain soft and golden. The image has a cinematic quality with "
+            "film-like color response reminiscent of Kodak Portra 400 — organic highlight roll-off, "
+            "warm midtones, and rich but not crushed shadows. Lens flare and atmospheric haze "
+            "add to the dreamy, warm editorial quality."
         ),
         "natural": (
-            "The color palette emphasizes the natural warmth of daylight, with skin tones "
-            "rendered beautifully through accurate white balance and thoughtful color grading. "
-            "The image has an editorial lifestyle photography aesthetic with natural contrast, "
-            "organic color response, and a sense of immediacy that connects with viewers. The "
-            "background elements, while soft, provide context and environmental storytelling that "
-            "adds depth to the portrait."
+            "The color palette fully embraces the ephemeral golden hour warmth, with the entire "
+            "image bathed in rich sunset tones. Skin practically glows with golden warmth, and "
+            "the environmental background contributes warm, soft colors that complement her "
+            "complexion. The look is that of high-end fashion editorial shot on location at the "
+            "perfect moment — warm, organic color response with natural contrast and the beautiful "
+            "imperfection of real light. The background elements provide environmental context and "
+            "storytelling that grounds the image in reality."
         ),
     }
 
     CRITICAL_REQUIREMENTS = (
-        "This image must show photorealistic quality with natural skin "
-        "texture — every pore, fine line, and natural imperfection should be visible. Hair must "
-        "appear as individual strands with natural variation. Eyes must have realistic catchlights "
-        "and depth. The image should look like it was captured by a master portrait photographer, "
-        "not generated by AI. Facial features must be consistent and distinctive, creating a "
-        "recognizable individual who maintains their appearance across all three reference images. "
-        "No artificial smoothness, no plastic appearance, no exaggerated features — only authentic, "
-        "natural beauty captured with technical excellence."
+        "This image MUST show hyper-photorealistic quality indistinguishable from a real "
+        "photograph. The skin must show REAL texture — visible pores, natural freckles, fine "
+        "peach fuzz on the face catching the golden light, subtle sun damage or age marks, "
+        "tiny imperfections and beauty marks that make a real face look REAL. Absolutely NO "
+        "artificial smoothness, NO airbrushed skin, NO plastic appearance. Hair must appear as "
+        "individual strands with natural flyaways, baby hairs at the hairline, and wind-tousled "
+        "movement — not perfectly styled. Eyes must have realistic catchlights reflecting the "
+        "natural environment and deep, soulful dimension. Skin must show the golden warmth of "
+        "real sunlight with subsurface scattering visible on thinner skin like ears and nose. "
+        "The image should look like it was captured by a world-class fashion photographer like "
+        "Peter Lindbergh or Mario Testino — raw, authentic beauty elevated by extraordinary "
+        "light and composition. Facial features must be consistent, distinctive, and deeply "
+        "human. This is a REAL woman, not a digital creation."
     )
 
     # ── Bulk generation building blocks (from original Z-Image templates) ──
@@ -692,8 +705,9 @@ class PromptEngine:
 
         sections = [
             (
-                f"Subject: Professional portrait photograph of {name}, a {age}-year-old "
-                f"{ethnicity} woman with {nationality} heritage."
+                f"Subject: Editorial fashion photograph of {name}, a {age}-year-old "
+                f"{ethnicity} woman with {nationality} heritage, shot on location during "
+                f"golden hour with natural wind and warm sunlight."
             ),
             f"Physical Description: {physical}",
             f"Composition & Pose: Composition: {self.COMPOSITION[pose].format(name=name)}",
@@ -723,8 +737,11 @@ class PromptEngine:
         """FLUX benefits from negative prompts for quality control."""
         return (
             "blurry, low quality, cartoon, anime, distorted face, bad anatomy, "
-            "deformed features, unnatural skin, plastic look, oversaturated, "
-            "jpeg artifacts, watermark, text, logo"
+            "deformed features, plastic skin, airbrushed skin, overly smooth skin, "
+            "artificially perfect skin, studio backdrop, grey background, white background, "
+            "neutral background, studio lighting, ring light, softbox, "
+            "oversaturated, jpeg artifacts, watermark, text, logo, "
+            "doll-like, mannequin, wax figure, CGI, 3D render"
         )
 
     # ────────────────────────────────────────────────────────────────
