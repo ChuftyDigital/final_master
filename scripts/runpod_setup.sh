@@ -5,7 +5,12 @@
 # ComfyUI is already installed and running on :8188.
 # This script drops in custom nodes, models, workflows, and the pipeline.
 #
+# CivitAI models are creator-gated (free but require login):
+#   export CIVITAI_API_TOKEN="your-token-here"
+#   Get one at: https://civitai.com/user/account → API Keys
+#
 #   git clone <repo> ~/pipeline && cd ~/pipeline
+#   export CIVITAI_API_TOKEN="..."
 #   bash scripts/runpod_setup.sh
 # =============================================================================
 
@@ -26,6 +31,14 @@ RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; CYAN='\033[0;36m'; NC
 echo ""
 echo -e "${CYAN}  AI Influencer Pipeline - RunPod Setup (comfyui:latest-5090)${NC}"
 echo ""
+
+# Check CivitAI token
+if [[ -z "$CIVITAI_TOKEN" ]]; then
+    echo -e "${YELLOW}WARNING: CIVITAI_API_TOKEN not set.${NC}"
+    echo -e "${YELLOW}CivitAI models are free but creator-gated (require login to download).${NC}"
+    echo -e "${YELLOW}Get a token at: https://civitai.com/user/account → API Keys${NC}"
+    echo ""
+fi
 
 # ---------------------------------------------------------------------------
 # 1. Custom nodes
@@ -90,7 +103,6 @@ dl() {
 
     local curl_args=(-L --retry 3 --retry-delay 5 --connect-timeout 30 --max-time 1800 -o "$dest")
 
-    # Pass auth headers if tokens are set (not required for public models)
     if [[ "$url" == *"civitai.com"* ]] && [[ -n "$CIVITAI_TOKEN" ]]; then
         curl_args+=(--header "Authorization: Bearer ${CIVITAI_TOKEN}")
     elif [[ "$url" == *"huggingface.co"* ]] && [[ -n "$HF_TOKEN" ]]; then
@@ -106,14 +118,16 @@ dl() {
             echo -e "    ${GREEN}$(numfmt --to=iec "$sz" 2>/dev/null || echo "${sz}B")${NC}"
             return 0
         elif [[ "$sz" -gt 0 ]]; then
-            local head
-            head=$(head -c 200 "$dest" 2>/dev/null || true)
-            if [[ "$head" == *"<html"* ]] || [[ "$head" == *"<!DOCTYPE"* ]]; then
+            local content
+            content=$(head -c 500 "$dest" 2>/dev/null || true)
+            if [[ "$content" == *"<html"* ]] || [[ "$content" == *"<!DOCTYPE"* ]]; then
                 echo -e "    ${RED}FAILED${NC} - server returned HTML instead of model file"
-                rm -f "$dest"
-                return 1
+            else
+                echo -e "    ${RED}FAILED${NC} - only ${sz} bytes (expected multi-MB model file)"
+                echo -e "    ${YELLOW}Response: ${content}${NC}"
             fi
-            echo -e "    ${YELLOW}WARNING${NC} - only ${sz} bytes"
+            echo -e "    ${YELLOW}URL: ${url}${NC}"
+            rm -f "$dest"
             return 1
         fi
     fi
@@ -129,21 +143,20 @@ dl "$(civitai 2442439)" "${MODELS}/unet/z_image_bf16.safetensors"               
 dl "$(civitai 2442540)" "${MODELS}/clip/qwen_3_4b.safetensors"                             "Qwen 3.4B CLIP" || true
 dl "$(civitai 2442479)" "${MODELS}/vae/ultraflux_vae.safetensors"                          "UltraFlux VAE" || true
 
-# SeedVR2 upscaler
-dl "https://huggingface.co/SeedVR/SeedVR2/resolve/main/seedvr2_ema_7b_fp16.safetensors"   "${MODELS}/upscale_models/seedvr2_ema_7b_fp16.safetensors" "SeedVR2 DiT 7B" || true
-dl "https://huggingface.co/SeedVR/SeedVR2/resolve/main/ema_vae_fp16.safetensors"          "${MODELS}/vae/ema_vae_fp16.safetensors"                    "SeedVR2 VAE" || true
+# SeedVR2 upscaler (numz/SeedVR2_comfyUI - public, models go to SEEDVR2/ where node expects them)
+dl "https://huggingface.co/numz/SeedVR2_comfyUI/resolve/main/seedvr2_ema_7b_fp16.safetensors" "${MODELS}/SEEDVR2/seedvr2_ema_7b_fp16.safetensors" "SeedVR2 DiT 7B" || true
+dl "https://huggingface.co/numz/SeedVR2_comfyUI/resolve/main/ema_vae_fp16.safetensors"        "${MODELS}/SEEDVR2/ema_vae_fp16.safetensors"        "SeedVR2 VAE" || true
 
 # Style LoRAs
 dl "$(civitai 2465980)" "${MODELS}/loras/nicegirls_Zimage.safetensors"                     "nicegirls LoRA" || true
 dl "$(civitai 2462523)" "${MODELS}/loras/Z-TURBO_Photography_35mmPhoto_896.safetensors"    "Z-TURBO Photo LoRA" || true
 dl "$(civitai 2456035)" "${MODELS}/loras/psxZStyle_v1_ZIT.safetensors"                     "psxZStyle LoRA" || true
 
-# SDXL for FaceDetailer pipe
-dl "https://huggingface.co/digiplay/AnalogMadness-sdxl-v5/resolve/main/analogMadnessSDXL_xl5.safetensors" \
-   "${MODELS}/checkpoints/analogMadnessSDXL_xl5.safetensors" "analogMadness SDXL" || true
+# SDXL for FaceDetailer pipe (CivitAI model 408483, XL5 version)
+dl "$(civitai 2207703)" "${MODELS}/checkpoints/analogMadnessSDXL_xl5.safetensors" "analogMadness SDXL XL5" || true
 
-# Face detection + segmentation
-dl "https://huggingface.co/Bingsu/adetailer/resolve/main/yolov11m-face.pt"                "${MODELS}/ultralytics/YOLOV11m-face.pt" "YOLOv11m Face" || true
+# Face detection + segmentation (face_yolov9c.pt - best available from Bingsu/adetailer)
+dl "https://huggingface.co/Bingsu/adetailer/resolve/main/face_yolov9c.pt"                 "${MODELS}/ultralytics/bbox/face_yolov9c.pt" "YOLOv9c Face" || true
 dl "https://dl.fbaipublicfiles.com/segment_anything/sam_vit_b_01ec64.pth"                 "${MODELS}/sams/sam_vit_b_01ec64.pth"    "SAM ViT-B" || true
 
 # ---------------------------------------------------------------------------

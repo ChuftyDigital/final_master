@@ -3,7 +3,7 @@
   "last_link_id": 76,
   "metadata": {
     "title": "Workflow 2 - Image Vault Generator",
-    "description": "Batch generates vault images using Z-Image Base + trained character LoRA + IPAdapter identity lock. 2-step pipeline (generate + latent upscale 1.5x + refine at denoise 0.2) with YOLOV11m face detailing. 4 lanes with bundle support. Optimized for RTX 5090.",
+    "description": "Batch generates vault images using Z-Image Base + trained character LoRA + IPAdapter identity lock. 2-step pipeline (generate + latent upscale 1.5x + refine at denoise 0.2) with YOLOv9c face detailing. 4 lanes with bundle support. Optimized for RTX 5090.",
     "version": "3.1",
     "author": "AI Influencer Pipeline",
     "gpu_target": "RTX 5090 32GB",
@@ -18,7 +18,7 @@
       "pos": [50, 50],
       "size": [450, 300],
       "properties": {
-        "text": "WORKFLOW 2: IMAGE VAULT GENERATOR (Z-Image Base)\n====================================\nGenerates 800 images per character (200 per lane)\n\nLanes: SFW | Suggestive | Spicy | NSFW\nPer lane: 80 one-offs + 10x3 + 10x5 + 4x10 bundles\n\n2-STEP PIPELINE:\n  Step 1: Generate at 1024x1024 (40 steps, DPM++ 2M Karras, CFG 4.5)\n  Step 2: Latent upscale 1.5x + refine (20 steps, denoise 0.2)\n  Step 3: FaceDetailer with YOLOV11m-face.pt\n  Step 4: Film grain + downscale + SeedVR2 upscale to 2048px\n\nIDENTITY LOCK: LoRA + IPAdapter FaceID dual lock\n\nUSAGE:\n1. Set character LoRA in LoRA loader\n2. Set reference image path\n3. Paste prompts from vault manifest\n4. Queue for batch generation\n\nOPTIMIZED FOR: RTX 5090 32GB VRAM\nBATCH MODE: Process prompts sequentially via API"
+        "text": "WORKFLOW 2: IMAGE VAULT GENERATOR (Z-Image Base)\n====================================\nGenerates 800 images per character (200 per lane)\n\nLanes: SFW | Suggestive | Spicy | NSFW\nPer lane: 80 one-offs + 10x3 + 10x5 + 4x10 bundles\n\n2-STEP PIPELINE:\n  Step 1: Generate at 1024x1024 (40 steps, DPM++ 2M Karras, CFG 4.5)\n  Step 2: Latent upscale 1.5x + refine (20 steps, denoise 0.2)\n  Step 3: FaceDetailer with face_yolov9c.pt\n  Step 4: Film grain + downscale + SeedVR2 upscale to 2048px\n\nIDENTITY LOCK: LoRA + IPAdapter FaceID dual lock\n\nUSAGE:\n1. Set character LoRA in LoRA loader\n2. Set reference image path\n3. Paste prompts from vault manifest\n4. Queue for batch generation\n\nOPTIMIZED FOR: RTX 5090 32GB VRAM\nBATCH MODE: Process prompts sequentially via API"
       }
     },
     {
@@ -284,7 +284,7 @@
       "type": "FaceDetailerPipe",
       "pos": [3150, 650],
       "size": [350, 300],
-      "title": "Face Enhancement (YOLOV11m)",
+      "title": "Face Enhancement (YOLOv9c)",
       "widgets_values": [1280, true, 1280, true, 0.5, 20, "dpmpp_2m", "karras", 0.3, 0.7, "randomize", 5, true, true],
       "inputs": [
         {"name": "image", "type": "IMAGE", "link": 35},
@@ -447,14 +447,14 @@
       "vram_requirement": "28-32GB",
       "step1": "Generate 1024x1024, DPM++ 2M Karras, 40 steps, CFG 4.5, denoise 1.0",
       "step2": "Latent upscale 1.5x (nearest-exact) + Refine 20 steps, denoise 0.2",
-      "post_processing": "FaceDetailer (YOLOV11m) → FilmGrain → Downscale 70% → SeedVR2 Upscale 2048px",
-      "face_detector": "YOLOV11m-face.pt",
+      "post_processing": "FaceDetailer (YOLOv9c) → FilmGrain → Downscale 70% → SeedVR2 Upscale 2048px",
+      "face_detector": "face_yolov9c.pt",
       "estimated_time_per_image": "90-120 seconds (2-step)",
       "estimated_time_per_lane_200": "5-7 hours",
       "estimated_time_per_character_800": "20-28 hours",
       "estimated_time_all_21_characters": "420-590 hours (18-25 days continuous)",
       "identity_consistency": "LoRA (0.85) + IPAdapter FaceID (0.75) dual lock",
-      "post_processing_detail": "2-step refine + YOLOV11m FaceDetailer + FilmGrain + SeedVR2 Upscale"
+      "post_processing_detail": "2-step refine + YOLOv9c FaceDetailer + FilmGrain + SeedVR2 Upscale"
     }
   },
   "version": 0.4

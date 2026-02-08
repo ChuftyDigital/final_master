@@ -315,13 +315,13 @@ if [[ "$SKIP_MODELS" == false ]]; then
     echo -e "  ${CYAN}── SeedVR2 Upscaler (7B) ──${NC}"
 
     download_model \
-        "PLACEHOLDER_URL/seedvr2_ema_7b_fp16.safetensors" \
-        "${MODELS_DIR}/upscale_models/seedvr2_ema_7b_fp16.safetensors" \
+        "https://huggingface.co/numz/SeedVR2_comfyUI/resolve/main/seedvr2_ema_7b_fp16.safetensors" \
+        "${MODELS_DIR}/SEEDVR2/seedvr2_ema_7b_fp16.safetensors" \
         "SeedVR2 DiT (7B, fp16)" || true
 
     download_model \
-        "PLACEHOLDER_URL/ema_vae_fp16.safetensors" \
-        "${MODELS_DIR}/vae/ema_vae_fp16.safetensors" \
+        "https://huggingface.co/numz/SeedVR2_comfyUI/resolve/main/ema_vae_fp16.safetensors" \
+        "${MODELS_DIR}/SEEDVR2/ema_vae_fp16.safetensors" \
         "SeedVR2 VAE (fp16)" || true
 
     # -----------------------------------------------------------------------
@@ -363,9 +363,9 @@ if [[ "$SKIP_MODELS" == false ]]; then
     echo -e "  ${CYAN}── Face Detection ──${NC}"
 
     download_model \
-        "PLACEHOLDER_URL/YOLOV11m-face.pt" \
-        "${MODELS_DIR}/ultralytics/YOLOV11m-face.pt" \
-        "YOLOv11m Face Detector" || true
+        "https://huggingface.co/Bingsu/adetailer/resolve/main/face_yolov9c.pt" \
+        "${MODELS_DIR}/ultralytics/bbox/face_yolov9c.pt" \
+        "YOLOv9c Face Detector" || true
 
     echo ""
 
@@ -377,13 +377,13 @@ if [[ "$SKIP_MODELS" == false ]]; then
         "${MODELS_DIR}/unet/z_image_bf16.safetensors:Z-Image Base UNet"
         "${MODELS_DIR}/clip/qwen_3_4b.safetensors:Qwen CLIP"
         "${MODELS_DIR}/vae/ultraflux_vae.safetensors:UltraFlux VAE"
-        "${MODELS_DIR}/upscale_models/seedvr2_ema_7b_fp16.safetensors:SeedVR2 DiT"
-        "${MODELS_DIR}/vae/ema_vae_fp16.safetensors:SeedVR2 VAE"
+        "${MODELS_DIR}/SEEDVR2/seedvr2_ema_7b_fp16.safetensors:SeedVR2 DiT"
+        "${MODELS_DIR}/SEEDVR2/ema_vae_fp16.safetensors:SeedVR2 VAE"
         "${MODELS_DIR}/loras/nicegirls_Zimage.safetensors:nicegirls LoRA"
         "${MODELS_DIR}/loras/Z-TURBO_Photography_35mmPhoto_896.safetensors:Z-TURBO LoRA"
         "${MODELS_DIR}/loras/psxZStyle_v1_ZIT.safetensors:psxZStyle LoRA"
         "${MODELS_DIR}/checkpoints/analogMadnessSDXL_xl5.safetensors:analogMadness SDXL"
-        "${MODELS_DIR}/ultralytics/YOLOV11m-face.pt:YOLOv11m Face"
+        "${MODELS_DIR}/ultralytics/bbox/face_yolov9c.pt:YOLOv9c Face"
     )
 
     missing=0
@@ -547,13 +547,13 @@ echo "  │                                                            │"
 echo "  │  unet/z_image_bf16.safetensors          Z-Image 6B UNet   │"
 echo "  │  clip/qwen_3_4b.safetensors             Qwen CLIP         │"
 echo "  │  vae/ultraflux_vae.safetensors          UltraFlux VAE     │"
-echo "  │  upscale_models/seedvr2_ema_7b_fp16.safetensors  SeedVR2  │"
-echo "  │  vae/ema_vae_fp16.safetensors           SeedVR2 VAE       │"
+echo "  │  SEEDVR2/seedvr2_ema_7b_fp16.safetensors         SeedVR2  │"
+echo "  │  SEEDVR2/ema_vae_fp16.safetensors        SeedVR2 VAE      │"
 echo "  │  loras/nicegirls_Zimage.safetensors     Style LoRA 1      │"
 echo "  │  loras/Z-TURBO_Photography_*.safetensors Style LoRA 2     │"
 echo "  │  loras/psxZStyle_v1_ZIT.safetensors     Style LoRA 3      │"
 echo "  │  checkpoints/analogMadnessSDXL_xl5.safetensors  SDXL      │"
-echo "  │  ultralytics/YOLOV11m-face.pt           Face Detect       │"
+echo "  │  ultralytics/bbox/face_yolov9c.pt        Face Detect       │"
 echo "  └─────────────────────────────────────────────────────────────┘"
 echo ""
 echo "  Quick start:"

@@ -3,7 +3,7 @@
   "last_link_id": 81,
   "metadata": {
     "title": "Workflow 1 - Master Reference Image Generator",
-    "description": "Generates 3 master reference images per character for LoRA training. Uses Z-Image Base (6B) with 2-step refinement pipeline (generate + latent upscale 1.5x + refine at denoise 0.2), YOLOV11m face detailing, and film grain. Optimized for RTX 5090 (32GB VRAM).",
+    "description": "Generates 3 master reference images per character for LoRA training. Uses Z-Image Base (6B) with 2-step refinement pipeline (generate + latent upscale 1.5x + refine at denoise 0.2), YOLOv9c face detailing, and film grain. Optimized for RTX 5090 (32GB VRAM).",
     "version": "3.1",
     "author": "AI Influencer Pipeline",
     "gpu_target": "RTX 5090 32GB",
@@ -16,7 +16,7 @@
       "pos": [50, 50],
       "size": [400, 220],
       "properties": {
-        "text": "WORKFLOW 1: MASTER IMAGE GENERATOR (Z-Image Base)\n=====================================================\nGenerates 3 reference images per character:\n  - Face 01: Front-facing portrait (identity anchor)\n  - Face 02: Three-quarter angle (dimensionality)\n  - Face 03: Natural/environmental (personality)\n\n2-STEP PIPELINE:\n  Step 1: Generate at 1024x1024 (40 steps, DPM++ 2M Karras, CFG 4.5)\n  Step 2: Latent upscale 1.5x + refine (20 steps, denoise 0.2)\n  Step 3: FaceDetailer with YOLOV11m-face.pt\n  Step 4: Film grain + SeedVR2 upscale to 2048px\n\nMODEL: Z-Image Base (6B) | NOT Turbo\nOPTIMIZED FOR: RTX 5090 32GB VRAM"
+        "text": "WORKFLOW 1: MASTER IMAGE GENERATOR (Z-Image Base)\n=====================================================\nGenerates 3 reference images per character:\n  - Face 01: Front-facing portrait (identity anchor)\n  - Face 02: Three-quarter angle (dimensionality)\n  - Face 03: Natural/environmental (personality)\n\n2-STEP PIPELINE:\n  Step 1: Generate at 1024x1024 (40 steps, DPM++ 2M Karras, CFG 4.5)\n  Step 2: Latent upscale 1.5x + refine (20 steps, denoise 0.2)\n  Step 3: FaceDetailer with face_yolov9c.pt\n  Step 4: Film grain + SeedVR2 upscale to 2048px\n\nMODEL: Z-Image Base (6B) | NOT Turbo\nOPTIMIZED FOR: RTX 5090 32GB VRAM"
       }
     },
     {
@@ -564,7 +564,7 @@
       "vram_requirement": "24-32GB",
       "step1": "Generate 1024x1024, DPM++ 2M Karras, 40 steps, CFG 4.5, denoise 1.0",
       "step2": "Latent upscale 1.5x (nearest-exact) + Refine 20 steps, denoise 0.2",
-      "post_processing": "FaceDetailer (YOLOV11m) → FilmGrain → SeedVR2 Upscale 2048px",
+      "post_processing": "FaceDetailer (YOLOv9c) → FilmGrain → SeedVR2 Upscale 2048px",
       "estimated_time_per_character": "8-12 minutes for all 3 images (2-step)",
       "total_time_21_characters": "170-250 minutes"
     }
