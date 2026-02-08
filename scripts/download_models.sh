@@ -5,10 +5,11 @@
 # Run on a fresh RunPod pod after cloning the repo.
 #
 # Usage:
-#   export CIVITAI_API_TOKEN="your_token_here"
 #   bash scripts/download_models.sh
 #
-# Get your CivitAI API token at: https://civitai.com/user/account
+# Optional: If any CivitAI downloads fail (login-gated models), set a token:
+#   export CIVITAI_API_TOKEN="your_token_here"
+#   Get one at: https://civitai.com/user/account
 # =============================================================================
 
 set -euo pipefail
@@ -22,14 +23,13 @@ TOKEN="${CIVITAI_API_TOKEN:-}"
 
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; CYAN='\033[0;36m'; NC='\033[0m'
 
-if [[ -z "$TOKEN" ]]; then
-    echo -e "${RED}ERROR: CIVITAI_API_TOKEN not set${NC}"
-    echo "  export CIVITAI_API_TOKEN=\"your_token_here\""
-    echo "  Get one at: https://civitai.com/user/account"
-    exit 1
+if [[ -n "$TOKEN" ]]; then
+    echo -e "${GREEN}CivitAI token set${NC}"
+    civitai() { echo "https://civitai.com/api/download/models/${1}?token=${TOKEN}"; }
+else
+    echo -e "${YELLOW}No CivitAI token - trying public downloads${NC}"
+    civitai() { echo "https://civitai.com/api/download/models/${1}"; }
 fi
-
-civitai() { echo "https://civitai.com/api/download/models/${1}?token=${TOKEN}"; }
 
 dl() {
     local url="$1" dest="$2" name="$3"
