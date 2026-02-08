@@ -1,13 +1,13 @@
 {
-  "_comment": "LoRA training configuration for kohya_ss -- RTX 5090 (32GB VRAM) optimised",
+  "_comment": "LoRA training configuration for kohya_ss -- RTX 5090 (32GB VRAM) -- Z-Image Base (Flux/Lumina2 architecture)",
 
   "training": {
     "network_type": "lora",
-    "network_dim": 32,
-    "network_alpha": 16,
-    "learning_rate": 1e-4,
-    "unet_lr": 1e-4,
-    "text_encoder_lr": 5e-5,
+    "network_dim": 16,
+    "network_alpha": 8,
+    "learning_rate": 5e-5,
+    "unet_lr": 5e-5,
+    "text_encoder_lr": 1e-5,
     "optimizer_type": "prodigy",
     "optimizer_args": {
       "weight_decay": 0.01,
@@ -27,8 +27,7 @@
     "gradient_checkpointing": true,
     "gradient_accumulation_steps": 1,
     "train_batch_size": 2,
-    "max_token_length": 225,
-    "clip_skip": 2,
+    "max_token_length": 512,
     "seed": 42,
     "cache_latents": true,
     "cache_latents_to_disk": false,
@@ -36,7 +35,6 @@
     "noise_offset": 0.0357,
     "adaptive_noise_scale": 0.00357,
     "min_snr_gamma": 5,
-    "xformers": true,
     "sdpa": true,
     "bucket_no_upscale": true
   },
@@ -82,15 +80,16 @@
     "log_dir": "output/logs/lora_training",
     "sample_every_n_steps": 500,
     "sample_prompts_file": "config/sample_prompts.txt",
-    "sample_sampler": "sa_solver"
+    "sample_sampler": "dpmpp_2m"
   },
 
   "model": {
-    "pretrained_model": "models/checkpoints/juggernautXL_v9.safetensors",
-    "vae": "models/vae/sdxl_vae.safetensors",
-    "model_type": "sdxl",
-    "v_parameterization": false,
-    "zero_terminal_snr": false
+    "pretrained_model": "models/unet/z_image_bf16.safetensors",
+    "clip": "models/clip/qwen_3_4b.safetensors",
+    "clip_type": "lumina2",
+    "vae": "models/vae/ultraflux_vae.safetensors",
+    "model_type": "flux",
+    "description": "Z-Image Base 6B parameter model (Flux/Lumina2 architecture). Training uses flux_train_network.py from kohya_ss sd-scripts."
   },
 
   "gpu_optimization": {
@@ -100,6 +99,6 @@
     "max_data_loader_workers": 4,
     "persistent_data_loader_workers": true,
     "pin_memory": true,
-    "description": "With 32GB VRAM on RTX 5090, we can use batch_size=2 with full bf16 and gradient checkpointing. Prodigy optimizer adapts learning rate automatically which is ideal for small 3-image datasets."
+    "description": "With 32GB VRAM on RTX 5090, we can use batch_size=2 with full bf16 and gradient checkpointing. Prodigy optimizer adapts learning rate automatically which is ideal for small 3-image datasets. Flux architecture uses lower network_dim (16) and learning rates than SDXL."
   }
 }

@@ -18,12 +18,18 @@ PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 COMFYUI="/comfyui"
 MODELS="${COMFYUI}/models"
 NODES="${COMFYUI}/custom_nodes"
-TOKEN="${CIVITAI_API_TOKEN:-}"
+CIVITAI_TOKEN="${CIVITAI_API_TOKEN:-}"
+HF_TOKEN="${HF_TOKEN:-}"
 
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; CYAN='\033[0;36m'; NC='\033[0m'
 
 echo ""
 echo -e "${CYAN}  AI Influencer Pipeline - RunPod Setup (comfyui:latest-5090)${NC}"
+echo ""
+
+# Show token status
+[[ -n "$CIVITAI_TOKEN" ]] && echo -e "  ${GREEN}CivitAI token set${NC}" || echo -e "  ${YELLOW}No CIVITAI_API_TOKEN set${NC}"
+[[ -n "$HF_TOKEN" ]] && echo -e "  ${GREEN}HuggingFace token set${NC}" || echo -e "  ${YELLOW}No HF_TOKEN set${NC}"
 echo ""
 
 # ---------------------------------------------------------------------------
@@ -77,11 +83,7 @@ clone_node "was-node-suite-comfyui"      "https://github.com/WASasquatch/was-nod
 # ---------------------------------------------------------------------------
 echo -e "${CYAN}[2/4] Models${NC}"
 
-if [[ -n "$TOKEN" ]]; then
-    civitai() { echo "https://civitai.com/api/download/models/${1}?token=${TOKEN}"; }
-else
-    civitai() { echo "https://civitai.com/api/download/models/${1}"; }
-fi
+civitai() { echo "https://civitai.com/api/download/models/${1}"; }
 
 dl() {
     local url="$1" dest="$2" name="$3"
@@ -90,15 +92,40 @@ dl() {
         echo -e "  ${GREEN}✓${NC} ${name}"
         return 0
     fi
+
+    # Build curl args: follow redirects, fail on HTTP errors, retry, timeout
+    local curl_args=(-L --fail --retry 3 --retry-delay 5 --connect-timeout 30 --max-time 1800 -o "$dest")
+
+    # Auth headers based on URL
+    if [[ "$url" == *"civitai.com"* ]] && [[ -n "$CIVITAI_TOKEN" ]]; then
+        curl_args+=(--header "Authorization: Bearer ${CIVITAI_TOKEN}")
+    elif [[ "$url" == *"huggingface.co"* ]] && [[ -n "$HF_TOKEN" ]]; then
+        curl_args+=(--header "Authorization: Bearer ${HF_TOKEN}")
+    fi
+
+    curl_args+=(--progress-bar)
+
     echo -ne "  ↓ ${name}... "
-    if wget -q --content-disposition -O "$dest" "$url" 2>/dev/null; then
+    if curl "${curl_args[@]}" "$url" 2>&1; then
         local sz=$(stat -c%s "$dest" 2>/dev/null || echo 0)
         if [[ "$sz" -gt 1000000 ]]; then
-            echo -e "${GREEN}$(numfmt --to=iec $sz 2>/dev/null || echo "${sz}B")${NC}"
+            echo -e "  ${GREEN}$(numfmt --to=iec "$sz" 2>/dev/null || echo "${sz}B")${NC}"
             return 0
+        elif [[ "$sz" -gt 0 ]]; then
+            local head
+            head=$(head -c 200 "$dest" 2>/dev/null || true)
+            if [[ "$head" == *"<html"* ]] || [[ "$head" == *"<!DOCTYPE"* ]] || [[ "$head" == *"login"* ]]; then
+                echo -e "${RED}FAILED${NC} - got HTML error page (auth required?)"
+                rm -f "$dest"
+                return 1
+            fi
+            echo -e "${YELLOW}WARNING${NC} - only ${sz} bytes"
+            return 1
         fi
     fi
-    echo -e "${RED}FAILED${NC} → $url"
+
+    echo -e "${RED}FAILED${NC} → ${url}"
+    rm -f "$dest"
     return 1
 }
 

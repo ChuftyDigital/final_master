@@ -342,30 +342,32 @@ def generate_training_toml(
             '  is_reg = true',
         ])
 
+    model_type = model_cfg.get("model_type", "flux")
+    is_flux = model_type == "flux"
+
     lines.extend([
         "",
         "[training_arguments]",
-        f'pretrained_model_name_or_path = "{model_cfg.get("pretrained_model", "models/checkpoints/juggernautXL_v9.safetensors")}"',
+        f'pretrained_model_name_or_path = "{model_cfg.get("pretrained_model", "models/unet/z_image_bf16.safetensors")}"',
         f'output_dir = "{output_dir}"',
         f'output_name = "{output_name}"',
         f'save_model_as = "{training.get("save_model_as", "safetensors")}"',
         f'max_train_steps = {training.get("max_train_steps", 1500)}',
         f'save_every_n_steps = {training.get("save_every_n_steps", 500)}',
-        f'learning_rate = {training.get("learning_rate", 1e-4)}',
-        f'unet_lr = {training.get("unet_lr", 1e-4)}',
-        f'text_encoder_lr = {training.get("text_encoder_lr", 5e-5)}',
+        f'learning_rate = {training.get("learning_rate", 5e-5)}',
+        f'unet_lr = {training.get("unet_lr", 5e-5)}',
+        f'text_encoder_lr = {training.get("text_encoder_lr", 1e-5)}',
         f'optimizer_type = "{training.get("optimizer_type", "prodigy")}"',
         f'lr_scheduler = "{training.get("lr_scheduler", "cosine_with_restarts")}"',
         f'lr_warmup_steps = {training.get("lr_warmup_steps", 100)}',
         f'lr_scheduler_num_cycles = {training.get("lr_scheduler_num_cycles", 3)}',
-        f'network_dim = {training.get("network_dim", 32)}',
-        f'network_alpha = {training.get("network_alpha", 16)}',
+        f'network_dim = {training.get("network_dim", 16)}',
+        f'network_alpha = {training.get("network_alpha", 8)}',
         f'mixed_precision = "{training.get("mixed_precision", "bf16")}"',
         f'full_bf16 = {str(training.get("full_bf16", True)).lower()}',
         f'gradient_checkpointing = {str(training.get("gradient_checkpointing", True)).lower()}',
         f'gradient_accumulation_steps = {training.get("gradient_accumulation_steps", 1)}',
-        f'max_token_length = {training.get("max_token_length", 225)}',
-        f'clip_skip = {training.get("clip_skip", 2)}',
+        f'max_token_length = {training.get("max_token_length", 512)}',
         f'seed = {training.get("seed", 42)}',
         f'cache_latents = {str(training.get("cache_latents", True)).lower()}',
         f'cache_latents_to_disk = {str(training.get("cache_latents_to_disk", False)).lower()}',
@@ -373,8 +375,15 @@ def generate_training_toml(
         f'noise_offset = {training.get("noise_offset", 0.0357)}',
         f'adaptive_noise_scale = {training.get("adaptive_noise_scale", 0.00357)}',
         f'min_snr_gamma = {training.get("min_snr_gamma", 5)}',
-        f'xformers = {str(training.get("xformers", True)).lower()}',
     ])
+
+    # Flux uses SDPA, SDXL uses xformers
+    if is_flux:
+        if training.get("sdpa", True):
+            lines.append(f'sdpa = true')
+    else:
+        lines.append(f'xformers = {str(training.get("xformers", True)).lower()}')
+        lines.append(f'clip_skip = {training.get("clip_skip", 2)}')
 
     # Optimizer arguments
     opt_args = training.get("optimizer_args", {})
@@ -389,10 +398,13 @@ def generate_training_toml(
                 opt_parts.append(f"{k}={v}")
         lines.append(f'optimizer_args = [{", ".join(repr(p) for p in opt_parts)}]')
 
-    # VAE
+    # VAE and CLIP paths
     vae_path = model_cfg.get("vae", "")
     if vae_path:
         lines.append(f'vae = "{vae_path}"')
+    clip_path = model_cfg.get("clip", "")
+    if clip_path:
+        lines.append(f'clip_l = "{clip_path}"')
 
     # Sample generation during training
     sample_steps = output_cfg.get("sample_every_n_steps", 500)
@@ -642,7 +654,7 @@ def prepare_all_characters(
 
     # Generate a batch training script
     if toml_paths:
-        batch_script = generate_batch_training_script(toml_paths, output_base_dir)
+        batch_script = generate_batch_training_script(toml_paths, output_base_dir, lora_config)
         logger.info("Batch training script: %s", batch_script)
 
     return toml_paths
@@ -651,6 +663,7 @@ def prepare_all_characters(
 def generate_batch_training_script(
     toml_paths: List[Path],
     output_dir: Path,
+    lora_config: Optional[Dict[str, Any]] = None,
 ) -> Path:
     """
     Generate a bash script that trains all LoRAs sequentially.
@@ -661,12 +674,20 @@ def generate_batch_training_script(
         Paths to the TOML training configs.
     output_dir : Path
         Directory to write the batch script.
+    lora_config : dict, optional
+        LoRA training config (used to determine model type).
 
     Returns
     -------
     Path
         Path to the generated batch training script.
     """
+    # Determine training script based on model type
+    model_type = "flux"
+    if lora_config:
+        model_type = lora_config.get("model", {}).get("model_type", "flux")
+    train_script = "flux_train_network.py" if model_type == "flux" else "sdxl_train_network.py"
+
     script_path = output_dir / "train_all_loras.sh"
     lines = [
         "#!/usr/bin/env bash",
@@ -676,6 +697,7 @@ def generate_batch_training_script(
         "# Usage: bash train_all_loras.sh",
         "#",
         "# Requires: kohya_ss sd-scripts installed and accessible",
+        f"# Model type: {model_type} (Z-Image Base / Flux architecture)",
         "# Optimised for RTX 5090 (32GB VRAM, bf16)",
         "",
         'set -euo pipefail',
@@ -694,7 +716,7 @@ def generate_batch_training_script(
         lines.extend([
             f'echo "=== Training {idx}/{len(toml_paths)}: {name} ==="',
             f'${{ACCELERATE_CMD}} --mixed_precision bf16 \\',
-            f'  "${{KOHYA_DIR}}/sdxl_train_network.py" \\',
+            f'  "${{KOHYA_DIR}}/{train_script}" \\',
             f'  --config_file "{toml_path}"',
             f'echo "{name} training complete."',
             'echo ""',
@@ -815,12 +837,15 @@ def main() -> None:
             reg_dir=args.reg_dir,
         )
 
+        model_type = lora_config.get("model", {}).get("model_type", "flux")
+        train_script = "flux_train_network.py" if model_type == "flux" else "sdxl_train_network.py"
         logger.info("")
         logger.info("Done! To start training:")
         logger.info(
             "  accelerate launch --mixed_precision bf16 "
-            "/path/to/kohya_ss/sd-scripts/sdxl_train_network.py "
+            "/path/to/kohya_ss/sd-scripts/%s "
             "--config_file %s",
+            train_script,
             toml_path,
         )
 

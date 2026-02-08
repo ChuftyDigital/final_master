@@ -97,7 +97,7 @@
   "custom_nodes": [
     {
       "name": "SeedVR2",
-      "repo": "https://github.com/SeedVR/SeedVR-ComfyUI",
+      "repo": "https://github.com/numz/ComfyUI-SeedVR2_VideoUpscaler",
       "description": "SeedVR2 video/image generation nodes"
     },
     {
