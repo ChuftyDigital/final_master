@@ -3,8 +3,8 @@
   "last_link_id": 70,
   "metadata": {
     "title": "Workflow 2 - Image Vault Generator",
-    "description": "Batch generates vault images using trained character LoRA + identity reference. 4 lanes (SFW/Suggestive/Spicy/NSFW) with bundle support. Prompts loaded from vault manifest files. Optimized for RTX 5090.",
-    "version": "2.0",
+    "description": "Batch generates vault images using Z-Image Base + trained character LoRA + IPAdapter identity lock. 2-step pipeline (generate + refine) with YOLOV11m face detailing. 4 lanes with bundle support. Optimized for RTX 5090.",
+    "version": "3.0",
     "author": "AI Influencer Pipeline",
     "gpu_target": "RTX 5090 32GB",
     "docker_image": "comfyui:latest-5090",
@@ -26,8 +26,8 @@
       "type": "UNETLoader",
       "pos": [100, 380],
       "size": [300, 80],
-      "title": "Z-Image-Turbo UNET",
-      "widgets_values": ["z_image_turbo_bf16.safetensors", "default"],
+      "title": "Z-Image Base UNET (6B)",
+      "widgets_values": ["z_image_bf16.safetensors", "default"],
       "outputs": [{"name": "MODEL", "type": "MODEL", "links": [1]}]
     },
     {
@@ -217,7 +217,7 @@
       "pos": [1700, 650],
       "size": [350, 350],
       "title": "Primary Sampler",
-      "widgets_values": [42, "randomize", 32, -1, "exponential/res_4s_krogstad", "beta57", 1.0, "standard", 100006],
+      "widgets_values": [42, "randomize", 40, 4.5, "dpmpp_2m", "karras", 1.0, "standard", 100006],
       "inputs": [
         {"name": "model", "type": "MODEL", "link": 16},
         {"name": "positive", "type": "CONDITIONING", "link": 23},
@@ -405,14 +405,18 @@
     },
     "info": {
       "pipeline": "vault_image_generation",
+      "model": "Z-Image Base (6B) - NOT Turbo",
       "target_gpu": "RTX 5090",
       "vram_requirement": "28-32GB",
-      "estimated_time_per_image": "45-60 seconds",
-      "estimated_time_per_lane_200": "2.5-3.3 hours",
-      "estimated_time_per_character_800": "10-13 hours",
-      "estimated_time_all_21_characters": "210-273 hours (9-12 days continuous)",
+      "sampler": "DPM++ 2M Karras, 40 steps, CFG 4.5",
+      "2_step_refinement": "Latent upscale 1.5x + 20 step refine at denoise 0.2",
+      "face_detector": "YOLOV11m-face.pt",
+      "estimated_time_per_image": "60-90 seconds (2-step)",
+      "estimated_time_per_lane_200": "3.3-5 hours",
+      "estimated_time_per_character_800": "13-20 hours",
+      "estimated_time_all_21_characters": "275-420 hours (12-18 days continuous)",
       "identity_consistency": "LoRA + IPAdapter dual lock",
-      "post_processing": "FaceDetailer + FilmGrain + SeedVR2 Upscale"
+      "post_processing": "2-step refine + YOLOV11m FaceDetailer + FilmGrain + SeedVR2 Upscale"
     }
   },
   "version": 0.4

@@ -3,8 +3,8 @@
   "last_link_id": 52,
   "metadata": {
     "title": "Workflow 1 - Master Reference Image Generator",
-    "description": "Generates 3 master reference images per character for LoRA training. Uses Z-Image-Turbo with SeedVR2 inference, face detailing, and film grain. Optimized for RTX 5090 (32GB VRAM).",
-    "version": "2.0",
+    "description": "Generates 3 master reference images per character for LoRA training. Uses Z-Image Base (6B) with 2-step refinement pipeline, YOLOV11m face detailing, and film grain. Optimized for RTX 5090 (32GB VRAM).",
+    "version": "3.0",
     "author": "AI Influencer Pipeline",
     "gpu_target": "RTX 5090 32GB",
     "docker_image": "comfyui:latest-5090"
@@ -16,7 +16,7 @@
       "pos": [50, 50],
       "size": [400, 200],
       "properties": {
-        "text": "WORKFLOW 1: MASTER IMAGE GENERATOR\n=====================================\nGenerates 3 reference images per character:\n  - Face 01: Front-facing portrait (identity anchor)\n  - Face 02: Three-quarter angle (dimensionality)\n  - Face 03: Natural/environmental (personality)\n\nINSTRUCTIONS:\n1. Set character number in 'Character Selector' (1-21)\n2. Paste prompts from output/master_prompts/\n3. Queue prompt - generates 3 images\n4. Images save to output/master_images/\n\nOPTIMIZED FOR: RTX 5090 32GB VRAM\nMODEL: Z-Image-Turbo with SeedVR2"
+        "text": "WORKFLOW 1: MASTER IMAGE GENERATOR (Z-Image Base)\n=====================================================\nGenerates 3 reference images per character:\n  - Face 01: Front-facing portrait (identity anchor)\n  - Face 02: Three-quarter angle (dimensionality)\n  - Face 03: Natural/environmental (personality)\n\n2-STEP PIPELINE:\n  Step 1: Generate at 1024x1024 (40 steps, DPM++ 2M Karras, CFG 4.5)\n  Step 2: Latent upscale 1.5x + refine (20 steps, denoise 0.2)\n  Step 3: FaceDetailer with YOLOV11m-face.pt\n  Step 4: Film grain + SeedVR2 upscale to 2048px\n\nMODEL: Z-Image Base (6B) | NOT Turbo\nOPTIMIZED FOR: RTX 5090 32GB VRAM"
       }
     },
     {
@@ -25,7 +25,7 @@
       "pos": [100, 300],
       "size": [300, 80],
       "properties": {},
-      "widgets_values": ["z-image-turbo.safetensors", "default"],
+      "widgets_values": ["z_image_bf16.safetensors", "default"],
       "outputs": [{"name": "MODEL", "type": "MODEL", "links": [1]}]
     },
     {
@@ -35,7 +35,7 @@
       "size": [300, 80],
       "properties": {},
       "widgets_values": ["qwen_3_4b.safetensors", "lumina2"],
-      "outputs": [{"name": "CLIP", "type": "CLIP", "links": [2, 3]}]
+      "outputs": [{"name": "CLIP", "type": "CLIP", "links": [2, 3, 50]}]
     },
     {
       "id": 4,
@@ -173,7 +173,7 @@
       "size": [350, 350],
       "title": "Primary Sampler - FACE 01",
       "properties": {},
-      "widgets_values": [42, "randomize", 32, 10.0, "exponential/res_4s_krogstad", "beta57", 1.0, "standard", 100006],
+      "widgets_values": [42, "randomize", 40, 4.5, "dpmpp_2m", "karras", 1.0, "standard", 100006],
       "inputs": [
         {"name": "model", "type": "MODEL", "link": 7},
         {"name": "positive", "type": "CONDITIONING", "link": 15},
@@ -189,7 +189,7 @@
       "size": [350, 350],
       "title": "Primary Sampler - FACE 02",
       "properties": {},
-      "widgets_values": [43, "randomize", 32, 10.0, "exponential/res_4s_krogstad", "beta57", 1.0, "standard", 100006],
+      "widgets_values": [43, "randomize", 40, 4.5, "dpmpp_2m", "karras", 1.0, "standard", 100006],
       "inputs": [
         {"name": "model", "type": "MODEL", "link": null},
         {"name": "positive", "type": "CONDITIONING", "link": 16},
@@ -205,7 +205,7 @@
       "size": [350, 350],
       "title": "Primary Sampler - FACE 03",
       "properties": {},
-      "widgets_values": [44, "randomize", 32, 10.0, "exponential/res_4s_krogstad", "beta57", 1.0, "standard", 100006],
+      "widgets_values": [44, "randomize", 40, 4.5, "dpmpp_2m", "karras", 1.0, "standard", 100006],
       "inputs": [
         {"name": "model", "type": "MODEL", "link": null},
         {"name": "positive", "type": "CONDITIONING", "link": 17},
@@ -444,10 +444,14 @@
     },
     "info": {
       "pipeline": "master_image_generation",
+      "model": "Z-Image Base (6B) - NOT Turbo",
       "target_gpu": "RTX 5090",
       "vram_requirement": "24-32GB",
-      "estimated_time_per_character": "3-5 minutes for all 3 images",
-      "total_time_21_characters": "60-100 minutes"
+      "sampler": "DPM++ 2M Karras, 40 steps, CFG 4.5",
+      "2_step_refinement": "Latent upscale 1.5x + 20 step refine at denoise 0.2",
+      "face_detector": "YOLOV11m-face.pt",
+      "estimated_time_per_character": "5-8 minutes for all 3 images",
+      "total_time_21_characters": "100-170 minutes"
     }
   },
   "version": 0.4

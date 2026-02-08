@@ -45,27 +45,51 @@
     "insightface": "models/insightface"
   },
 
-  "default_checkpoint": "juggernautXL_v9.safetensors",
-
-  "default_sampler": {
-    "sampler_name": "sa_solver",
-    "scheduler": "karras",
-    "steps": 30,
-    "cfg": 2.5,
-    "denoise": 1.0,
-    "width": 1024,
-    "height": 1024
+  "z_image_base": {
+    "unet": "z_image_bf16.safetensors",
+    "clip": "qwen_3_4b.safetensors",
+    "clip_type": "lumina2",
+    "vae": "ultraflux_vae.safetensors",
+    "seedvr2_dit": "seedvr2_ema_7b_fp16.safetensors",
+    "seedvr2_vae": "ema_vae_fp16.safetensors",
+    "sdxl_refiner": "analogMadnessSDXL_xl5.safetensors",
+    "face_detector": "YOLOV11m-face.pt",
+    "notes": "Z-Image Base 6B parameter model. Better detail than Turbo, needs 30-50 steps. Supports full negative prompts. Use narrative-style descriptive prompts."
   },
 
-  "highres_sampler": {
-    "sampler_name": "sa_solver",
+  "default_checkpoint": "analogMadnessSDXL_xl5.safetensors",
+
+  "step1_sampler": {
+    "_description": "Initial generation at base resolution",
+    "sampler_name": "dpmpp_2m",
+    "scheduler": "karras",
+    "steps": 40,
+    "cfg": 4.5,
+    "denoise": 1.0,
+    "width": 1024,
+    "height": 1024,
+    "aura_flow_shift": 3.0,
+    "notes": "Z-Image Base sweet spot: 30-50 steps, CFG 3.0-7.0. DPM++ 2M Karras recommended."
+  },
+
+  "step2_refine": {
+    "_description": "Latent upscale + refinement pass for detail enhancement",
+    "sampler_name": "dpmpp_2m",
     "scheduler": "karras",
     "steps": 20,
-    "cfg": 2.5,
-    "denoise": 0.45,
+    "cfg": 4.5,
+    "denoise": 0.2,
+    "upscale_method": "latent_nearest_exact",
     "upscale_factor": 1.5,
-    "width": 1536,
-    "height": 1536
+    "notes": "Low denoise (0.1-0.25) adds detail without changing composition. This is the key to photoreal quality."
+  },
+
+  "portrait_resolution": {
+    "_description": "Optimal portrait resolutions for Z-Image Base",
+    "square": {"width": 1024, "height": 1024, "aspect": "1:1"},
+    "portrait": {"width": 768, "height": 1152, "aspect": "2:3"},
+    "landscape": {"width": 1152, "height": 768, "aspect": "3:2"},
+    "slim_portrait": {"width": 768, "height": 1344, "aspect": "9:16"}
   },
 
   "negative_prompt_default": "deformed, distorted, disfigured, poorly drawn, bad anatomy, wrong anatomy, extra limb, missing limb, floating limbs, mutated hands, extra fingers, missing fingers, blurry, watermark, text, logo, signature, jpeg artifacts, low quality, lowres, cropped, worst quality",
