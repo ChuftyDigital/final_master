@@ -78,7 +78,7 @@ MODELS = [
     },
     {
         "name": "4x ClearReality Upscaler",
-        "url": "https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x-ClearRealityV1.pth",
+        "url": "https://huggingface.co/LS110824/upscale/resolve/main/4x-ClearRealityV1.pth",
         "subdir": "upscale_models",
         "filename": "4x-ClearRealityV1.pth",
         "size_gb": 0.06,
@@ -94,7 +94,7 @@ MODELS = [
     },
     {
         "name": "SAM Segmentation",
-        "url": "https://huggingface.co/daswerth/sd-webui-segment-anything/resolve/main/sam_vit_b_01ec64.pth",
+        "url": "https://dl.fbaipublicfiles.com/segment_anything/sam_vit_b_01ec64.pth",
         "subdir": "sams",
         "filename": "sam_vit_b_01ec64.pth",
         "size_gb": 0.37,
@@ -189,6 +189,8 @@ class ModelInstaller:
         """Download all models (or filtered by category)."""
         self._create_dirs()
         state = self._load_state()
+        # Clear previous failures so they get retried
+        state["failed"] = [f for f in state.get("failed", []) if not f.startswith("model:")]
         results = {}
 
         models = MODELS
