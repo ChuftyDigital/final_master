@@ -1,0 +1,81 @@
+PREMIUM FLUX PROMPT INDEX
+======================================================================
+
+Total Characters: 21
+Total Images: 63
+Prompt Quality: Cinema-grade with exceptional detail
+Optimized For: FLUX.1 Dev FP8
+Generation Time: ~30 seconds per image (RTX 4090)
+
+FILES:
+  prompts_premium_front.txt - Front-facing portraits
+  prompts_premium_angle.txt - Three-quarter angles
+  prompts_premium_natural.txt - Natural expressions
+
+======================================================================
+
+CHARACTER LIST:
+
+ 1. char_001: ISABELLA REYES
+    26-year-old Latina | Beach/Bikini Lifestyle
+
+ 2. char_002: ARABELLA PEMBERTON-CLARKE
+    29-year-old European | Equestrian/Country Elite
+
+ 3. char_003: GIADA VALENTINI
+    27-year-old European | Luxury Travel/Aviation
+
+ 4. char_004: SASHA VOLKOV
+    24-year-old European | Gaming/E-Sports (Cute/Casual)
+
+ 5. char_005: ZARA MITCHELL
+    31-year-old North American | Fitness/Athletic Training
+
+ 6. char_006: SAKURA TANAKA
+    23-year-old Asian | Cosplay/Anime
+
+ 7. char_007: AMÉLIE ROUSSEAU
+    28-year-old European | Fashion/Haute Couture
+
+ 8. char_008: DAKOTA ROSE
+    22-year-old Mixed | Amateur/Girl Next Door
+
+ 9. char_009: VALENTINA SOUSA
+    33-year-old Latina | MILF/Mature Latina
+
+10. char_010: PRIYA SHARMA
+    25-year-old South Asian | Yoga/Wellness/Spiritual
+
+11. char_011: LUNA HART
+    26-year-old Mixed | Alternative/Tattooed
+
+12. char_012: MEI LIN CHEN
+    24-year-old Mixed | ASMR/Girlfriend Experience
+
+13. char_013: NATASHA VOLKOV
+    30-year-old Mixed | Dominatrix/BDSM
+
+14. char_014: CHLOE WILLIAMS
+    20-year-old European | College/Young Adult (18+)
+
+15. char_015: SIENNA BROOKS
+    35-year-old Oceanian | MILF/Cougar
+
+16. char_016: JASMINE NGUYEN
+    23-year-old Mixed | Petite Asian/Feet Content
+
+17. char_017: XIMENA MORALES
+    27-year-old Latina | Latina Curves/BBW
+
+18. char_018: SCARLETT MONROE
+    29-year-old Mixed | BBW/Southern Charm
+
+19. char_019: EBONY JACKSON
+    28-year-old Mixed | Black Beauty/Melanin Content
+
+20. char_020: LENA KOZLOV
+    25-year-old Mixed | Lesbian/Couples Content
+
+21. char_021: YUKI NAKAMURA
+    25-year-old European | Sexy Japanese Gamer/Competitive Streaming
+
