@@ -145,7 +145,7 @@ echo "Starting ComfyUI (RTX 5090 Blackwell optimized)..."
 export CUDA_VISIBLE_DEVICES=0
 export PYTORCH_CUDA_ALLOC_CONF="max_split_size_mb:512"
 
-python main.py \
+python3 main.py \
     --listen 0.0.0.0 \
     --port 8188 \
     --highvram \
