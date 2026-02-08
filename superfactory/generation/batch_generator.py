@@ -144,11 +144,14 @@ class BatchGenerator:
                         height=self.config.generation("bulk", "resolution", [1024, 1536])[1],
                         steps=self.config.generation("bulk", "steps", 28),
                         cfg=self.config.generation("bulk", "cfg", 1.0),
-                        sampler=self.config.generation("bulk", "sampler", "dpmpp_2m"),
-                        scheduler=self.config.generation("bulk", "scheduler", "simple"),
+                        sampler=self.config.generation("bulk", "sampler", "dpmpp_2m_sde_gpu"),
+                        scheduler=self.config.generation("bulk", "scheduler", "karras"),
                         seed=seed,
                         filename_prefix=f"{char_id}_{lane}_{idx:04d}",
                         negative=negative,
+                        face_detail=self.config.generation("bulk", "face_detail", True),
+                        face_detail_denoise=self.config.generation("bulk", "face_detail_denoise", 0.35),
+                        upscale=self.config.generation("bulk", "upscale", False),
                     )
 
                     result = self.client.generate_and_wait(workflow)

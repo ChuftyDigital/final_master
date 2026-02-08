@@ -29,27 +29,35 @@ gpu:
   memory_config: "max_split_size_mb:512"
 
 generation:
-  # Reference images (FLUX.1 Dev, maximum quality + FluxPromptEnhance)
-  # FLUX Dev: 28 steps, CFG 1.0, dpmpp_2m, simple scheduler
-  # FluxPromptEnhance AI-enhances prompts before CLIP encoding
-  # ~45 seconds per image on RTX 5090 with FP8
+  # Reference images (FLUX.1 Dev, full photorealistic pipeline)
+  # Pipeline: FluxPromptEnhance → KSampler → FaceDetailer → 4x-UltraSharp
+  # Sampler: dpmpp_2m_sde_gpu + karras (best for photorealism)
+  # ~60-90 seconds per image on RTX 5090 with FP8
   reference:
     count_per_character: 3
     poses: ["front", "angle", "natural"]
     resolution: [1024, 1024]
     steps: 28
     cfg: 1.0
-    sampler: "dpmpp_2m"
-    scheduler: "simple"
+    sampler: "dpmpp_2m_sde_gpu"
+    scheduler: "karras"
+    face_detail: true
+    face_detail_denoise: 0.35
+    upscale: true
+    upscale_model: "4x-UltraSharp.pth"
+    upscale_megapixels: 4.0
 
-  # Bulk content (FLUX.1 Dev, same quality pipeline + FluxPromptEnhance)
-  # RTX 5090 FP8: ~35-40s per image at 1024x1536
+  # Bulk content (same pipeline, FaceDetailer on, upscale off for speed)
+  # RTX 5090 FP8: ~45-60s per image at 1024x1536
   bulk:
     resolution: [1024, 1536]  # portrait orientation
     steps: 28
     cfg: 1.0
-    sampler: "dpmpp_2m"
-    scheduler: "simple"
+    sampler: "dpmpp_2m_sde_gpu"
+    scheduler: "karras"
+    face_detail: true
+    face_detail_denoise: 0.35
+    upscale: false
 
   # All 4 content lanes active
   lanes:

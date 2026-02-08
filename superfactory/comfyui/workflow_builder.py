@@ -3,6 +3,10 @@
 Builds API-format workflow dicts programmatically instead of maintaining
 fragile JSON files. Each method adds nodes and wires them together.
 
+Photorealistic pipeline:
+  Generate → FluxPromptEnhance → KSampler → VAEDecode
+  → FaceDetailer (Impact Pack) → Upscale (4x-UltraSharp) → Save
+
 Supports both FLUX and Z-Image/Lumina2 model pipelines.
 """
 
@@ -13,24 +17,19 @@ from typing import Any, Dict, List, Optional, Tuple
 class WorkflowBuilder:
     """Constructs ComfyUI API-format workflows programmatically.
 
-    Usage (FLUX models — primary pipeline):
+    Usage (FLUX photorealistic pipeline):
         wb = WorkflowBuilder()
         wb.load_checkpoint("flux1-dev-fp8.safetensors")
         wb.load_dual_clip("t5xxl_fp8_e4m3fn.safetensors", "clip_l.safetensors", "flux")
         wb.load_vae("ae.safetensors")
-        wb.set_prompt("Professional portrait photograph of...", "blurry, low quality...")
+        wb.set_prompt("Editorial portrait...", "blurry...", enhance=True)
         wb.set_empty_latent(1024, 1024)
-        wb.sample(steps=28, cfg=1.0, sampler="dpmpp_2m", scheduler="simple")
+        wb.sample(steps=28, cfg=1.0, sampler="dpmpp_2m_sde_gpu", scheduler="karras")
         wb.decode()
+        wb.face_detail()          # FaceDetailer pass for realistic faces
+        wb.upscale("4x-UltraSharp.pth")  # High-res upscale
         wb.save("output_prefix")
         workflow = wb.build()
-
-    Usage (Z-Image / Lumina2 models — alternative):
-        wb = WorkflowBuilder()
-        wb.load_checkpoint("z_image_bf16.safetensors")
-        wb.load_clip("qwen_3_4b_fp8_mixed.safetensors", "lumina2")
-        wb.load_vae("ae.safetensors")
-        ...
     """
 
     def __init__(self):
@@ -45,6 +44,9 @@ class WorkflowBuilder:
         self._negative: Optional[str] = None
         self._latent: Optional[str] = None
         self._image: Optional[str] = None
+        # Face detection models (loaded on demand)
+        self._bbox_detector: Optional[str] = None
+        self._sam_model: Optional[str] = None
 
     def _add_node(self, class_type: str, inputs: Dict[str, Any]) -> str:
         """Add a node and return its ID string."""
@@ -58,11 +60,7 @@ class WorkflowBuilder:
         return [node_id, output_idx]
 
     def load_checkpoint(self, ckpt_name: str) -> "WorkflowBuilder":
-        """Load a checkpoint model. Outputs: MODEL(0), CLIP(1), VAE(2).
-
-        For FLUX/diffusion-only models, CLIP output may be None.
-        Call load_dual_clip() or load_clip() separately for text encoding.
-        """
+        """Load a checkpoint model. Outputs: MODEL(0), CLIP(1), VAE(2)."""
         nid = self._add_node("CheckpointLoaderSimple", {"ckpt_name": ckpt_name})
         self._model = (nid, 0)
         self._clip = (nid, 1)
@@ -75,8 +73,8 @@ class WorkflowBuilder:
         """Load dual CLIP text encoders (for FLUX models).
 
         Args:
-            clip_name1: T5-XXL encoder filename (e.g. t5xxl_fp8_e4m3fn.safetensors)
-            clip_name2: CLIP-L encoder filename (e.g. clip_l.safetensors)
+            clip_name1: T5-XXL encoder filename
+            clip_name2: CLIP-L encoder filename
             clip_type: "flux" or "sdxl"
         """
         nid = self._add_node("DualCLIPLoader", {
@@ -88,12 +86,7 @@ class WorkflowBuilder:
         return self
 
     def load_clip(self, clip_name: str, clip_type: str = "lumina2") -> "WorkflowBuilder":
-        """Load a single text encoder (for Z-Image/Lumina models).
-
-        Args:
-            clip_name: Text encoder filename (e.g. qwen_3_4b_fp8_mixed.safetensors)
-            clip_type: "lumina2" for Z-Image, "sd1" for SD1.5, etc.
-        """
+        """Load a single text encoder (for Z-Image/Lumina models)."""
         nid = self._add_node("CLIPLoader", {
             "clip_name": clip_name,
             "type": clip_type,
@@ -166,8 +159,8 @@ class WorkflowBuilder:
         self,
         steps: int = 28,
         cfg: float = 1.0,
-        sampler: str = "dpmpp_2m",
-        scheduler: str = "simple",
+        sampler: str = "dpmpp_2m_sde_gpu",
+        scheduler: str = "karras",
         seed: Optional[int] = None,
         denoise: float = 1.0,
     ) -> "WorkflowBuilder":
@@ -195,6 +188,127 @@ class WorkflowBuilder:
         nid = self._add_node("VAEDecode", {
             "samples": self._ref(self._latent, 0),
             "vae": self._ref(self._vae[0], self._vae[1]),
+        })
+        self._image = nid
+        return self
+
+    # ── Face Detection & Detail ───────────────────────────────────
+
+    def load_face_detector(self, model_name: str = "face_yolov8m.pt") -> "WorkflowBuilder":
+        """Load YOLO face detector via UltralyticsDetectorProvider (Impact Pack)."""
+        nid = self._add_node("UltralyticsDetectorProvider", {
+            "model_name": model_name,
+        })
+        self._bbox_detector = nid
+        return self
+
+    def load_sam(self, model_name: str = "sam_vit_b_01ec64.pth", device: str = "AUTO") -> "WorkflowBuilder":
+        """Load SAM segmentation model (Impact Pack)."""
+        nid = self._add_node("SAMLoader", {
+            "model_name": model_name,
+            "device_mode": device,
+        })
+        self._sam_model = nid
+        return self
+
+    def face_detail(
+        self,
+        steps: int = 20,
+        cfg: float = 1.0,
+        sampler: str = "dpmpp_2m_sde_gpu",
+        scheduler: str = "karras",
+        denoise: float = 0.35,
+        guide_size: int = 512,
+        max_size: int = 1024,
+        seed: Optional[int] = None,
+        bbox_threshold: float = 0.5,
+        bbox_dilation: int = 10,
+        bbox_crop_factor: float = 3.0,
+        feather: int = 5,
+    ) -> "WorkflowBuilder":
+        """Run FaceDetailer to enhance face realism (Impact Pack).
+
+        Detects faces, crops them, runs a second KSampler pass at higher
+        detail, then composites back. Essential for photorealistic portraits.
+
+        Args:
+            denoise: How much to refine face (0.3-0.4 = faithful, 0.5+ = creative)
+            guide_size: Face crop resolution for detail pass
+        """
+        if seed is None:
+            seed = random.randint(1, 2**31)
+
+        # Auto-load detector models if not already loaded
+        if self._bbox_detector is None:
+            self.load_face_detector()
+        if self._sam_model is None:
+            self.load_sam()
+
+        nid = self._add_node("FaceDetailer", {
+            "image": self._ref(self._image, 0),
+            "model": self._ref(self._model[0], self._model[1]),
+            "clip": self._ref(self._clip[0], self._clip[1]),
+            "vae": self._ref(self._vae[0], self._vae[1]),
+            "positive": self._ref(self._positive, 0),
+            "negative": self._ref(self._negative, 0),
+            "bbox_detector": self._ref(self._bbox_detector, 0),
+            "sam_model_opt": self._ref(self._sam_model, 0),
+            "guide_size": guide_size,
+            "guide_size_for": True,
+            "max_size": max_size,
+            "seed": seed,
+            "steps": steps,
+            "cfg": cfg,
+            "sampler_name": sampler,
+            "scheduler": scheduler,
+            "denoise": denoise,
+            "feather": feather,
+            "noise_mask": True,
+            "force_inpaint": True,
+            "bbox_threshold": bbox_threshold,
+            "bbox_dilation": bbox_dilation,
+            "bbox_crop_factor": bbox_crop_factor,
+            "sam_detection_hint": "center-1",
+            "sam_dilation": 0,
+            "sam_threshold": 0.93,
+            "sam_bbox_expansion": 0,
+            "sam_mask_hint_threshold": 0.7,
+            "sam_mask_hint_use_negative": "False",
+            "drop_size": 10,
+            "wildcard": "",
+            "cycle": 1,
+        })
+        # FaceDetailer output 0 is the enhanced image
+        self._image = nid
+        return self
+
+    # ── Upscaling ─────────────────────────────────────────────────
+
+    def upscale(self, model_name: str = "4x-UltraSharp.pth") -> "WorkflowBuilder":
+        """Upscale image using a model (e.g. 4x-UltraSharp).
+
+        Loads the upscale model and applies it to the current image.
+        """
+        loader_id = self._add_node("UpscaleModelLoader", {
+            "model_name": model_name,
+        })
+        nid = self._add_node("ImageUpscaleWithModel", {
+            "upscale_model": self._ref(loader_id, 0),
+            "image": self._ref(self._image, 0),
+        })
+        self._image = nid
+        return self
+
+    def scale_to_pixels(self, megapixels: float = 4.0, method: str = "lanczos") -> "WorkflowBuilder":
+        """Scale image to a target total megapixel count.
+
+        Useful after 4x upscale to control final resolution.
+        e.g. megapixels=4.0 → ~2048x2048 for square images.
+        """
+        nid = self._add_node("ImageScaleToTotalPixels", {
+            "image": self._ref(self._image, 0),
+            "upscale_method": method,
+            "megapixels": megapixels,
         })
         self._image = nid
         return self
@@ -232,21 +346,30 @@ def build_reference_workflow(
     height: int = 1024,
     steps: int = 28,
     cfg: float = 1.0,
-    sampler: str = "dpmpp_2m",
-    scheduler: str = "simple",
+    sampler: str = "dpmpp_2m_sde_gpu",
+    scheduler: str = "karras",
     seed: Optional[int] = None,
     filename_prefix: str = "reference",
-    negative: str = "blurry, low quality, cartoon, anime, distorted face, bad anatomy, deformed features, unnatural skin, plastic look, oversaturated, jpeg artifacts, watermark, text, logo",
+    negative: str = "blurry, low quality, cartoon, anime, distorted face, bad anatomy, deformed features, plastic skin, airbrushed skin, overly smooth skin, studio backdrop, grey background, neutral background, oversaturated, jpeg artifacts, watermark, text, logo, doll-like, mannequin, CGI, 3D render",
     enhance_prompt: bool = True,
+    face_detail: bool = True,
+    face_detail_denoise: float = 0.35,
+    upscale_model: str = "4x-UltraSharp.pth",
+    upscale: bool = True,
+    upscale_megapixels: float = 4.0,
 ) -> Dict[str, Any]:
-    """Build a FLUX reference image generation workflow.
+    """Build a FLUX photorealistic reference image workflow.
+
+    Full pipeline: FluxPromptEnhance → KSampler (dpmpp_2m_sde_gpu/karras)
+    → FaceDetailer (Impact Pack) → 4x-UltraSharp Upscale → Save
 
     FLUX.1 Dev with FP8 on RTX 5090:
-    - 28 steps with dpmpp_2m + simple scheduler
+    - 28 steps with dpmpp_2m_sde_gpu + karras scheduler
     - CFG 1.0
     - FluxPromptEnhance for AI-enhanced prompts
-    - DualCLIPLoader: T5-XXL + CLIP-L
-    - ~45 seconds per image on RTX 5090
+    - FaceDetailer for realistic face refinement
+    - 4x-UltraSharp upscale for maximum detail
+    - ~60-90 seconds per image on RTX 5090
     """
     wb = WorkflowBuilder()
     wb.load_checkpoint(checkpoint)
@@ -256,6 +379,22 @@ def build_reference_workflow(
     wb.set_empty_latent(width, height)
     wb.sample(steps=steps, cfg=cfg, sampler=sampler, scheduler=scheduler, seed=seed)
     wb.decode()
+
+    # FaceDetailer: detect face, crop, run second detail pass, composite back
+    if face_detail:
+        wb.face_detail(
+            steps=20,
+            cfg=cfg,
+            sampler=sampler,
+            scheduler=scheduler,
+            denoise=face_detail_denoise,
+        )
+
+    # Upscale for maximum detail and skin texture
+    if upscale:
+        wb.upscale(upscale_model)
+        wb.scale_to_pixels(megapixels=upscale_megapixels)
+
     wb.save(filename_prefix)
     return wb.build()
 
@@ -271,17 +410,22 @@ def build_bulk_workflow(
     height: int = 1536,
     steps: int = 28,
     cfg: float = 1.0,
-    sampler: str = "dpmpp_2m",
-    scheduler: str = "simple",
+    sampler: str = "dpmpp_2m_sde_gpu",
+    scheduler: str = "karras",
     seed: Optional[int] = None,
     filename_prefix: str = "generated",
-    negative: str = "blurry, low quality, cartoon, anime, distorted face, bad anatomy, deformed features, unnatural skin, plastic look, oversaturated, jpeg artifacts, watermark, text, logo",
+    negative: str = "blurry, low quality, cartoon, anime, distorted face, bad anatomy, deformed features, plastic skin, airbrushed skin, overly smooth skin, studio backdrop, grey background, neutral background, oversaturated, jpeg artifacts, watermark, text, logo, doll-like, mannequin, CGI, 3D render",
     enhance_prompt: bool = True,
+    face_detail: bool = True,
+    face_detail_denoise: float = 0.35,
+    upscale_model: str = "4x-UltraSharp.pth",
+    upscale: bool = False,
+    upscale_megapixels: float = 4.0,
 ) -> Dict[str, Any]:
-    """Build a FLUX bulk generation workflow.
+    """Build a FLUX photorealistic bulk generation workflow.
 
-    Same FLUX pipeline as reference but with portrait orientation for
-    content generation. FluxPromptEnhance for AI-enhanced prompts.
+    Same pipeline as reference. FaceDetailer enabled by default.
+    Upscale disabled by default for bulk (speed), enable if needed.
     """
     wb = WorkflowBuilder()
     wb.load_checkpoint(checkpoint)
@@ -291,5 +435,19 @@ def build_bulk_workflow(
     wb.set_empty_latent(width, height)
     wb.sample(steps=steps, cfg=cfg, sampler=sampler, scheduler=scheduler, seed=seed)
     wb.decode()
+
+    if face_detail:
+        wb.face_detail(
+            steps=20,
+            cfg=cfg,
+            sampler=sampler,
+            scheduler=scheduler,
+            denoise=face_detail_denoise,
+        )
+
+    if upscale:
+        wb.upscale(upscale_model)
+        wb.scale_to_pixels(megapixels=upscale_megapixels)
+
     wb.save(filename_prefix)
     return wb.build()

@@ -55,7 +55,7 @@ class ReferenceGenerator:
             prompt = self.prompts.reference_prompt(persona, pose)
             negative = self.prompts.negative_prompt()
 
-            # Build workflow
+            # Build workflow (full photorealistic pipeline)
             workflow = build_reference_workflow(
                 prompt=prompt,
                 checkpoint=self.config.model("reference_checkpoint", "flux1-dev-fp8.safetensors"),
@@ -67,10 +67,15 @@ class ReferenceGenerator:
                 height=self.config.generation("reference", "resolution", [1024, 1024])[1],
                 steps=self.config.generation("reference", "steps", 28),
                 cfg=self.config.generation("reference", "cfg", 1.0),
-                sampler=self.config.generation("reference", "sampler", "dpmpp_2m"),
-                scheduler=self.config.generation("reference", "scheduler", "simple"),
+                sampler=self.config.generation("reference", "sampler", "dpmpp_2m_sde_gpu"),
+                scheduler=self.config.generation("reference", "scheduler", "karras"),
                 filename_prefix=f"{char_id}_face_{i:02d}",
                 negative=negative,
+                face_detail=self.config.generation("reference", "face_detail", True),
+                face_detail_denoise=self.config.generation("reference", "face_detail_denoise", 0.35),
+                upscale=self.config.generation("reference", "upscale", True),
+                upscale_model=self.config.generation("reference", "upscale_model", "4x-UltraSharp.pth"),
+                upscale_megapixels=self.config.generation("reference", "upscale_megapixels", 4.0),
             )
 
             # Generate and save

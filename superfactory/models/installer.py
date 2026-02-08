@@ -37,11 +37,11 @@ MODELS = [
         "category": "core",
     },
     {
-        "name": "4x ClearReality Upscaler",
-        "url": "https://huggingface.co/LS110824/upscale/resolve/main/4x-ClearRealityV1.pth",
+        "name": "4x UltraSharp Upscaler",
+        "url": "https://huggingface.co/Kim2091/UltraSharp/resolve/main/4x-UltraSharp.pth",
         "subdir": "upscale_models",
-        "filename": "4x-ClearRealityV1.pth",
-        "size_gb": 0.06,
+        "filename": "4x-UltraSharp.pth",
+        "size_gb": 0.07,
         "category": "upscale",
     },
     {
