@@ -310,19 +310,19 @@ class PromptEngine:
 
         sections = [
             (
-                f"Subject: Professional portrait photograph of {name}, a {age}-year-old "
-                f"{ethnicity} woman with {nationality} heritage."
+                f"Professional portrait photograph of {name}, a {age}-year-old "
+                f"{ethnicity} woman with {nationality} heritage. This is a close-up "
+                f"head-and-shoulders portrait of a real person, not a product shot or flat-lay."
             ),
+            f"Composition & Pose: {self.COMPOSITION[pose].format(name=name)}",
             f"Physical Description: {physical}",
+            f"Lighting: {self.LIGHTING[pose]}",
+            f"Technical Specifications: {self.TECHNICAL_SPECS}",
             (
                 f"Styling: She is styled in {fashion} that reflects her "
                 f"{aesthetic.lower()} aesthetic, wearing carefully chosen pieces that complement "
-                f"her natural beauty without overwhelming it. The styling is sophisticated yet "
-                f"authentic, showcasing her personal aesthetic. {personality}."
+                f"her natural beauty without overwhelming it. {personality}."
             ),
-            f"Composition & Pose: {self.COMPOSITION[pose].format(name=name)}",
-            f"Lighting: {self.LIGHTING[pose]}",
-            f"Technical Specifications: {self.TECHNICAL_SPECS}",
             f"Style & Atmosphere: {self.ATMOSPHERE[pose].format(aesthetic=aesthetic)}",
             f"Critical Requirements: {self.CRITICAL_REQUIREMENTS}",
         ]
@@ -428,9 +428,20 @@ class PromptEngine:
 
     def _lane_specifics(self, p: Persona, lane: str, index: int):
         """Return (outfit, action, expression, mood) for the given lane."""
-        wardrobe_data = getattr(p, '_data', {}).get("wardrobe", {})
+        # Wardrobe can be a flat list or a dict with categories
+        wardrobe_raw = getattr(p, '_data', {}).get("wardrobe", [])
 
-        sfw_outfits = wardrobe_data.get("casual", []) + wardrobe_data.get("professional", [])
+        if isinstance(wardrobe_raw, list):
+            # Flat list — use items for SFW, derive suggestive from defaults
+            sfw_outfits = wardrobe_raw if wardrobe_raw else []
+            suggestive_outfits = []
+        elif isinstance(wardrobe_raw, dict):
+            sfw_outfits = wardrobe_raw.get("casual", []) + wardrobe_raw.get("professional", [])
+            suggestive_outfits = wardrobe_raw.get("evening", []) + wardrobe_raw.get("glamour", [])
+        else:
+            sfw_outfits = []
+            suggestive_outfits = []
+
         if not sfw_outfits:
             sfw_outfits = [
                 "a fitted blazer over a silk camisole with tailored trousers",
@@ -443,7 +454,6 @@ class PromptEngine:
                 "a sleek midi skirt with a tucked-in blouse",
             ]
 
-        suggestive_outfits = wardrobe_data.get("evening", []) + wardrobe_data.get("glamour", [])
         if not suggestive_outfits:
             suggestive_outfits = [
                 "a form-fitting evening dress with subtle shimmer",
