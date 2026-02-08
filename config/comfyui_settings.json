@@ -1,0 +1,157 @@
+{
+  "_comment": "ComfyUI configuration for AI Influencer pipeline -- RTX 5090 optimised",
+
+  "docker": {
+    "image": "comfyui:latest-5090",
+    "runtime": "nvidia",
+    "gpu_device": "0",
+    "shm_size": "16g",
+    "ports": {
+      "api": "8188:8188"
+    },
+    "volumes": {
+      "models": "./models:/comfyui/models",
+      "output": "./output:/comfyui/output",
+      "input": "./input:/comfyui/input",
+      "custom_nodes": "./custom_nodes:/comfyui/custom_nodes"
+    },
+    "environment": {
+      "NVIDIA_VISIBLE_DEVICES": "0",
+      "CUDA_VISIBLE_DEVICES": "0",
+      "COMFYUI_EXTRA_ARGS": "--bf16-vae --bf16-unet --fast"
+    }
+  },
+
+  "gpu": {
+    "name": "NVIDIA RTX 5090",
+    "vram_gb": 32,
+    "compute_capability": "12.0",
+    "precision": "bf16",
+    "max_batch_size": 4,
+    "enable_xformers": true,
+    "enable_flash_attention": true,
+    "cuda_malloc": true
+  },
+
+  "model_paths": {
+    "checkpoints": "models/checkpoints",
+    "loras": "models/loras",
+    "vae": "models/vae",
+    "clip": "models/clip",
+    "controlnet": "models/controlnet",
+    "embeddings": "models/embeddings",
+    "upscale_models": "models/upscale_models",
+    "ipadapter": "models/ipadapter",
+    "insightface": "models/insightface"
+  },
+
+  "default_checkpoint": "juggernautXL_v9.safetensors",
+
+  "default_sampler": {
+    "sampler_name": "sa_solver",
+    "scheduler": "karras",
+    "steps": 30,
+    "cfg": 2.5,
+    "denoise": 1.0,
+    "width": 1024,
+    "height": 1024
+  },
+
+  "highres_sampler": {
+    "sampler_name": "sa_solver",
+    "scheduler": "karras",
+    "steps": 20,
+    "cfg": 2.5,
+    "denoise": 0.45,
+    "upscale_factor": 1.5,
+    "width": 1536,
+    "height": 1536
+  },
+
+  "negative_prompt_default": "deformed, distorted, disfigured, poorly drawn, bad anatomy, wrong anatomy, extra limb, missing limb, floating limbs, mutated hands, extra fingers, missing fingers, blurry, watermark, text, logo, signature, jpeg artifacts, low quality, lowres, cropped, worst quality",
+
+  "custom_nodes": [
+    {
+      "name": "SeedVR2",
+      "repo": "https://github.com/SeedVR/SeedVR-ComfyUI",
+      "description": "SeedVR2 video/image generation nodes"
+    },
+    {
+      "name": "rgthree-comfy",
+      "repo": "https://github.com/rgthree/rgthree-comfy",
+      "description": "rgthree quality-of-life nodes (context, reroute, etc.)"
+    },
+    {
+      "name": "ComfyUI-Easy-Use",
+      "repo": "https://github.com/yolain/ComfyUI-Easy-Use",
+      "description": "Easy-use node suite (loaders, pipes, etc.)"
+    },
+    {
+      "name": "ComfyUI-Impact-Pack",
+      "repo": "https://github.com/ltdrdata/ComfyUI-Impact-Pack",
+      "description": "Impact pack (detailer, SAM, face detection)"
+    },
+    {
+      "name": "ComfyUI-Manager",
+      "repo": "https://github.com/ltdrdata/ComfyUI-Manager",
+      "description": "Node manager for installing/updating custom nodes"
+    },
+    {
+      "name": "ComfyUI_IPAdapter_plus",
+      "repo": "https://github.com/cubiq/ComfyUI_IPAdapter_plus",
+      "description": "IP-Adapter for reference image conditioning"
+    },
+    {
+      "name": "ComfyUI-KJNodes",
+      "repo": "https://github.com/kijai/ComfyUI-KJNodes",
+      "description": "KJ utility nodes"
+    },
+    {
+      "name": "comfyui_controlnet_aux",
+      "repo": "https://github.com/Fannovel16/comfyui_controlnet_aux",
+      "description": "ControlNet auxiliary preprocessors"
+    },
+    {
+      "name": "ComfyUI-WD14-Tagger",
+      "repo": "https://github.com/pythongosssss/ComfyUI-WD14-Tagger",
+      "description": "WD14 auto-tagging for caption generation"
+    },
+    {
+      "name": "ComfyUI-Florence2",
+      "repo": "https://github.com/kijai/ComfyUI-Florence2",
+      "description": "Florence-2 captioning and detection"
+    },
+    {
+      "name": "ComfyUI-Crystools",
+      "repo": "https://github.com/crystian/ComfyUI-Crystools",
+      "description": "Crystal tools (metadata, resources monitor)"
+    },
+    {
+      "name": "ComfyUI_essentials",
+      "repo": "https://github.com/cubiq/ComfyUI_essentials",
+      "description": "Essential utility nodes"
+    },
+    {
+      "name": "was-node-suite-comfyui",
+      "repo": "https://github.com/WASasquatch/was-node-suite-comfyui",
+      "description": "WAS node suite (text, image, conditioning tools)"
+    }
+  ],
+
+  "output_directories": {
+    "master_images": "output/master_images",
+    "lora_datasets": "output/lora_datasets",
+    "lora_models": "output/lora_models",
+    "vault": "output/vault",
+    "temp": "output/temp",
+    "logs": "output/logs"
+  },
+
+  "api": {
+    "host": "127.0.0.1",
+    "port": 8188,
+    "max_queue_size": 10,
+    "timeout_seconds": 600,
+    "poll_interval_seconds": 2
+  }
+}

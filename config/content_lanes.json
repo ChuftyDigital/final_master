@@ -1,0 +1,103 @@
+{
+  "meta": {
+    "description": "Content lane definitions for image vault generation",
+    "lanes_per_character": 4,
+    "images_per_lane": 200,
+    "total_per_character": 800
+  },
+  "lanes": {
+    "sfw": {
+      "label": "SFW",
+      "description": "Safe for work - fully clothed, lifestyle content",
+      "clothing_level": "fully clothed",
+      "mood_range": ["casual", "professional", "playful", "lifestyle", "candid"],
+      "composition_types": ["portrait", "three-quarter", "full-body", "environmental", "candid"],
+      "lighting_styles": ["natural daylight", "golden hour", "soft studio", "bright and airy", "window light"],
+      "distribution": {
+        "one_off": 80,
+        "bundle_3": {"count": 10, "per_bundle": 3, "total": 30},
+        "bundle_5": {"count": 10, "per_bundle": 5, "total": 50},
+        "bundle_10": {"count": 4, "per_bundle": 10, "total": 40}
+      },
+      "prompt_modifiers": {
+        "clothing": "wearing {character_appropriate_casual_clothing}, fully dressed",
+        "mood": "natural, relaxed, lifestyle-appropriate expression",
+        "exclusions": "no revealing clothing, no suggestive poses, no bedroom settings"
+      }
+    },
+    "suggestive": {
+      "label": "Suggestive",
+      "description": "Mildly flirty - form-fitting clothing, teasing poses",
+      "clothing_level": "form-fitting or revealing casual",
+      "mood_range": ["flirty", "teasing", "confident", "playful", "alluring"],
+      "composition_types": ["close-up", "three-quarter", "over-shoulder", "reclining", "mirror selfie style"],
+      "lighting_styles": ["warm ambient", "golden hour", "soft studio", "natural window backlit", "warm candlelight"],
+      "distribution": {
+        "one_off": 80,
+        "bundle_3": {"count": 10, "per_bundle": 3, "total": 30},
+        "bundle_5": {"count": 10, "per_bundle": 5, "total": 50},
+        "bundle_10": {"count": 4, "per_bundle": 10, "total": 40}
+      },
+      "prompt_modifiers": {
+        "clothing": "wearing {form_fitting_or_revealing_casual}, showing figure",
+        "mood": "flirty, teasing, confident expression with come-hither energy",
+        "exclusions": "no explicit nudity, no overtly sexual poses"
+      }
+    },
+    "spicy": {
+      "label": "Spicy",
+      "description": "Hot content - lingerie, implied nudity, provocative poses",
+      "clothing_level": "lingerie, underwear, implied undressing",
+      "mood_range": ["seductive", "intimate", "provocative", "sensual", "passionate"],
+      "composition_types": ["close-up intimate", "reclining", "kneeling", "standing provocative", "bed scene"],
+      "lighting_styles": ["moody warm", "dim ambient", "dramatic shadows", "candlelight", "soft backlit"],
+      "distribution": {
+        "one_off": 80,
+        "bundle_3": {"count": 10, "per_bundle": 3, "total": 30},
+        "bundle_5": {"count": 10, "per_bundle": 5, "total": 50},
+        "bundle_10": {"count": 4, "per_bundle": 10, "total": 40}
+      },
+      "prompt_modifiers": {
+        "clothing": "wearing {lingerie_or_intimate_wear}, sensual presentation",
+        "mood": "seductive, intimate, provocative expression with desire",
+        "exclusions": "no full nudity, artistic and tasteful framing"
+      }
+    },
+    "nsfw": {
+      "label": "NSFW",
+      "description": "Explicit content - artistic nudity, explicit poses",
+      "clothing_level": "minimal to none, artistic nudity",
+      "mood_range": ["explicit", "raw", "passionate", "uninhibited", "artistic nude"],
+      "composition_types": ["artistic nude", "intimate close-up", "full body", "reclining nude", "shower/bath"],
+      "lighting_styles": ["dramatic chiaroscuro", "soft intimate", "natural body light", "artistic shadow play", "warm golden"],
+      "distribution": {
+        "one_off": 80,
+        "bundle_3": {"count": 10, "per_bundle": 3, "total": 30},
+        "bundle_5": {"count": 10, "per_bundle": 5, "total": 50},
+        "bundle_10": {"count": 4, "per_bundle": 10, "total": 40}
+      },
+      "prompt_modifiers": {
+        "clothing": "minimal clothing or artistic nudity, {character_appropriate_intimate}",
+        "mood": "uninhibited, raw, passionate expression",
+        "exclusions": "maintain artistic quality, professional photography aesthetic"
+      }
+    }
+  },
+  "bundle_themes": {
+    "bundle_3": {
+      "description": "3-image mini-sets with narrative arc",
+      "structure": ["establishing shot", "progression", "climax/reveal"],
+      "theme_types": ["outfit progression", "time of day series", "activity sequence", "mood escalation"]
+    },
+    "bundle_5": {
+      "description": "5-image story sets",
+      "structure": ["intro/context", "build-up", "peak moment", "alternative angle", "closing shot"],
+      "theme_types": ["day in the life", "getting ready", "location exploration", "outfit change", "seasonal series"]
+    },
+    "bundle_10": {
+      "description": "10-image premium collections",
+      "structure": ["establishing wide", "medium context", "close portrait", "action/pose 1", "action/pose 2", "detail shot", "alternative outfit", "candid moment", "dramatic pose", "signature closing"],
+      "theme_types": ["complete photoshoot", "themed collection", "location series", "transformation set", "behind the scenes"]
+    }
+  }
+}

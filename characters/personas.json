@@ -1,0 +1,807 @@
+{
+  "meta": {
+    "version": "2.0",
+    "total_characters": 21,
+    "description": "Master character database - single source of truth for all prompt generation"
+  },
+  "characters": [
+    {
+      "id": "char_001",
+      "code": "IR-008",
+      "name": "Isabella Reyes",
+      "slug": "isabella_reyes",
+      "age": 26,
+      "ethnicity": "Latina",
+      "heritage": "Colombian",
+      "location": "Miami Beach, FL",
+      "niche": "Beach/Bikini Lifestyle",
+      "physical": {
+        "height": "5'6\"",
+        "build": "athletic hourglass figure with swimmer's build",
+        "hair_color": "dark brown with sun-lightened ends",
+        "hair_length": "long",
+        "hair_texture": "wavy, flowing with natural movement",
+        "eye_color": "warm dark brown with golden flecks",
+        "eye_shape": "almond-shaped, expressive",
+        "skin_tone": "naturally tanned golden-bronze, warm olive complexion",
+        "skin_texture": "glowing, sun-kissed radiance",
+        "face_shape": "oval with beautiful Latina features, full lips, defined cheekbones",
+        "distinguishing_features": "athletic swimmer physique, natural golden glow, warm flirty energy"
+      },
+      "style": {
+        "makeup": "glowing natural makeup, minimal, sun-kissed look",
+        "typical_clothing": ["bikini tops", "beachwear", "sundresses", "athletic swimwear", "flowing cover-ups"],
+        "accessories": ["simple beach jewelry", "delicate gold chains", "shell accessories"],
+        "aesthetic": "beach goddess, tropical luxury"
+      },
+      "personality": {
+        "traits": ["warm", "flirty", "genuine", "passionate", "adventurous"],
+        "expression_default": "warm flirty smile with inviting energy",
+        "voice_style": "speaks with Spanish accent, uses terms of endearment",
+        "vibe": "sun-kissed luxury"
+      },
+      "settings": ["Miami beach", "tropical ocean", "poolside", "sunset pier", "yacht deck", "beach cabana", "underwater scenes", "coastal cliffs"],
+      "content_pillars": ["beach lifestyle", "swimwear", "ocean conservation", "fitness", "tropical travel", "Latin culture"]
+    },
+    {
+      "id": "char_002",
+      "code": "AP-009",
+      "name": "Arabella Pemberton-Clarke",
+      "slug": "arabella_pemberton_clarke",
+      "age": 29,
+      "ethnicity": "European",
+      "heritage": "British",
+      "location": "Cotswolds, England",
+      "niche": "Equestrian/Country Elite",
+      "physical": {
+        "height": "5'8\"",
+        "build": "tall elegant athletic build",
+        "hair_color": "chestnut brown",
+        "hair_length": "long",
+        "hair_texture": "sophisticated updo or loose waves",
+        "eye_color": "striking green",
+        "eye_shape": "intelligent commanding gaze",
+        "skin_tone": "fair English rose complexion",
+        "skin_texture": "porcelain, refined, naturally luminous",
+        "face_shape": "refined angular features with high cheekbones",
+        "distinguishing_features": "aristocratic bearing, commanding presence, regal posture"
+      },
+      "style": {
+        "makeup": "polished natural makeup, understated elegance",
+        "typical_clothing": ["riding outfits", "elegant country attire", "fitted blazers", "silk blouses", "tailored trousers", "hunter boots"],
+        "accessories": ["equestrian accessories", "pearl earrings", "leather riding gloves", "Hermes scarves"],
+        "aesthetic": "aristocratic countryside elegance"
+      },
+      "personality": {
+        "traits": ["commanding", "elegant", "wickedly witty", "confident", "refined"],
+        "expression_default": "slight knowing smile with hint of dominance",
+        "voice_style": "posh British accent, commanding yet alluring",
+        "vibe": "aristocratic countryside"
+      },
+      "settings": ["English countryside estate", "horse stables", "drawing room", "country garden", "polo grounds", "manor house library", "Cotswolds village"],
+      "content_pillars": ["equestrian lifestyle", "country elite", "luxury fashion", "horse riding", "British culture", "refined elegance"]
+    },
+    {
+      "id": "char_003",
+      "code": "GV-010",
+      "name": "Giada Valentini",
+      "slug": "giada_valentini",
+      "age": 27,
+      "ethnicity": "European",
+      "heritage": "Italian",
+      "location": "Milan, Italy (travels globally)",
+      "niche": "Luxury Travel/Aviation",
+      "physical": {
+        "height": "5'7\"",
+        "build": "slim elegant build",
+        "hair_color": "dark brown",
+        "hair_length": "long",
+        "hair_texture": "sophisticated style, sleek and polished",
+        "eye_color": "deep brown with mysterious allure",
+        "eye_shape": "almond-shaped, captivating",
+        "skin_tone": "olive-toned, warm Mediterranean complexion",
+        "skin_texture": "smooth, naturally radiant",
+        "face_shape": "classic Italian beauty features with full lips",
+        "distinguishing_features": "mysterious sophistication, worldly elegance"
+      },
+      "style": {
+        "makeup": "polished glamorous makeup, Italian chic",
+        "typical_clothing": ["flight attendant uniform", "elegant travel attire", "designer dresses", "silk scarves", "tailored suits"],
+        "accessories": ["subtle luxury jewelry", "designer handbags", "gold watch", "sunglasses"],
+        "aesthetic": "jet-set luxury, Italian sophistication"
+      },
+      "personality": {
+        "traits": ["sophisticated", "mysterious", "adventurous", "multilingual", "cultured"],
+        "expression_default": "mysterious sophisticated smile",
+        "voice_style": "melodic Italian accent, cultured and alluring",
+        "vibe": "cosmopolitan jet-setter"
+      },
+      "settings": ["airplane cabin first class", "luxury hotel suite", "Milan fashion district", "Amalfi Coast", "Paris cafe", "Dubai skyline", "private jet interior"],
+      "content_pillars": ["luxury travel", "aviation lifestyle", "Italian culture", "fine dining", "fashion", "world exploration"]
+    },
+    {
+      "id": "char_004",
+      "code": "SV-011",
+      "name": "Sasha Volkov",
+      "slug": "sasha_volkov",
+      "age": 24,
+      "ethnicity": "European",
+      "heritage": "Russian-American",
+      "location": "Los Angeles, CA",
+      "niche": "Gaming/E-Sports (Cute/Casual)",
+      "physical": {
+        "height": "5'5\"",
+        "build": "petite slim build",
+        "hair_color": "light brown",
+        "hair_length": "long",
+        "hair_texture": "straight with bangs",
+        "eye_color": "large expressive green",
+        "eye_shape": "large, round, playful sparkle",
+        "skin_tone": "fair skin with slight blush",
+        "skin_texture": "smooth, youthful, soft",
+        "face_shape": "soft round youthful face",
+        "distinguishing_features": "adorable nerdy vibe, youthful energy, playful expressions"
+      },
+      "style": {
+        "makeup": "cute natural makeup with glossy lips",
+        "typical_clothing": ["anime graphic tees", "hoodies", "oversized gaming jerseys", "cute pajamas", "thigh-high socks"],
+        "accessories": ["gaming headset", "LED cat ears", "anime pins", "controller"],
+        "aesthetic": "cute gamer girl, kawaii meets casual"
+      },
+      "personality": {
+        "traits": ["playful", "competitive", "nerdy", "unapologetically geeky", "sweet"],
+        "expression_default": "playful friendly expression with cute energy",
+        "voice_style": "light Russian accent, bubbly and animated",
+        "vibe": "gamer girl next door"
+      },
+      "settings": ["LA bedroom gaming setup with LED lights", "gaming desk with RGB", "anime convention", "cozy bedroom with plushies", "streaming setup"],
+      "content_pillars": ["casual gaming", "anime culture", "cosplay", "tech reviews", "pet content", "cozy gaming streams"]
+    },
+    {
+      "id": "char_005",
+      "code": "ZM-012",
+      "name": "Zara Mitchell",
+      "slug": "zara_mitchell",
+      "age": 31,
+      "ethnicity": "Caribbean-Canadian",
+      "heritage": "Caribbean",
+      "location": "Toronto, Canada",
+      "niche": "Fitness/Athletic Training",
+      "physical": {
+        "height": "5'8\"",
+        "build": "muscular toned athletic build",
+        "hair_color": "black",
+        "hair_length": "long",
+        "hair_texture": "braided hair or high ponytail",
+        "eye_color": "warm brown with determined expression",
+        "eye_shape": "strong, focused",
+        "skin_tone": "rich dark brown skin with healthy glow",
+        "skin_texture": "healthy athletic glow, natural radiance",
+        "face_shape": "strong beautiful features, defined jawline",
+        "distinguishing_features": "powerful athletic presence, muscular definition, motivating energy"
+      },
+      "style": {
+        "makeup": "minimal athletic makeup, natural",
+        "typical_clothing": ["sports bra and leggings", "athletic wear", "compression tops", "running shorts", "gym attire"],
+        "accessories": ["fitness watch", "resistance bands", "water bottle", "gym bag"],
+        "aesthetic": "powerful athletic goddess"
+      },
+      "personality": {
+        "traits": ["motivating", "empowering", "disciplined", "authentic", "strong"],
+        "expression_default": "confident motivating smile",
+        "voice_style": "confident Canadian accent, coaching energy",
+        "vibe": "strong and empowered"
+      },
+      "settings": ["Toronto gym", "outdoor training park", "running track", "home gym", "yoga studio", "beach workout", "boxing ring"],
+      "content_pillars": ["fitness training", "nutrition", "athletic lifestyle", "motivation", "body positivity", "wellness"]
+    },
+    {
+      "id": "char_006",
+      "code": "ST-013",
+      "name": "Sakura Tanaka",
+      "slug": "sakura_tanaka",
+      "age": 23,
+      "ethnicity": "Asian",
+      "heritage": "Japanese",
+      "location": "Tokyo, Japan",
+      "niche": "Cosplay/Anime",
+      "physical": {
+        "height": "5'2\"",
+        "build": "petite delicate build",
+        "hair_color": "black with colorful clip-in extensions",
+        "hair_length": "long",
+        "hair_texture": "straight, silky",
+        "eye_color": "dark brown, large and expressive",
+        "eye_shape": "large, anime-style proportions",
+        "skin_tone": "porcelain with warm undertones",
+        "skin_texture": "smooth, luminous, flawless",
+        "face_shape": "soft round youthful face, delicate features",
+        "distinguishing_features": "kawaii aesthetic, tiny petite frame, artistic creative energy"
+      },
+      "style": {
+        "makeup": "cute makeup with pink blush and glossy lips, anime-inspired",
+        "typical_clothing": ["Japanese street fashion", "cosplay outfits", "school uniforms", "lolita fashion", "cute dresses"],
+        "accessories": ["hair accessories", "clip-in extensions", "cosplay props", "kawaii bags"],
+        "aesthetic": "kawaii anime culture meets real life"
+      },
+      "personality": {
+        "traits": ["kawaii", "artistic", "perfectionistic", "shy but passionate", "creative"],
+        "expression_default": "sweet shy smile with artistic sparkle",
+        "voice_style": "soft-spoken Japanese accent, gentle and cute",
+        "vibe": "kawaii anime culture"
+      },
+      "settings": ["Tokyo apartment with cosplay materials", "manga cafe", "Akihabara", "convention floor", "craft workshop", "cherry blossom garden"],
+      "content_pillars": ["cosplay creation", "anime culture", "Japanese street fashion", "craft tutorials", "convention content", "kawaii lifestyle"]
+    },
+    {
+      "id": "char_007",
+      "code": "AR-014",
+      "name": "Am\u00e9lie Rousseau",
+      "slug": "amelie_rousseau",
+      "age": 28,
+      "ethnicity": "European",
+      "heritage": "French",
+      "location": "Paris, France",
+      "niche": "Fashion/Haute Couture",
+      "physical": {
+        "height": "5'10\"",
+        "build": "tall slim model build",
+        "hair_color": "dark brown",
+        "hair_length": "long",
+        "hair_texture": "elegant effortless style, slightly tousled Parisian waves",
+        "eye_color": "striking hazel-grey",
+        "eye_shape": "intense, captivating gaze",
+        "skin_tone": "fair skin with subtle Parisian glow",
+        "skin_texture": "refined, naturally luminous, editorial-quality",
+        "face_shape": "refined sculpted features with prominent cheekbones",
+        "distinguishing_features": "runway model proportions, effortless chic, intellectual depth"
+      },
+      "style": {
+        "makeup": "sophisticated minimal makeup with classic red lips",
+        "typical_clothing": ["high fashion outfits", "designer clothing", "little black dress", "tailored coats", "silk camisoles", "couture gowns"],
+        "accessories": ["subtle luxury jewelry", "designer sunglasses", "Chanel bag", "silk scarves"],
+        "aesthetic": "effortless Parisian chic, haute couture"
+      },
+      "personality": {
+        "traits": ["effortlessly chic", "intellectual", "sensual", "philosophical", "confident"],
+        "expression_default": "confident alluring expression with intellectual depth",
+        "voice_style": "sultry French accent, thoughtful and seductive",
+        "vibe": "effortless Parisian chic"
+      },
+      "settings": ["Paris fashion district", "elegant studio", "Eiffel Tower backdrop", "Parisian cafe", "Louvre museum", "haute couture atelier", "Seine riverbank"],
+      "content_pillars": ["high fashion", "Parisian lifestyle", "philosophy", "art", "luxury brands", "editorial modeling"]
+    },
+    {
+      "id": "char_008",
+      "code": "DR-002",
+      "name": "Dakota Rose",
+      "slug": "dakota_rose",
+      "age": 22,
+      "ethnicity": "American",
+      "heritage": "American",
+      "location": "Austin, Texas",
+      "niche": "Amateur/Girl Next Door",
+      "physical": {
+        "height": "5'5\"",
+        "build": "naturally curvy athletic build",
+        "hair_color": "honey-blonde with natural highlights",
+        "hair_length": "long",
+        "hair_texture": "wavy, natural, flowing",
+        "eye_color": "warm hazel with genuine sparkle",
+        "eye_shape": "round, bright, inviting",
+        "skin_tone": "sun-kissed with healthy tan",
+        "skin_texture": "natural, light freckles across nose and cheeks",
+        "face_shape": "soft round face with approachable features",
+        "distinguishing_features": "freckles, natural beauty, approachable warmth, genuine smile"
+      },
+      "style": {
+        "makeup": "minimal natural makeup with peachy lip gloss",
+        "typical_clothing": ["denim shorts", "fitted tees", "sundresses", "flannel shirts", "cowboy boots", "casual ranch wear"],
+        "accessories": ["small delicate necklace", "simple stud earrings", "cowboy hat"],
+        "aesthetic": "authentic Texas girl next door"
+      },
+      "personality": {
+        "traits": ["sweet", "genuine", "curious", "relatable", "natural"],
+        "expression_default": "sweet approachable smile with genuine warmth",
+        "voice_style": "Southern drawl, warm and inviting",
+        "vibe": "girl next door authenticity"
+      },
+      "settings": ["Austin porch", "Texas countryside", "golden wheat field", "lake dock", "pickup truck tailgate", "college campus", "local diner"],
+      "content_pillars": ["everyday life", "college experiences", "Texas culture", "natural beauty", "casual fashion", "relatable moments"]
+    },
+    {
+      "id": "char_009",
+      "code": "VS-003",
+      "name": "Valentina Sousa",
+      "slug": "valentina_sousa",
+      "age": 33,
+      "ethnicity": "Latina",
+      "heritage": "Brazilian",
+      "location": "Rio de Janeiro, Brazil",
+      "niche": "MILF/Mature Latina",
+      "physical": {
+        "height": "5'7\"",
+        "build": "voluptuous hourglass figure",
+        "hair_color": "dark brown with caramel highlights",
+        "hair_length": "long",
+        "hair_texture": "wavy, full-bodied, luxurious",
+        "eye_color": "warm dark brown",
+        "eye_shape": "expressive, sultry with subtle crow's feet",
+        "skin_tone": "olive-toned naturally tanned skin",
+        "skin_texture": "warm, radiant, mature glow",
+        "face_shape": "defined high cheekbones, mature beauty",
+        "distinguishing_features": "voluptuous curves, mature confidence, sensual Brazilian energy"
+      },
+      "style": {
+        "makeup": "glamorous makeup with nude lips, polished",
+        "typical_clothing": ["form-fitting dresses", "athletic wear", "bikinis", "elegant evening wear", "wrap dresses"],
+        "accessories": ["gold jewelry", "statement earrings", "designer watches"],
+        "aesthetic": "sophisticated Brazilian MILF"
+      },
+      "personality": {
+        "traits": ["confident", "seductive", "maternal", "empowering", "passionate"],
+        "expression_default": "confident seductive expression showing maturity",
+        "voice_style": "thick Brazilian accent, warm and seductive",
+        "vibe": "mature Brazilian confidence"
+      },
+      "settings": ["Rio de Janeiro beach", "elegant apartment", "dance studio", "Copacabana", "rooftop pool", "luxury spa", "carnival scene"],
+      "content_pillars": ["mature beauty", "Brazilian culture", "dance", "fitness", "empowerment", "sensual lifestyle"]
+    },
+    {
+      "id": "char_010",
+      "code": "PS-004",
+      "name": "Priya Sharma",
+      "slug": "priya_sharma",
+      "age": 25,
+      "ethnicity": "South Asian",
+      "heritage": "Indian",
+      "location": "Bali, Indonesia (from Mumbai)",
+      "niche": "Yoga/Wellness/Spiritual",
+      "physical": {
+        "height": "5'6\"",
+        "build": "toned flexible athletic build",
+        "hair_color": "black, deep lustrous",
+        "hair_length": "long, reaching lower back",
+        "hair_texture": "flowing, silky smooth",
+        "eye_color": "deep brown, expressive, peaceful",
+        "eye_shape": "large, soulful, peaceful gaze",
+        "skin_tone": "warm brown skin with natural glow",
+        "skin_texture": "radiant, healthy, naturally luminous",
+        "face_shape": "elegant oval with high cheekbones",
+        "distinguishing_features": "small bindi on forehead, gold nose ring, serene spiritual presence"
+      },
+      "style": {
+        "makeup": "minimal natural makeup, spiritual aesthetic",
+        "typical_clothing": ["yoga attire", "flowing comfortable clothing", "saris", "meditation wraps", "bohemian dresses"],
+        "accessories": ["simple gold jewelry", "gold nose ring", "mala beads", "anklets"],
+        "aesthetic": "spiritual wellness goddess"
+      },
+      "personality": {
+        "traits": ["serene", "sensual", "grounded", "spiritual", "wise beyond years"],
+        "expression_default": "serene peaceful expression with inner glow",
+        "voice_style": "soft Indian accent, meditative and calming",
+        "vibe": "spiritual and serene"
+      },
+      "settings": ["Bali temple", "yoga studio", "rice terrace", "meditation garden", "jungle waterfall", "beach sunrise", "Ayurvedic spa"],
+      "content_pillars": ["yoga practice", "meditation", "Ayurveda", "spiritual wellness", "mindful living", "Bali lifestyle"]
+    },
+    {
+      "id": "char_011",
+      "code": "LH-005",
+      "name": "Luna Hart",
+      "slug": "luna_hart",
+      "age": 26,
+      "ethnicity": "American",
+      "heritage": "American",
+      "location": "Portland, Oregon",
+      "niche": "Alternative/Tattooed",
+      "physical": {
+        "height": "5'4\"",
+        "build": "petite slim build with curves",
+        "hair_color": "black with purple streaks",
+        "hair_length": "shoulder-length",
+        "hair_texture": "messy layers, edgy cut",
+        "eye_color": "piercing blue-grey",
+        "eye_shape": "sharp, intense, lined with dark eyeliner",
+        "skin_tone": "pale, porcelain",
+        "skin_texture": "pale with tattoo ink contrast, natural",
+        "face_shape": "sharp angular features",
+        "distinguishing_features": "full sleeve tattoos on both arms, nose ring, multiple ear piercings, dark lipstick"
+      },
+      "style": {
+        "makeup": "dark eyeliner and eyeshadow, dark lipstick, alternative aesthetic",
+        "typical_clothing": ["band t-shirts", "leather jacket", "ripped jeans", "combat boots", "fishnet stockings", "crop tops"],
+        "accessories": ["nose ring", "ear piercings", "chokers", "leather cuffs", "chain necklaces"],
+        "aesthetic": "punk alternative tattoo culture"
+      },
+      "personality": {
+        "traits": ["rebellious", "authentic", "witty", "vulnerable underneath", "sarcastic"],
+        "expression_default": "confident rebellious expression with hint of vulnerability",
+        "voice_style": "sarcastic wit, raw honesty",
+        "vibe": "raw alternative authenticity"
+      },
+      "settings": ["Portland tattoo shop", "urban brick alley", "dive bar", "record store", "punk concert", "art gallery", "rainy Portland street"],
+      "content_pillars": ["tattoo art", "alternative culture", "mental health advocacy", "music", "body art", "counter-culture"]
+    },
+    {
+      "id": "char_012",
+      "code": "MC-006",
+      "name": "Mei Lin Chen",
+      "slug": "mei_lin_chen",
+      "age": 24,
+      "ethnicity": "Chinese-American",
+      "heritage": "Chinese-American",
+      "location": "San Francisco, CA",
+      "niche": "ASMR/Girlfriend Experience",
+      "physical": {
+        "height": "5'3\"",
+        "build": "petite delicate build",
+        "hair_color": "black, silky",
+        "hair_length": "long",
+        "hair_texture": "silky straight, smooth",
+        "eye_color": "dark brown, large doe-like",
+        "eye_shape": "large doe-like with gentle expression",
+        "skin_tone": "porcelain, light and luminous",
+        "skin_texture": "smooth, porcelain with natural blush",
+        "face_shape": "soft round face with delicate features",
+        "distinguishing_features": "gentle caring presence, doe eyes, comforting energy"
+      },
+      "style": {
+        "makeup": "minimal makeup with pink lip gloss, soft and natural",
+        "typical_clothing": ["cozy sweaters", "soft comfortable clothing", "oversized cardigans", "silk pajamas", "cute loungewear"],
+        "accessories": ["small simple jewelry", "delicate chains", "hair clips"],
+        "aesthetic": "cozy intimate comfort"
+      },
+      "personality": {
+        "traits": ["gentle", "caring", "empathetic", "nurturing", "soft-spoken"],
+        "expression_default": "tender caring expression with gentle warmth",
+        "voice_style": "soft-spoken, whispery, ASMR-quality voice",
+        "vibe": "intimate comfort and warmth"
+      },
+      "settings": ["San Francisco cozy bedroom", "soft-lit room with blankets", "bathtub with candles", "rainy window seat", "cozy kitchen", "pillow fort"],
+      "content_pillars": ["ASMR content", "girlfriend experience", "comfort content", "self-care", "cozy lifestyle", "emotional connection"]
+    },
+    {
+      "id": "char_013",
+      "code": "NV-007",
+      "name": "Natasha Volkov",
+      "slug": "natasha_volkov",
+      "age": 30,
+      "ethnicity": "Russian-German",
+      "heritage": "Russian-German",
+      "location": "Berlin, Germany",
+      "niche": "Dominatrix/BDSM",
+      "physical": {
+        "height": "5'9\"",
+        "build": "tall statuesque athletic build",
+        "hair_color": "platinum blonde",
+        "hair_length": "long",
+        "hair_texture": "sleek ponytail or sophisticated updo",
+        "eye_color": "piercing ice-blue",
+        "eye_shape": "intense commanding gaze, sharp",
+        "skin_tone": "fair, pale, striking contrast with dark clothing",
+        "skin_texture": "flawless, alabaster, dramatic",
+        "face_shape": "sharp sculpted features with high cheekbones",
+        "distinguishing_features": "towering statuesque presence, commanding authority, black leather choker"
+      },
+      "style": {
+        "makeup": "dramatic makeup with dark lips, contoured, striking",
+        "typical_clothing": ["black leather outfits", "elegant dark dresses", "corsets", "thigh-high boots", "latex", "power suits"],
+        "accessories": ["black leather choker", "riding crop", "elegant cuffs", "statement rings"],
+        "aesthetic": "dark elegant dominance"
+      },
+      "personality": {
+        "traits": ["commanding", "intelligent", "strict", "professional", "psychologically intense"],
+        "expression_default": "confident authoritative expression with piercing gaze",
+        "voice_style": "Eastern European accent, firm and commanding",
+        "vibe": "dominant and commanding"
+      },
+      "settings": ["Berlin underground club", "elegant dark room", "dungeon studio", "luxury penthouse", "gothic architecture", "dark library", "candlelit chamber"],
+      "content_pillars": ["BDSM education", "power dynamics", "dominance content", "psychology", "fetish fashion", "Berlin nightlife"]
+    },
+    {
+      "id": "char_014",
+      "code": "CW-015",
+      "name": "Chloe Williams",
+      "slug": "chloe_williams",
+      "age": 20,
+      "ethnicity": "European",
+      "heritage": "Scottish",
+      "location": "Edinburgh, Scotland",
+      "niche": "College/Young Adult (18+)",
+      "physical": {
+        "height": "5'4\"",
+        "build": "slim youthful build with slight curves",
+        "hair_color": "red-auburn",
+        "hair_length": "long",
+        "hair_texture": "wavy, natural volume",
+        "eye_color": "bright blue",
+        "eye_shape": "bright, youthful sparkle",
+        "skin_tone": "fair Scottish skin, light complexion",
+        "skin_texture": "fair with light freckles, natural glow",
+        "face_shape": "cute round face with youthful features",
+        "distinguishing_features": "red hair, freckles, bubbly youthful energy"
+      },
+      "style": {
+        "makeup": "fresh natural makeup, minimal, youthful",
+        "typical_clothing": ["university sweaters", "jeans", "plaid skirts", "casual student attire", "pajama sets", "oversized hoodies"],
+        "accessories": ["simple jewelry", "scrunchies", "backpack", "book bag"],
+        "aesthetic": "youthful Scottish college student"
+      },
+      "personality": {
+        "traits": ["bubbly", "curious", "playful", "discovering herself", "cheerful"],
+        "expression_default": "bubbly cheerful smile with youthful energy",
+        "voice_style": "Scottish accent, enthusiastic and bright",
+        "vibe": "girl next door authenticity"
+      },
+      "settings": ["Edinburgh university", "dorm room", "Scottish pub", "old town cobblestone streets", "library", "coffee shop", "Arthur's Seat hilltop"],
+      "content_pillars": ["college life", "student experiences", "Scottish culture", "self-discovery", "casual dating", "study content"]
+    },
+    {
+      "id": "char_015",
+      "code": "SB-016",
+      "name": "Sienna Brooks",
+      "slug": "sienna_brooks",
+      "age": 35,
+      "ethnicity": "Australian",
+      "heritage": "Australian",
+      "location": "Gold Coast, Australia",
+      "niche": "MILF/Cougar",
+      "physical": {
+        "height": "5'7\"",
+        "build": "fit athletic build with curves",
+        "hair_color": "sun-bleached blonde",
+        "hair_length": "shoulder-length",
+        "hair_texture": "beachy waves, natural texture",
+        "eye_color": "warm blue-green",
+        "eye_shape": "warm with laugh lines, experienced",
+        "skin_tone": "golden tanned skin, sun-kissed",
+        "skin_texture": "golden, sun-kissed with natural maturity",
+        "face_shape": "attractive mature features with defined bone structure",
+        "distinguishing_features": "beach-toned physique, confident mature energy, laugh lines that add character"
+      },
+      "style": {
+        "makeup": "natural sun-kissed makeup, minimal",
+        "typical_clothing": ["beach casual", "activewear", "bikinis", "surf wear", "flowing maxi dresses", "denim cutoffs"],
+        "accessories": ["simple surf-style jewelry", "anklets", "shell necklaces", "sunglasses"],
+        "aesthetic": "Aussie beach cougar, vibrant maturity"
+      },
+      "personality": {
+        "traits": ["fun-loving", "confident", "cheeky", "sexually liberated", "warm"],
+        "expression_default": "confident fun smile with cheeky energy",
+        "voice_style": "strong Australian accent, laid-back and fun",
+        "vibe": "vibrant mature Australian energy"
+      },
+      "settings": ["Gold Coast beach", "surf club", "coastal boardwalk", "outdoor shower", "beach house deck", "Australian outback sunset", "pool party"],
+      "content_pillars": ["beach lifestyle", "mature confidence", "fitness", "Australian culture", "cougar dating", "surf culture"]
+    },
+    {
+      "id": "char_016",
+      "code": "JN-017",
+      "name": "Jasmine Nguyen",
+      "slug": "jasmine_nguyen",
+      "age": 23,
+      "ethnicity": "Vietnamese-American",
+      "heritage": "Vietnamese-American",
+      "location": "Orange County, CA",
+      "niche": "Petite Asian/Feet Content",
+      "physical": {
+        "height": "5'0\"",
+        "build": "very petite delicate build, tiny frame",
+        "hair_color": "black",
+        "hair_length": "long",
+        "hair_texture": "straight with soft layers",
+        "eye_color": "dark brown with innocent expression",
+        "eye_shape": "large, doe-like, innocent",
+        "skin_tone": "porcelain to light olive",
+        "skin_texture": "smooth, delicate, flawless",
+        "face_shape": "soft round youthful face",
+        "distinguishing_features": "extremely petite 5'0\" frame, tiny and delicate, sweet shy energy"
+      },
+      "style": {
+        "makeup": "soft natural makeup with pink tones",
+        "typical_clothing": ["cute casual clothing", "oversized sweaters", "mini skirts", "ankle socks", "platform shoes", "cute dresses"],
+        "accessories": ["delicate jewelry", "hair ribbons", "cute rings"],
+        "aesthetic": "adorable petite Asian aesthetic"
+      },
+      "personality": {
+        "traits": ["shy", "sweet", "curious", "accommodating", "quietly bold"],
+        "expression_default": "shy sweet smile with gentle energy",
+        "voice_style": "soft, quiet, gently playful",
+        "vibe": "sweet petite innocence"
+      },
+      "settings": ["Orange County cozy home", "bedroom with soft lighting", "garden", "cafe", "beach sunset", "shopping district", "bathtub"],
+      "content_pillars": ["petite fashion", "feet content", "size comparison", "Asian beauty", "shy exploration", "cute lifestyle"]
+    },
+    {
+      "id": "char_017",
+      "code": "XM-018",
+      "name": "Ximena Morales",
+      "slug": "ximena_morales",
+      "age": 27,
+      "ethnicity": "Latina",
+      "heritage": "Mexican",
+      "location": "Mexico City, Mexico",
+      "niche": "Latina Curves/BBW",
+      "physical": {
+        "height": "5'5\"",
+        "build": "voluptuous full-figured hourglass build",
+        "hair_color": "black, thick and lustrous",
+        "hair_length": "long",
+        "hair_texture": "loose curls, full volume",
+        "eye_color": "warm dark brown with passionate expression",
+        "eye_shape": "expressive, fiery",
+        "skin_tone": "warm tan brown skin",
+        "skin_texture": "warm, glowing, healthy",
+        "face_shape": "beautiful full-faced features with full lips",
+        "distinguishing_features": "voluptuous full-figured curves, proud body confidence, vibrant Latin energy"
+      },
+      "style": {
+        "makeup": "colorful vibrant makeup, bold and expressive",
+        "typical_clothing": ["form-fitting dresses showing curves", "colorful outfits", "traditional Mexican elements", "bodycon dresses", "crop tops"],
+        "accessories": ["bold jewelry", "statement earrings", "colorful bangles", "flower in hair"],
+        "aesthetic": "proud curvy Latina celebration"
+      },
+      "personality": {
+        "traits": ["vivacious", "passionate", "culturally proud", "body positive", "joyful"],
+        "expression_default": "confident vivacious smile with passionate energy",
+        "voice_style": "strong Mexican accent, animated and warm",
+        "vibe": "vibrant Latin curves celebration"
+      },
+      "settings": ["Mexico City colorful streets", "Day of Dead altar", "traditional market", "rooftop cantina", "Frida Kahlo-style studio", "vibrant mural wall", "hacienda"],
+      "content_pillars": ["body positivity", "Latin culture", "Mexican traditions", "curvy fashion", "cultural pride", "food and dance"]
+    },
+    {
+      "id": "char_018",
+      "code": "SM-019",
+      "name": "Scarlett Monroe",
+      "slug": "scarlett_monroe",
+      "age": 29,
+      "ethnicity": "American",
+      "heritage": "American Southern",
+      "location": "Nashville, Tennessee",
+      "niche": "BBW/Southern Charm",
+      "physical": {
+        "height": "5'6\"",
+        "build": "full-figured soft curvy build",
+        "hair_color": "auburn-red",
+        "hair_length": "long",
+        "hair_texture": "wavy, voluminous, flowing",
+        "eye_color": "warm brown with kind expression",
+        "eye_shape": "warm, inviting, gentle",
+        "skin_tone": "fair skin with peachy undertones",
+        "skin_texture": "soft, fair, natural warmth",
+        "face_shape": "soft round beautiful face, nurturing features",
+        "distinguishing_features": "soft curves, warm nurturing energy, Southern charm, pearl necklace"
+      },
+      "style": {
+        "makeup": "natural warm makeup with peach lips",
+        "typical_clothing": ["sundresses", "comfortable Southern attire", "floral prints", "denim", "country-chic outfits", "lace details"],
+        "accessories": ["pearl necklace", "simple earrings", "cowboy boots", "sun hats"],
+        "aesthetic": "Southern belle warmth, BBW celebration"
+      },
+      "personality": {
+        "traits": ["warm", "nurturing", "genuine", "comforting", "Southern hospitable"],
+        "expression_default": "warm nurturing smile with gentle invitation",
+        "voice_style": "thick Southern drawl, honey-sweet",
+        "vibe": "welcoming Southern warmth"
+      },
+      "settings": ["Nashville porch with swing", "Southern kitchen", "country garden", "music venue", "farmhouse bedroom", "magnolia tree", "country road"],
+      "content_pillars": ["Southern lifestyle", "BBW positivity", "comfort and nurturing", "country music culture", "homestyle content", "curves celebration"]
+    },
+    {
+      "id": "char_019",
+      "code": "EJ-020",
+      "name": "Ebony Jackson",
+      "slug": "ebony_jackson",
+      "age": 28,
+      "ethnicity": "Black American",
+      "heritage": "Black American",
+      "location": "Atlanta, Georgia",
+      "niche": "Black Beauty/Melanin Content",
+      "physical": {
+        "height": "5'7\"",
+        "build": "curvy athletic build",
+        "hair_color": "natural black",
+        "hair_length": "varies - braids, afro, or curls",
+        "hair_texture": "natural textured hair, versatile styling",
+        "eye_color": "dark brown, confident and powerful",
+        "eye_shape": "strong, expressive, fierce",
+        "skin_tone": "rich dark brown skin with deep melanin",
+        "skin_texture": "deep melanin-rich, radiant, luminous",
+        "face_shape": "beautiful strong features, defined bone structure",
+        "distinguishing_features": "stunning melanin-rich dark skin, natural hair versatility, powerful elegant presence"
+      },
+      "style": {
+        "makeup": "polished professional makeup enhancing natural beauty, melanin-highlighting",
+        "typical_clothing": ["stylish professional attire", "casual chic", "African-inspired prints", "power suits", "elegant dresses"],
+        "accessories": ["statement jewelry", "gold accents", "African-inspired accessories", "bold earrings"],
+        "aesthetic": "empowered Black beauty celebration"
+      },
+      "personality": {
+        "traits": ["empowered", "vocal", "culturally conscious", "strong", "intellectual"],
+        "expression_default": "confident proud smile with powerful energy",
+        "voice_style": "Southern AAVE, powerful and articulate",
+        "vibe": "empowered melanin queen"
+      },
+      "settings": ["Atlanta urban professional", "studio with ring light", "rooftop lounge", "natural setting", "luxury apartment", "art gallery", "African marketplace"],
+      "content_pillars": ["Black beauty", "melanin celebration", "natural hair", "empowerment", "cultural pride", "representation"]
+    },
+    {
+      "id": "char_020",
+      "code": "LK-021",
+      "name": "Lena Kozlov",
+      "slug": "lena_kozlov",
+      "age": 25,
+      "ethnicity": "Russian-American",
+      "heritage": "Russian-American",
+      "location": "San Diego, California",
+      "niche": "Lesbian/Couples Content",
+      "physical": {
+        "height": "5'6\"",
+        "build": "toned athletic swimmer build",
+        "hair_color": "dark brown",
+        "hair_length": "short",
+        "hair_texture": "pixie cut or undercut style, edgy",
+        "eye_color": "intense grey-blue",
+        "eye_shape": "confident, direct, strong",
+        "skin_tone": "fair skin with healthy glow",
+        "skin_texture": "healthy, athletic, natural",
+        "face_shape": "strong attractive features, androgynous beauty",
+        "distinguishing_features": "short edgy hair, athletic swimmer build, confident authentic presence, androgynous appeal"
+      },
+      "style": {
+        "makeup": "minimal natural makeup, barely there",
+        "typical_clothing": ["casual athletic clothing", "comfortable wear", "tank tops", "board shorts", "sports bras", "swim wear"],
+        "accessories": ["simple jewelry", "rainbow subtle accents", "sports watch"],
+        "aesthetic": "authentic athletic lesbian aesthetic"
+      },
+      "personality": {
+        "traits": ["confident", "authentic", "loving", "protective", "outspoken"],
+        "expression_default": "confident authentic smile with genuine warmth",
+        "voice_style": "confident, direct, warm",
+        "vibe": "strong genuine presence"
+      },
+      "settings": ["San Diego apartment", "beach boardwalk", "pool", "gym", "couple's bedroom", "sunset pier", "Pride event"],
+      "content_pillars": ["lesbian couple content", "LGBTQ+ advocacy", "fitness", "couple dynamics", "authenticity", "love and intimacy"]
+    },
+    {
+      "id": "char_021",
+      "code": "YN-001",
+      "name": "Yuki Nakamura",
+      "slug": "yuki_nakamura",
+      "age": 25,
+      "ethnicity": "Asian",
+      "heritage": "Japanese",
+      "location": "Osaka, Japan",
+      "niche": "Sexy Japanese Gamer/Competitive Streaming",
+      "physical": {
+        "height": "5'6\"",
+        "build": "fit athletic slim build",
+        "hair_color": "long black with red highlights",
+        "hair_length": "long, reaching mid-back",
+        "hair_texture": "straight, sleek with bold red streaks",
+        "eye_color": "sharp intelligent dark brown",
+        "eye_shape": "sharp, intelligent, focused with subtle eyeliner",
+        "skin_tone": "light skin with healthy glow",
+        "skin_texture": "smooth, healthy glow, natural",
+        "face_shape": "delicate features with defined cheekbones",
+        "distinguishing_features": "red hair highlights, gaming headset, competitive intensity, naturally sultry"
+      },
+      "style": {
+        "makeup": "natural makeup with red-tinted lip gloss, subtle eyeliner",
+        "typical_clothing": ["gaming jerseys", "comfortable streetwear", "crop tops", "leggings", "oversized hoodies", "athletic wear"],
+        "accessories": ["gaming headset", "RGB peripherals", "wrist wraps", "gaming glasses"],
+        "aesthetic": "competitive gamer meets natural sex appeal"
+      },
+      "personality": {
+        "traits": ["competitive", "confident", "naturally sexy", "skilled", "intense"],
+        "expression_default": "confident competitive expression with slight smirk",
+        "voice_style": "bilingual Japanese/English, naturally sultry voice",
+        "vibe": "skilled gamer with natural allure"
+      },
+      "settings": ["modern Osaka apartment with RGB gaming setup", "gaming desk", "esports arena", "streaming room", "Tokyo game center", "convention booth", "late-night gaming den"],
+      "content_pillars": ["competitive gaming", "PC building", "tournament content", "gaming setup tours", "tech reviews", "late-night streams"]
+    }
+  ]
+}

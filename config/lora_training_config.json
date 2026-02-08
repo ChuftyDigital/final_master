@@ -1,0 +1,105 @@
+{
+  "_comment": "LoRA training configuration for kohya_ss -- RTX 5090 (32GB VRAM) optimised",
+
+  "training": {
+    "network_type": "lora",
+    "network_dim": 32,
+    "network_alpha": 16,
+    "learning_rate": 1e-4,
+    "unet_lr": 1e-4,
+    "text_encoder_lr": 5e-5,
+    "optimizer_type": "prodigy",
+    "optimizer_args": {
+      "weight_decay": 0.01,
+      "decouple": true,
+      "use_bias_correction": true,
+      "safeguard_warmup": true,
+      "d_coef": 1.0
+    },
+    "lr_scheduler": "cosine_with_restarts",
+    "lr_warmup_steps": 100,
+    "lr_scheduler_num_cycles": 3,
+    "max_train_steps": 1500,
+    "save_every_n_steps": 500,
+    "save_model_as": "safetensors",
+    "mixed_precision": "bf16",
+    "full_bf16": true,
+    "gradient_checkpointing": true,
+    "gradient_accumulation_steps": 1,
+    "train_batch_size": 2,
+    "max_token_length": 225,
+    "clip_skip": 2,
+    "seed": 42,
+    "cache_latents": true,
+    "cache_latents_to_disk": false,
+    "cache_text_encoder_outputs": true,
+    "noise_offset": 0.0357,
+    "adaptive_noise_scale": 0.00357,
+    "min_snr_gamma": 5,
+    "xformers": true,
+    "sdpa": true,
+    "bucket_no_upscale": true
+  },
+
+  "dataset": {
+    "resolution": 1024,
+    "enable_bucket": true,
+    "min_bucket_reso": 512,
+    "max_bucket_reso": 2048,
+    "bucket_reso_steps": 64,
+    "num_repeats": 50,
+    "images_per_character": 3,
+    "flip_aug": false,
+    "color_aug": false,
+    "random_crop": false,
+    "keep_tokens": 1,
+    "shuffle_caption": true
+  },
+
+  "regularization": {
+    "enabled": true,
+    "images_dir": "reg_images",
+    "num_repeats": 1,
+    "class_prompt": "a person",
+    "description": "Use generic person images as regularization to prevent overfitting on 3-image dataset"
+  },
+
+  "caption": {
+    "method": "manual_with_template",
+    "extension": ".txt",
+    "trigger_word_position": "first",
+    "include_character_traits": true,
+    "include_style_tags": true,
+    "template": "{trigger_word}, {ethnicity} {gender}, {hair_description}, {eye_color} eyes, {distinguishing_features}, {style_tags}",
+    "tag_separator": ", ",
+    "max_tags": 30
+  },
+
+  "output": {
+    "output_dir": "output/lora_models",
+    "output_name_template": "{character_slug}_lora_v1",
+    "output_format": "safetensors",
+    "log_dir": "output/logs/lora_training",
+    "sample_every_n_steps": 500,
+    "sample_prompts_file": "config/sample_prompts.txt",
+    "sample_sampler": "sa_solver"
+  },
+
+  "model": {
+    "pretrained_model": "models/checkpoints/juggernautXL_v9.safetensors",
+    "vae": "models/vae/sdxl_vae.safetensors",
+    "model_type": "sdxl",
+    "v_parameterization": false,
+    "zero_terminal_snr": false
+  },
+
+  "gpu_optimization": {
+    "target_gpu": "RTX 5090",
+    "vram_gb": 32,
+    "precision": "bf16",
+    "max_data_loader_workers": 4,
+    "persistent_data_loader_workers": true,
+    "pin_memory": true,
+    "description": "With 32GB VRAM on RTX 5090, we can use batch_size=2 with full bf16 and gradient checkpointing. Prodigy optimizer adapts learning rate automatically which is ideal for small 3-image datasets."
+  }
+}
