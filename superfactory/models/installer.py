@@ -37,54 +37,6 @@ MODELS = [
         "category": "core",
     },
     {
-        "name": "CLIP Vision (ViT-H)",
-        "url": "https://huggingface.co/h94/IP-Adapter/resolve/main/models/image_encoder/model.safetensors",
-        "subdir": "clip_vision",
-        "filename": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
-        "size_gb": 2.4,
-        "category": "clip",
-    },
-    {
-        "name": "IPAdapter Plus SD1.5",
-        "url": "https://huggingface.co/h94/IP-Adapter/resolve/main/models/ip-adapter-plus_sd15.bin",
-        "subdir": "ipadapter",
-        "filename": "ip-adapter-plus_sd15.bin",
-        "size_gb": 0.15,
-        "category": "ipadapter",
-    },
-    {
-        "name": "IPAdapter Plus SDXL",
-        "url": "https://huggingface.co/h94/IP-Adapter/resolve/main/sdxl_models/ip-adapter-plus_sdxl_vit-h.bin",
-        "subdir": "ipadapter",
-        "filename": "ip-adapter-plus_sdxl_vit-h.bin",
-        "size_gb": 0.97,
-        "category": "ipadapter",
-    },
-    {
-        "name": "InstantID Adapter",
-        "url": "https://huggingface.co/InstantX/InstantID/resolve/main/ip-adapter.bin",
-        "subdir": "instantid",
-        "filename": "ip-adapter.bin",
-        "size_gb": 1.6,
-        "category": "instantid",
-    },
-    {
-        "name": "InstantID ControlNet",
-        "url": "https://huggingface.co/InstantX/InstantID/resolve/main/ControlNetModel/diffusion_pytorch_model.safetensors",
-        "subdir": "controlnet",
-        "filename": "diffusion_pytorch_model.safetensors",
-        "size_gb": 2.4,
-        "category": "instantid",
-    },
-    {
-        "name": "OpenPose ControlNet",
-        "url": "https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11p_sd15_openpose.pth",
-        "subdir": "controlnet",
-        "filename": "control_v11p_sd15_openpose.pth",
-        "size_gb": 1.4,
-        "category": "controlnet",
-    },
-    {
         "name": "4x ClearReality Upscaler",
         "url": "https://huggingface.co/LS110824/upscale/resolve/main/4x-ClearRealityV1.pth",
         "subdir": "upscale_models",
@@ -120,10 +72,7 @@ MODELS = [
 
 CUSTOM_NODES = [
     {"name": "ComfyUI-Manager", "url": "https://github.com/ltdrdata/ComfyUI-Manager.git", "requirements": True},
-    {"name": "ComfyUI_IPAdapter_plus", "url": "https://github.com/cubiq/ComfyUI_IPAdapter_plus.git", "requirements": False},
-    {"name": "ComfyUI_InstantID", "url": "https://github.com/cubiq/ComfyUI_InstantID.git", "requirements": False},
     {"name": "ComfyUI-Impact-Pack", "url": "https://github.com/ltdrdata/ComfyUI-Impact-Pack.git", "requirements": True},
-    {"name": "comfyui_controlnet_aux", "url": "https://github.com/Fannovel16/comfyui_controlnet_aux.git", "requirements": True},
 ]
 
 

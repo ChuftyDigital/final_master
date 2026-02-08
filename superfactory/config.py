@@ -112,10 +112,6 @@ class Config:
         """Get lane-specific configuration."""
         return self._get_nested(("generation", "lanes", lane), {})
 
-    def ipadapter_weights(self) -> list:
-        """Get IPAdapter weights."""
-        return self._get_nested(("generation", "ipadapter", "weights"), [0.7, 0.5, 0.4])
-
     def all_lanes(self) -> list:
         """Get all configured lane names."""
         lanes = self._get_nested(("generation", "lanes"), {})

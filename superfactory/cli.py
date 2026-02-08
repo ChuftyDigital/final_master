@@ -247,8 +247,11 @@ def cmd_workflow(args, config):
             prompt = prompts.reference_prompt(p, pose)
             wf = build_reference_workflow(
                 prompt=prompt,
-                checkpoint=config.model("reference_checkpoint"),
-                vae=config.model("vae"),
+                checkpoint=config.model("reference_checkpoint", "flux1-dev-fp8.safetensors"),
+                vae=config.model("vae", "ae.safetensors"),
+                text_encoder_t5=config.model("text_encoder_t5", "t5xxl_fp8_e4m3fn.safetensors"),
+                text_encoder_clip=config.model("text_encoder_clip", "clip_l.safetensors"),
+                clip_type=config.model("clip_type", "flux"),
                 filename_prefix=f"{p.character_id}_face_{i:02d}",
             )
             path = output_dir / f"{p.character_id}_reference_{pose}.json"
@@ -276,7 +279,7 @@ def main():
 
     # install
     p_install = subs.add_parser("install", help="Install models and custom nodes")
-    p_install.add_argument("--comfyui-path", default="/workspace/ComfyUI", help="ComfyUI path")
+    p_install.add_argument("--comfyui-path", default="/workspace/runpod-slim/ComfyUI", help="ComfyUI path")
     p_install.add_argument("--status-only", action="store_true", help="Show status only")
 
     # references
