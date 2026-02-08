@@ -43,10 +43,16 @@ echo -e "${GREEN}GPU: $GPU_NAME (${GPU_MEM}MB VRAM)${NC}"
 echo ""
 
 # ── Step 2: PyTorch with CUDA 12.8 ───────────────────────────────────────
-echo -e "${YELLOW}[2/7] Installing PyTorch nightly (CUDA 12.8 for Blackwell)...${NC}"
-python3 -m pip install --upgrade pip -q
-python3 -m pip uninstall -y torch torchvision torchaudio 2>/dev/null || true
-python3 -m pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu128 -q
+echo -e "${YELLOW}[2/7] Checking PyTorch / CUDA 12.8...${NC}"
+CUDA_VER=$(python3 -c "import torch; print(torch.version.cuda or '')" 2>/dev/null || echo "")
+if [[ "$CUDA_VER" == 12.8* ]]; then
+    echo -e "${GREEN}PyTorch already has CUDA $CUDA_VER - skipping install${NC}"
+else
+    echo "Installing PyTorch nightly with CUDA 12.8..."
+    python3 -m pip install --upgrade pip -q
+    python3 -m pip uninstall -y torch torchvision torchaudio 2>/dev/null || true
+    python3 -m pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu128 -q
+fi
 
 # Verify
 python3 -c "
@@ -55,7 +61,7 @@ print(f'PyTorch: {torch.__version__}')
 print(f'CUDA: {torch.version.cuda}')
 if torch.cuda.is_available():
     print(f'Device: {torch.cuda.get_device_name(0)}')
-    print(f'VRAM: {torch.cuda.get_device_properties(0).total_mem / 1e9:.1f} GB')
+    print(f'VRAM: {torch.cuda.get_device_properties(0).total_memory / 1e9:.1f} GB')
 else:
     print('WARNING: CUDA not available')
 "
