@@ -64,6 +64,14 @@ class ComfyUIClient:
             json=payload,
             timeout=30,
         )
+        if resp.status_code >= 400:
+            # Log the full error body from ComfyUI before raising
+            try:
+                error_data = resp.json()
+                error_msg = json.dumps(error_data, indent=2)[:2000]
+            except Exception:
+                error_msg = resp.text[:2000]
+            logger.error(f"ComfyUI rejected workflow ({resp.status_code}):\n{error_msg}")
         resp.raise_for_status()
         return resp.json()["prompt_id"]
 
