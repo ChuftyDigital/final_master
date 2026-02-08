@@ -27,11 +27,6 @@ echo ""
 echo -e "${CYAN}  AI Influencer Pipeline - RunPod Setup (comfyui:latest-5090)${NC}"
 echo ""
 
-# Show token status
-[[ -n "$CIVITAI_TOKEN" ]] && echo -e "  ${GREEN}CivitAI token set${NC}" || echo -e "  ${YELLOW}No CIVITAI_API_TOKEN set${NC}"
-[[ -n "$HF_TOKEN" ]] && echo -e "  ${GREEN}HuggingFace token set${NC}" || echo -e "  ${YELLOW}No HF_TOKEN set${NC}"
-echo ""
-
 # ---------------------------------------------------------------------------
 # 1. Custom nodes
 # ---------------------------------------------------------------------------
@@ -93,10 +88,9 @@ dl() {
         return 0
     fi
 
-    # Build curl args: follow redirects, fail on HTTP errors, retry, timeout
-    local curl_args=(-L --fail --retry 3 --retry-delay 5 --connect-timeout 30 --max-time 1800 -o "$dest")
+    local curl_args=(-L --retry 3 --retry-delay 5 --connect-timeout 30 --max-time 1800 -o "$dest")
 
-    # Auth headers based on URL
+    # Pass auth headers if tokens are set (not required for public models)
     if [[ "$url" == *"civitai.com"* ]] && [[ -n "$CIVITAI_TOKEN" ]]; then
         curl_args+=(--header "Authorization: Bearer ${CIVITAI_TOKEN}")
     elif [[ "$url" == *"huggingface.co"* ]] && [[ -n "$HF_TOKEN" ]]; then
@@ -105,26 +99,27 @@ dl() {
 
     curl_args+=(--progress-bar)
 
-    echo -ne "  ↓ ${name}... "
-    if curl "${curl_args[@]}" "$url" 2>&1; then
+    echo -e "  ↓ ${name}..."
+    if curl "${curl_args[@]}" "$url"; then
         local sz=$(stat -c%s "$dest" 2>/dev/null || echo 0)
         if [[ "$sz" -gt 1000000 ]]; then
-            echo -e "  ${GREEN}$(numfmt --to=iec "$sz" 2>/dev/null || echo "${sz}B")${NC}"
+            echo -e "    ${GREEN}$(numfmt --to=iec "$sz" 2>/dev/null || echo "${sz}B")${NC}"
             return 0
         elif [[ "$sz" -gt 0 ]]; then
             local head
             head=$(head -c 200 "$dest" 2>/dev/null || true)
-            if [[ "$head" == *"<html"* ]] || [[ "$head" == *"<!DOCTYPE"* ]] || [[ "$head" == *"login"* ]]; then
-                echo -e "${RED}FAILED${NC} - got HTML error page (auth required?)"
+            if [[ "$head" == *"<html"* ]] || [[ "$head" == *"<!DOCTYPE"* ]]; then
+                echo -e "    ${RED}FAILED${NC} - server returned HTML instead of model file"
                 rm -f "$dest"
                 return 1
             fi
-            echo -e "${YELLOW}WARNING${NC} - only ${sz} bytes"
+            echo -e "    ${YELLOW}WARNING${NC} - only ${sz} bytes"
             return 1
         fi
     fi
 
-    echo -e "${RED}FAILED${NC} → ${url}"
+    echo -e "    ${RED}FAILED${NC} - curl error (see above)"
+    echo -e "    ${YELLOW}${url}${NC}"
     rm -f "$dest"
     return 1
 }

@@ -3,13 +3,10 @@
 # Download all models for the AI Influencer Pipeline
 # =============================================================================
 # Run on a fresh RunPod pod after cloning the repo.
+# All models are public - no tokens required.
 #
 # Usage:
 #   bash scripts/download_models.sh
-#
-# Optional tokens for gated/login-required models:
-#   export CIVITAI_API_TOKEN="your_token"    # https://civitai.com/user/account
-#   export HF_TOKEN="your_token"             # https://huggingface.co/settings/tokens
 # =============================================================================
 
 set -euo pipefail
@@ -29,18 +26,6 @@ echo ""
 echo -e "${CYAN}Downloading all models to: ${MODELS}${NC}"
 echo ""
 
-if [[ -n "$CIVITAI_TOKEN" ]]; then
-    echo -e "  ${GREEN}CivitAI token set${NC}"
-else
-    echo -e "  ${YELLOW}No CIVITAI_API_TOKEN - some CivitAI downloads may fail if login-gated${NC}"
-fi
-if [[ -n "$HF_TOKEN" ]]; then
-    echo -e "  ${GREEN}HuggingFace token set${NC}"
-else
-    echo -e "  ${YELLOW}No HF_TOKEN - some HuggingFace downloads may fail if gated${NC}"
-fi
-echo ""
-
 # ---------------------------------------------------------------------------
 # Download function using curl with proper error handling
 # ---------------------------------------------------------------------------
@@ -54,52 +39,47 @@ dl() {
         return 0
     fi
 
-    # Build curl args
-    local curl_args=(-L --fail --retry 3 --retry-delay 5 --connect-timeout 30 --max-time 1800 -o "$dest")
+    # Build curl args: follow redirects, retry on failure, long timeout for big files
+    local curl_args=(-L --retry 3 --retry-delay 5 --connect-timeout 30 --max-time 1800 -o "$dest")
 
-    # Add auth headers based on URL
+    # Pass auth headers if tokens happen to be set (not required for public models)
     if [[ "$url" == *"civitai.com"* ]] && [[ -n "$CIVITAI_TOKEN" ]]; then
         curl_args+=(--header "Authorization: Bearer ${CIVITAI_TOKEN}")
     elif [[ "$url" == *"huggingface.co"* ]] && [[ -n "$HF_TOKEN" ]]; then
         curl_args+=(--header "Authorization: Bearer ${HF_TOKEN}")
     fi
 
-    # Show progress for large files
     curl_args+=(--progress-bar)
 
-    echo -ne "  ↓ ${name}... "
+    echo -e "  ↓ ${name}..."
 
-    # Download with full error output visible
-    local http_code
-    if curl "${curl_args[@]}" "$url" 2>&1; then
+    # Download - stderr shows progress bar + any errors
+    if curl "${curl_args[@]}" "$url"; then
         local sz=$(stat -c%s "$dest" 2>/dev/null || echo 0)
-        # Verify it's not a tiny error page
         if [[ "$sz" -gt 1000000 ]]; then
-            echo -e "  ${GREEN}$(numfmt --to=iec "$sz" 2>/dev/null || echo "${sz}B")${NC}"
+            echo -e "    ${GREEN}$(numfmt --to=iec "$sz" 2>/dev/null || echo "${sz}B")${NC}"
             return 0
         elif [[ "$sz" -gt 0 ]]; then
-            # Small file - likely an HTML error page
+            # Small file - check if it's an HTML error page
             local head
             head=$(head -c 200 "$dest" 2>/dev/null || true)
-            if [[ "$head" == *"<html"* ]] || [[ "$head" == *"<!DOCTYPE"* ]] || [[ "$head" == *"login"* ]]; then
-                echo -e "${RED}FAILED${NC} - got HTML error page (auth required?)"
-                echo -e "    ${YELLOW}URL: ${url}${NC}"
+            if [[ "$head" == *"<html"* ]] || [[ "$head" == *"<!DOCTYPE"* ]]; then
+                echo -e "    ${RED}FAILED${NC} - server returned HTML instead of model file"
+                echo -e "    ${YELLOW}${url}${NC}"
                 rm -f "$dest"
                 return 1
-            else
-                echo -e "${YELLOW}WARNING${NC} - file is only ${sz} bytes"
-                return 1
             fi
+            echo -e "    ${YELLOW}WARNING${NC} - file is only ${sz} bytes"
+            return 1
         fi
     fi
 
-    echo -e "${RED}FAILED${NC}"
-    echo -e "    ${YELLOW}URL: ${url}${NC}"
+    echo -e "    ${RED}FAILED${NC} - curl error (see above)"
+    echo -e "    ${YELLOW}${url}${NC}"
     rm -f "$dest"
     return 1
 }
 
-# CivitAI URL builder (token via header now, not query param)
 civitai() { echo "https://civitai.com/api/download/models/${1}"; }
 
 # ---------------------------------------------------------------------------
@@ -202,12 +182,7 @@ EOF
 
 echo ""
 if [[ $missing -gt 0 ]]; then
-    echo -e "${YELLOW}${missing} model(s) missing or incomplete.${NC}"
-    echo ""
-    echo -e "Troubleshooting:"
-    echo -e "  - CivitAI models may need a token: export CIVITAI_API_TOKEN=\"your_token\""
-    echo -e "  - HuggingFace gated models need: export HF_TOKEN=\"your_token\""
-    echo -e "  - Check if model pages require accepting terms first"
+    echo -e "${YELLOW}${missing} model(s) missing or incomplete. Check error output above.${NC}"
 else
     echo -e "${GREEN}All 11 models downloaded successfully.${NC}"
 fi
