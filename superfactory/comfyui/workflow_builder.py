@@ -5,7 +5,7 @@ fragile JSON files. Each method adds nodes and wires them together.
 
 Photorealistic pipeline:
   Generate → FluxPromptEnhance → KSampler → VAEDecode
-  → FaceDetailer (Impact Pack) → Upscale (4x-UltraSharp) → Save
+  → FaceDetailer (Impact Pack) → ColorMatch (KJNodes) → Upscale (4x-UltraSharp) → Save
 
 Supports both FLUX and Z-Image/Lumina2 model pipelines.
 """
@@ -27,6 +27,7 @@ class WorkflowBuilder:
         wb.sample(steps=28, cfg=1.0, sampler="dpmpp_2m_sde_gpu", scheduler="karras")
         wb.decode()
         wb.face_detail()          # FaceDetailer pass for realistic faces
+        wb.color_match(ref_id)    # Harmonize face lighting with original
         wb.upscale("4x-UltraSharp.pth")  # High-res upscale
         wb.save("output_prefix")
         workflow = wb.build()
@@ -282,6 +283,31 @@ class WorkflowBuilder:
         self._image = nid
         return self
 
+    # ── Color Harmonization ────────────────────────────────────────
+
+    def color_match(
+        self,
+        reference_image_id: str,
+        method: str = "mkl",
+    ) -> "WorkflowBuilder":
+        """Match color/lighting of current image to a reference image.
+
+        Requires ComfyUI-KJNodes custom node. Prevents the "patched face"
+        look after FaceDetailer by harmonizing color between the detailed
+        face region and the overall image lighting.
+
+        Args:
+            reference_image_id: Node ID of the reference image to match colors from
+            method: Color matching algorithm ("mkl", "hm", "reinhard")
+        """
+        nid = self._add_node("ColorMatch", {
+            "image_ref": self._ref(reference_image_id, 0),
+            "image_target": self._ref(self._image, 0),
+            "method": method,
+        })
+        self._image = nid
+        return self
+
     # ── Upscaling ─────────────────────────────────────────────────
 
     def upscale(self, model_name: str = "4x-UltraSharp.pth") -> "WorkflowBuilder":
@@ -361,7 +387,7 @@ def build_reference_workflow(
     """Build a FLUX photorealistic reference image workflow.
 
     Full pipeline: FluxPromptEnhance → KSampler (dpmpp_2m_sde_gpu/karras)
-    → FaceDetailer (Impact Pack) → 4x-UltraSharp Upscale → Save
+    → FaceDetailer (Impact Pack) → ColorMatch (KJNodes) → 4x-UltraSharp Upscale → Save
 
     FLUX.1 Dev with FP8 on RTX 5090:
     - 28 steps with dpmpp_2m_sde_gpu + karras scheduler
@@ -382,6 +408,8 @@ def build_reference_workflow(
 
     # FaceDetailer: detect face, crop, run second detail pass, composite back
     if face_detail:
+        # Save pre-FaceDetailer image ref for ColorMatch harmonization
+        pre_face_image = wb._image
         wb.face_detail(
             steps=20,
             cfg=cfg,
@@ -389,6 +417,8 @@ def build_reference_workflow(
             scheduler=scheduler,
             denoise=face_detail_denoise,
         )
+        # ColorMatch: harmonize face-detailed result with original lighting
+        wb.color_match(reference_image_id=pre_face_image)
 
     # Upscale for maximum detail and skin texture
     if upscale:
@@ -437,6 +467,7 @@ def build_bulk_workflow(
     wb.decode()
 
     if face_detail:
+        pre_face_image = wb._image
         wb.face_detail(
             steps=20,
             cfg=cfg,
@@ -444,6 +475,7 @@ def build_bulk_workflow(
             scheduler=scheduler,
             denoise=face_detail_denoise,
         )
+        wb.color_match(reference_image_id=pre_face_image)
 
     if upscale:
         wb.upscale(upscale_model)
