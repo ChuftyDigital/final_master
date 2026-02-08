@@ -1,0 +1,41 @@
+{
+  "id": "superfactory-rtx5090",
+  "name": "Super Factory Ultimate (RTX 5090)",
+  "description": "AI Model Character Generation - 21 characters, 16,800 images. RTX 5090 Blackwell optimized with CUDA 12.8, FP8, Z-Image/FLUX models.",
+  "category": "AI/ML",
+  "tags": ["ComfyUI", "Z-Image", "FLUX", "RTX5090", "AI-Image-Generation"],
+  "gpu": {
+    "type": "NVIDIA RTX 5090",
+    "memory": "32GB GDDR7",
+    "architecture": "Blackwell (sm_120)"
+  },
+  "container": {
+    "image": "nvcr.io/nvidia/pytorch:25.01-py3",
+    "env": [
+      {"key": "CUDA_VERSION", "value": "12.8"},
+      {"key": "PYTORCH_VERSION", "value": "nightly-cu128"},
+      {"key": "PYTHON_VERSION", "value": "3.10"},
+      {"key": "COMFYUI_PATH", "value": "/workspace/ComfyUI"},
+      {"key": "PROJECT_PATH", "value": "/workspace/superfactory"},
+      {"key": "PYTORCH_CUDA_ALLOC_CONF", "value": "max_split_size_mb:512"}
+    ],
+    "ports": [
+      {"port": 8188, "protocol": "http", "description": "ComfyUI Web Interface"},
+      {"port": 22, "protocol": "tcp", "description": "SSH Access"}
+    ]
+  },
+  "storage": {
+    "containerDisk": 50,
+    "volumeSize": 100
+  },
+  "requirements": {
+    "minGpuMemory": 32,
+    "recommendedGpu": "NVIDIA RTX 5090",
+    "minDiskSpace": 50,
+    "internet": true
+  },
+  "advanced": {
+    "dockerArgs": ["--gpus=all", "--shm-size=16gb"],
+    "volumes": [{"name": "workspace", "path": "/workspace", "size": 100}]
+  }
+}

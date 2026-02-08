@@ -1,5 +1,6 @@
 # Super Factory Ultimate - Master Configuration
-# All settings in one place. Override via CLI flags or environment variables.
+# Optimized for: RunPod + NVIDIA RTX 5090 (Blackwell, 32GB GDDR7)
+# Override via CLI flags or environment variables.
 
 project:
   name: "Super Factory Ultimate"
@@ -8,14 +9,27 @@ project:
 
 comfyui:
   server: "127.0.0.1:8188"
-  protocol: "http"  # http or https
-  timeout: 300       # seconds per image
-  verify_ssl: false  # set false for RunPod proxies
+  protocol: "http"       # RunPod internal: http. RunPod proxy: https
+  timeout: 300            # seconds per image
+  verify_ssl: false       # false for RunPod HTTPS proxies
   max_retries: 3
-  retry_delay: 5     # seconds between retries
+  retry_delay: 5
+
+# RTX 5090 Blackwell optimizations
+gpu:
+  name: "NVIDIA RTX 5090"
+  vram: 32                # GB GDDR7
+  architecture: "Blackwell (sm_120)"
+  cuda_version: "12.8"
+  pytorch: "nightly-cu128"
+  # 5090-specific flags
+  disable_xformers: true  # incompatible with Blackwell
+  disable_sage_attention: true  # causes errors on 5090
+  fp8_enabled: true       # 2x speedup on Blackwell
+  memory_config: "max_split_size_mb:512"
 
 generation:
-  # Reference images
+  # Reference images (Z-Image Base, quality focus)
   reference:
     count_per_character: 3
     poses: ["front", "angle", "natural"]
@@ -25,7 +39,8 @@ generation:
     sampler: "dpmpp_2m"
     scheduler: "beta"
 
-  # Bulk content
+  # Bulk content (Z-Image Turbo, speed focus)
+  # RTX 5090: ~10-12s per image vs ~15-20s on 4090
   bulk:
     resolution: [1024, 1536]  # portrait orientation
     steps: 8
@@ -33,7 +48,7 @@ generation:
     sampler: "dpmpp_2m"
     scheduler: "beta"
 
-  # Content lanes
+  # All 4 content lanes active
   lanes:
     sfw:
       name: "Safe For Work"
@@ -73,6 +88,7 @@ models:
   # Upscaler
   upscaler: "4x-ClearRealityV1.pth"
 
+# RunPod workspace paths
 paths:
   personas: "personas"
   templates: "templates"
@@ -80,6 +96,16 @@ paths:
   reference_images: "input/reference_images"
   output: "output"
   logs: "logs"
+
+runpod:
+  container_image: "nvcr.io/nvidia/pytorch:25.01-py3"
+  container_disk: 50     # GB
+  volume_size: 100       # GB persistent storage
+  comfyui_path: "/workspace/ComfyUI"
+  project_path: "/workspace/superfactory"
+  ports:
+    comfyui: 8188
+    ssh: 22
 
 logging:
   level: "INFO"
