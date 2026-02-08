@@ -79,8 +79,29 @@ class PromptEngine:
         "Light brown": "light brown skin with warm honey undertones, glowing with natural health and beautiful even texture that catches the light",
     }
 
-    # ── Per-pose camera specifications (from original enhanced generator) ──
+    # ── Camera + post-processing (same for all reference poses for consistency) ──
 
+    REFERENCE_TECHNICAL_SPECS = (
+        "Captured with professional-grade equipment using a Sony A7R IV full-frame "
+        "mirrorless camera paired with a Zeiss Batis 85mm f/1.8 lens, the gold standard "
+        "for portrait photography. The lens is set to f/2.0 to create a beautifully shallow "
+        "depth of field that isolates the subject from the background while maintaining "
+        "tack-sharp focus on the eyes. ISO is set to 100 for maximum image quality and "
+        "dynamic range. Shutter speed is 1/160s to eliminate any motion blur while "
+        "maintaining natural appearance. The image is rendered in photorealistic 8K "
+        "resolution with exceptional detail in every element - individual strands of hair, "
+        "the subtle texture of skin with visible pores and natural imperfections, fine "
+        "details in fabric and accessories. The color grading maintains natural skin tones "
+        "with subtle warmth, professional contrast that adds depth without looking "
+        "overprocessed. The background is a smooth, neutral gradient that provides "
+        "separation without distraction. Post-processing includes subtle skin retouching "
+        "that maintains natural texture while removing temporary blemishes, color correction "
+        "for accurate representation, and contrast optimization that enhances depth. The "
+        "final image has the quality of a high-end editorial portrait suitable for magazine "
+        "covers or luxury brand campaigns."
+    )
+
+    # Keep per-pose camera specs for BULK generation variety
     CAMERA_SPECS = {
         "front": (
             "Captured with a Sony A7R IV full-frame mirrorless camera paired with a "
@@ -671,21 +692,13 @@ class PromptEngine:
 
         sections = [
             (
-                f"Professional portrait photograph of {name}, a {age}-year-old "
-                f"{ethnicity} woman with {nationality} heritage. This is a close-up "
-                f"head-and-shoulders portrait of a real person, not a product shot or flat-lay."
+                f"Subject: Professional portrait photograph of {name}, a {age}-year-old "
+                f"{ethnicity} woman with {nationality} heritage."
             ),
-            f"Composition & Pose: {self.COMPOSITION[pose].format(name=name)}",
             f"Physical Description: {physical}",
-            (
-                f"Styling: She is styled in {fashion} that reflects her "
-                f"{niche.lower() + ' ' if niche else ''}{aesthetic.lower()} aesthetic, "
-                f"wearing carefully chosen pieces that complement her natural beauty without "
-                f"overwhelming it. {personality}."
-            ),
+            f"Composition & Pose: Composition: {self.COMPOSITION[pose].format(name=name)}",
             f"Lighting: {self.LIGHTING[pose]}",
-            f"Technical Specifications: {self.CAMERA_SPECS[pose]}",
-            f"{self.COLOR_GRADING[pose]}",
+            f"Technical Specifications: {self.REFERENCE_TECHNICAL_SPECS}",
             f"Style & Atmosphere: {self.ATMOSPHERE[pose].format(aesthetic=aesthetic)}",
             f"Critical Requirements: {self.CRITICAL_REQUIREMENTS}",
         ]
