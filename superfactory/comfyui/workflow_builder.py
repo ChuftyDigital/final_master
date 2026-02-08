@@ -378,7 +378,7 @@ def build_reference_workflow(
     seed: Optional[int] = None,
     filename_prefix: str = "reference",
     negative: str = "blurry, low quality, cartoon, anime, distorted face, bad anatomy, deformed features, plastic skin, airbrushed skin, overly smooth skin, studio backdrop, grey background, neutral background, oversaturated, jpeg artifacts, watermark, text, logo, doll-like, mannequin, CGI, 3D render",
-    enhance_prompt: bool = True,
+    enhance_prompt: bool = False,
     face_detail: bool = True,
     face_detail_denoise: float = 0.35,
     upscale_model: str = "4x-UltraSharp.pth",
@@ -387,7 +387,7 @@ def build_reference_workflow(
 ) -> Dict[str, Any]:
     """Build a FLUX photorealistic reference image workflow.
 
-    Full pipeline: FluxPromptEnhance → KSampler (dpmpp_2m_sde_gpu/karras)
+    Full pipeline: KSampler (dpmpp_2m_sde_gpu/karras)
     → FaceDetailer (Impact Pack) → ColorMatch (KJNodes) → 4x-UltraSharp Upscale → Save
 
     FLUX.1 Dev with FP8 on RTX 5090:
@@ -446,7 +446,7 @@ def build_bulk_workflow(
     seed: Optional[int] = None,
     filename_prefix: str = "generated",
     negative: str = "blurry, low quality, cartoon, anime, distorted face, bad anatomy, deformed features, plastic skin, airbrushed skin, overly smooth skin, studio backdrop, grey background, neutral background, oversaturated, jpeg artifacts, watermark, text, logo, doll-like, mannequin, CGI, 3D render",
-    enhance_prompt: bool = True,
+    enhance_prompt: bool = False,
     face_detail: bool = True,
     face_detail_denoise: float = 0.35,
     upscale_model: str = "4x-UltraSharp.pth",
