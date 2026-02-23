@@ -1,0 +1,461 @@
+{
+  "last_node_id": 62,
+  "last_link_id": 76,
+  "metadata": {
+    "title": "Workflow 2 - Image Vault Generator",
+    "description": "Batch generates vault images using Z-Image Base + trained character LoRA + IPAdapter identity lock. 2-step pipeline (generate + latent upscale 1.5x + refine at denoise 0.2) with YOLOV11m face detailing. 4 lanes with bundle support. Optimized for RTX 5090.",
+    "version": "3.1",
+    "author": "AI Influencer Pipeline",
+    "gpu_target": "RTX 5090 32GB",
+    "docker_image": "comfyui:latest-5090",
+    "images_per_character": 800,
+    "lanes": ["sfw", "suggestive", "spicy", "nsfw"]
+  },
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Note",
+      "pos": [50, 50],
+      "size": [450, 300],
+      "properties": {
+        "text": "WORKFLOW 2: IMAGE VAULT GENERATOR (Z-Image Base)\n====================================\nGenerates 800 images per character (200 per lane)\n\nLanes: SFW | Suggestive | Spicy | NSFW\nPer lane: 80 one-offs + 10x3 + 10x5 + 4x10 bundles\n\n2-STEP PIPELINE:\n  Step 1: Generate at 1024x1024 (40 steps, DPM++ 2M Karras, CFG 4.5)\n  Step 2: Latent upscale 1.5x + refine (20 steps, denoise 0.2)\n  Step 3: FaceDetailer with YOLOV11m-face.pt\n  Step 4: Film grain + downscale + SeedVR2 upscale to 2048px\n\nIDENTITY LOCK: LoRA + IPAdapter FaceID dual lock\n\nUSAGE:\n1. Set character LoRA in LoRA loader\n2. Set reference image path\n3. Paste prompts from vault manifest\n4. Queue for batch generation\n\nOPTIMIZED FOR: RTX 5090 32GB VRAM\nBATCH MODE: Process prompts sequentially via API"
+      }
+    },
+    {
+      "id": 2,
+      "type": "UNETLoader",
+      "pos": [100, 380],
+      "size": [300, 80],
+      "title": "Z-Image Base UNET (6B)",
+      "widgets_values": ["z_image_bf16.safetensors", "default"],
+      "outputs": [{"name": "MODEL", "type": "MODEL", "links": [1]}]
+    },
+    {
+      "id": 3,
+      "type": "CLIPLoader",
+      "pos": [100, 500],
+      "size": [300, 80],
+      "title": "Qwen CLIP Encoder",
+      "widgets_values": ["qwen_3_4b.safetensors", "lumina2"],
+      "outputs": [{"name": "CLIP", "type": "CLIP", "links": [2, 3, 4]}]
+    },
+    {
+      "id": 4,
+      "type": "VAELoader",
+      "pos": [100, 620],
+      "size": [300, 80],
+      "title": "UltraFlux VAE",
+      "widgets_values": ["ultraflux_vae.safetensors"],
+      "outputs": [{"name": "VAE", "type": "VAE", "links": [5]}]
+    },
+    {
+      "id": 5,
+      "type": "SeedVR2LoadDiTModel",
+      "pos": [100, 740],
+      "size": [300, 80],
+      "title": "SeedVR2 DiT (Upscaler)",
+      "widgets_values": ["seedvr2_ema_7b_fp16.safetensors"],
+      "outputs": [{"name": "DIT_MODEL", "type": "DIT_MODEL", "links": [6]}]
+    },
+    {
+      "id": 6,
+      "type": "SeedVR2LoadVAEModel",
+      "pos": [100, 860],
+      "size": [300, 80],
+      "title": "SeedVR2 VAE (Upscaler)",
+      "widgets_values": ["ema_vae_fp16.safetensors"],
+      "outputs": [{"name": "SEEDVR2_VAE", "type": "SEEDVR2_VAE", "links": [7]}]
+    },
+    {
+      "id": 7,
+      "type": "CheckpointLoaderSimple",
+      "pos": [100, 980],
+      "size": [300, 80],
+      "title": "SDXL Checkpoint (FaceDetailer)",
+      "widgets_values": ["analogMadnessSDXL_xl5.safetensors"],
+      "outputs": [
+        {"name": "MODEL", "type": "MODEL", "links": [8]},
+        {"name": "CLIP", "type": "CLIP", "links": [9]},
+        {"name": "VAE", "type": "VAE", "links": [10]}
+      ]
+    },
+    {
+      "id": 10,
+      "type": "LoraLoaderModelOnly",
+      "pos": [500, 380],
+      "size": [350, 100],
+      "title": "CHARACTER LoRA (Change per character)",
+      "properties": {},
+      "widgets_values": ["CHARACTER_LORA_HERE.safetensors", 0.85],
+      "inputs": [{"name": "model", "type": "MODEL", "link": 1}],
+      "outputs": [{"name": "MODEL", "type": "MODEL", "links": [11]}]
+    },
+    {
+      "id": 11,
+      "type": "easy loraStack",
+      "pos": [500, 520],
+      "size": [350, 200],
+      "title": "Style LoRA Stack",
+      "widgets_values": [
+        "nicegirls_Zimage.safetensors", 0.35, 1.0,
+        "Z-TURBO_Photography_35mmPhoto_896.safetensors", 0.12, 1.0,
+        "psxZStyle_v1_ZIT.safetensors", 0.08, 1.0,
+        "None", 0, 0,
+        "None", 0, 0
+      ],
+      "inputs": [{"name": "model", "type": "MODEL", "link": 11}],
+      "outputs": [{"name": "MODEL", "type": "MODEL", "links": [12]}]
+    },
+    {
+      "id": 15,
+      "type": "LoadImage",
+      "pos": [500, 780],
+      "size": [300, 100],
+      "title": "Identity Reference Image (face_01)",
+      "widgets_values": ["char_001_face_01.png", "image"],
+      "outputs": [{"name": "IMAGE", "type": "IMAGE", "links": [15]}]
+    },
+    {
+      "id": 16,
+      "type": "IPAdapterFaceID",
+      "pos": [900, 600],
+      "size": [350, 200],
+      "title": "IPAdapter Face Identity Lock",
+      "properties": {},
+      "widgets_values": [0.75, 0.65, "V2", "average", 0, 1, "concat"],
+      "inputs": [
+        {"name": "model", "type": "MODEL", "link": 12},
+        {"name": "ref_image", "type": "IMAGE", "link": 15}
+      ],
+      "outputs": [{"name": "MODEL", "type": "MODEL", "links": [16, 73]}]
+    },
+    {
+      "id": 20,
+      "type": "CLIPTextEncode",
+      "pos": [900, 380],
+      "size": [450, 120],
+      "title": "SCENE PROMPT (from vault manifest)",
+      "widgets_values": ["PASTE VAULT PROMPT HERE - Generated by prompt_engine.py"],
+      "inputs": [{"name": "clip", "type": "CLIP", "link": 2}],
+      "outputs": [{"name": "CONDITIONING", "type": "CONDITIONING", "links": [20]}]
+    },
+    {
+      "id": 21,
+      "type": "CLIPTextEncode",
+      "pos": [900, 850],
+      "size": [450, 80],
+      "title": "Identity Anchor Prompt",
+      "widgets_values": ["Using provided reference photo as immutable identity anchor. Do not alter facial features, bone structure, eye color, hair color, skin tone, or any identifying facial characteristics. The reference face is the ground truth. Only permitted change: clothing, pose, and environment."],
+      "inputs": [{"name": "clip", "type": "CLIP", "link": 3}],
+      "outputs": [{"name": "CONDITIONING", "type": "CONDITIONING", "links": [21]}]
+    },
+    {
+      "id": 22,
+      "type": "CLIPTextEncode",
+      "pos": [900, 980],
+      "size": [450, 80],
+      "title": "Negative Prompt",
+      "widgets_values": ["cartoon, anime, illustration, painting, CGI, 3D render, low quality, blurry, distorted features, multiple people, deformed, bad anatomy, unrealistic proportions, different person, inconsistent features, plastic skin, artificial smoothness, overprocessed, text, watermark, different face, wrong eye color, wrong hair color, wrong skin tone"],
+      "inputs": [{"name": "clip", "type": "CLIP", "link": 4}],
+      "outputs": [{"name": "CONDITIONING", "type": "CONDITIONING", "links": [22, 75]}]
+    },
+    {
+      "id": 23,
+      "type": "ConditioningCombine",
+      "pos": [1400, 450],
+      "size": [200, 60],
+      "title": "Combine Positive Conditions",
+      "inputs": [
+        {"name": "conditioning_1", "type": "CONDITIONING", "link": 20},
+        {"name": "conditioning_2", "type": "CONDITIONING", "link": 21}
+      ],
+      "outputs": [{"name": "CONDITIONING", "type": "CONDITIONING", "links": [23, 74]}]
+    },
+    {
+      "id": 25,
+      "type": "ControlAltAI.FluxResolutionNode",
+      "pos": [1400, 550],
+      "size": [250, 120],
+      "title": "Resolution (Match lane requirements)",
+      "widgets_values": [1.5, "9:16 (Slim Vertical)", 64, false, 1024, 1024],
+      "outputs": [
+        {"name": "width", "type": "INT", "links": [25]},
+        {"name": "height", "type": "INT", "links": [26]}
+      ]
+    },
+    {
+      "id": 26,
+      "type": "EmptySD3LatentImage",
+      "pos": [1400, 700],
+      "size": [250, 80],
+      "title": "Empty Latent",
+      "widgets_values": [1024, 1536, 1],
+      "outputs": [{"name": "LATENT", "type": "LATENT", "links": [27]}]
+    },
+    {
+      "id": 28,
+      "type": "BetaSamplingScheduler",
+      "pos": [1700, 400],
+      "size": [250, 80],
+      "title": "Beta Scheduler",
+      "widgets_values": [20, 0.4, 0.4],
+      "outputs": [{"name": "SIGMAS", "type": "SIGMAS", "links": [28]}]
+    },
+    {
+      "id": 29,
+      "type": "RescaleCFG_Sigmas",
+      "pos": [1700, 520],
+      "size": [250, 60],
+      "title": "Sigma Rescale",
+      "widgets_values": [0.996],
+      "inputs": [{"name": "sigmas", "type": "SIGMAS", "link": 28}],
+      "outputs": [{"name": "SIGMAS", "type": "SIGMAS", "links": [29]}]
+    },
+    {
+      "id": 30,
+      "type": "ClownsharKSampler_Beta",
+      "pos": [1700, 650],
+      "size": [350, 350],
+      "title": "Step 1 Generate",
+      "widgets_values": [42, "randomize", 40, 4.5, "dpmpp_2m", "karras", 1.0, "standard", 100006],
+      "inputs": [
+        {"name": "model", "type": "MODEL", "link": 16},
+        {"name": "positive", "type": "CONDITIONING", "link": 23},
+        {"name": "negative", "type": "CONDITIONING", "link": 22},
+        {"name": "latent_image", "type": "LATENT", "link": 27},
+        {"name": "sigmas", "type": "SIGMAS", "link": 29}
+      ],
+      "outputs": [{"name": "LATENT", "type": "LATENT", "links": [71]}]
+    },
+    {
+      "id": 61,
+      "type": "LatentUpscaleBy",
+      "pos": [2150, 650],
+      "size": [200, 80],
+      "title": "Step 2 Latent Upscale 1.5x",
+      "properties": {},
+      "widgets_values": ["nearest-exact", 1.5],
+      "inputs": [{"name": "samples", "type": "LATENT", "link": 71}],
+      "outputs": [{"name": "LATENT", "type": "LATENT", "links": [72]}]
+    },
+    {
+      "id": 62,
+      "type": "ClownsharKSampler_Beta",
+      "pos": [2400, 650],
+      "size": [350, 350],
+      "title": "Step 2 Refine (denoise 0.2)",
+      "properties": {},
+      "widgets_values": [42, "randomize", 20, 4.5, "dpmpp_2m", "karras", 0.2, "standard", 100006],
+      "inputs": [
+        {"name": "model", "type": "MODEL", "link": 73},
+        {"name": "positive", "type": "CONDITIONING", "link": 74},
+        {"name": "negative", "type": "CONDITIONING", "link": 75},
+        {"name": "latent_image", "type": "LATENT", "link": 72}
+      ],
+      "outputs": [{"name": "LATENT", "type": "LATENT", "links": [76]}]
+    },
+    {
+      "id": 35,
+      "type": "VAEDecode",
+      "pos": [2850, 650],
+      "size": [200, 60],
+      "title": "VAE Decode",
+      "inputs": [
+        {"name": "samples", "type": "LATENT", "link": 76},
+        {"name": "vae", "type": "VAE", "link": 5}
+      ],
+      "outputs": [{"name": "IMAGE", "type": "IMAGE", "links": [35]}]
+    },
+    {
+      "id": 40,
+      "type": "ToDetailerPipeSDXL",
+      "pos": [2850, 850],
+      "size": [300, 120],
+      "title": "SDXL Detailer Pipe Setup",
+      "inputs": [
+        {"name": "model", "type": "MODEL", "link": 8},
+        {"name": "clip", "type": "CLIP", "link": 9},
+        {"name": "vae", "type": "VAE", "link": 10}
+      ],
+      "outputs": [{"name": "DETAILER_PIPE", "type": "DETAILER_PIPE", "links": [40]}]
+    },
+    {
+      "id": 41,
+      "type": "FaceDetailerPipe",
+      "pos": [3150, 650],
+      "size": [350, 300],
+      "title": "Face Enhancement (YOLOV11m)",
+      "widgets_values": [1280, true, 1280, true, 0.5, 20, "dpmpp_2m", "karras", 0.3, 0.7, "randomize", 5, true, true],
+      "inputs": [
+        {"name": "image", "type": "IMAGE", "link": 35},
+        {"name": "detailer_pipe", "type": "DETAILER_PIPE", "link": 40}
+      ],
+      "outputs": [{"name": "IMAGE", "type": "IMAGE", "links": [41]}]
+    },
+    {
+      "id": 45,
+      "type": "FastFilmGrain",
+      "pos": [3600, 650],
+      "size": [250, 100],
+      "title": "Film Grain (Realism)",
+      "widgets_values": [0.019, 0.3, 5],
+      "inputs": [{"name": "image", "type": "IMAGE", "link": 41}],
+      "outputs": [{"name": "IMAGE", "type": "IMAGE", "links": [45]}]
+    },
+    {
+      "id": 46,
+      "type": "ImageScaleBy",
+      "pos": [3600, 800],
+      "size": [250, 80],
+      "title": "Downscale to 70%",
+      "widgets_values": ["lanczos", 0.7],
+      "inputs": [{"name": "image", "type": "IMAGE", "link": 45}],
+      "outputs": [{"name": "IMAGE", "type": "IMAGE", "links": [46]}]
+    },
+    {
+      "id": 47,
+      "type": "SeedVR2VideoUpscaler",
+      "pos": [3950, 650],
+      "size": [300, 120],
+      "title": "SeedVR2 Upscale to 2048px",
+      "widgets_values": [2048, "randomize", "lab"],
+      "inputs": [
+        {"name": "image", "type": "IMAGE", "link": 46},
+        {"name": "dit_model", "type": "DIT_MODEL", "link": 6},
+        {"name": "vae", "type": "SEEDVR2_VAE", "link": 7}
+      ],
+      "outputs": [{"name": "IMAGE", "type": "IMAGE", "links": [47]}]
+    },
+    {
+      "id": 50,
+      "type": "SaveImage",
+      "pos": [4350, 650],
+      "size": [350, 300],
+      "title": "Save Vault Image",
+      "widgets_values": ["vault/char_XXX_lane_type_NNN"],
+      "inputs": [{"name": "images", "type": "IMAGE", "link": 47}]
+    },
+    {
+      "id": 51,
+      "type": "PreviewImage",
+      "pos": [4350, 1000],
+      "size": [300, 250],
+      "title": "Preview Output",
+      "inputs": [{"name": "images", "type": "IMAGE", "link": null}]
+    },
+    {
+      "id": 55,
+      "type": "PatchSageAttentionKJ",
+      "pos": [100, 1120],
+      "size": [250, 60],
+      "title": "RTX 5090 Sage Attention",
+      "widgets_values": ["auto", true]
+    },
+    {
+      "id": 56,
+      "type": "ModelPatchTorchSettings",
+      "pos": [100, 1220],
+      "size": [250, 60],
+      "title": "Torch BF16 Optimization",
+      "widgets_values": [true]
+    },
+    {
+      "id": 57,
+      "type": "easy cleanGpuUsed",
+      "pos": [4350, 1300],
+      "size": [200, 60],
+      "title": "Clean GPU Between Batches"
+    }
+  ],
+  "links": [
+    [1, 2, 0, 10, 0, "MODEL"],
+    [2, 3, 0, 20, 0, "CLIP"],
+    [3, 3, 0, 21, 0, "CLIP"],
+    [4, 3, 0, 22, 0, "CLIP"],
+    [5, 4, 0, 35, 1, "VAE"],
+    [6, 5, 0, 47, 1, "DIT_MODEL"],
+    [7, 6, 0, 47, 2, "SEEDVR2_VAE"],
+    [8, 7, 0, 40, 0, "MODEL"],
+    [9, 7, 1, 40, 1, "CLIP"],
+    [10, 7, 2, 40, 2, "VAE"],
+    [11, 10, 0, 11, 0, "MODEL"],
+    [12, 11, 0, 16, 0, "MODEL"],
+    [15, 15, 0, 16, 1, "IMAGE"],
+    [16, 16, 0, 30, 0, "MODEL"],
+    [73, 16, 0, 62, 0, "MODEL"],
+    [20, 20, 0, 23, 0, "CONDITIONING"],
+    [21, 21, 0, 23, 1, "CONDITIONING"],
+    [22, 22, 0, 30, 2, "CONDITIONING"],
+    [75, 22, 0, 62, 2, "CONDITIONING"],
+    [23, 23, 0, 30, 1, "CONDITIONING"],
+    [74, 23, 0, 62, 1, "CONDITIONING"],
+    [27, 26, 0, 30, 3, "LATENT"],
+    [28, 28, 0, 29, 0, "SIGMAS"],
+    [29, 29, 0, 30, 4, "SIGMAS"],
+    [71, 30, 0, 61, 0, "LATENT"],
+    [72, 61, 0, 62, 3, "LATENT"],
+    [76, 62, 0, 35, 0, "LATENT"],
+    [35, 35, 0, 41, 0, "IMAGE"],
+    [40, 40, 0, 41, 1, "DETAILER_PIPE"],
+    [41, 41, 0, 45, 0, "IMAGE"],
+    [45, 45, 0, 46, 0, "IMAGE"],
+    [46, 46, 0, 47, 0, "IMAGE"],
+    [47, 47, 0, 50, 0, "IMAGE"]
+  ],
+  "groups": [
+    {
+      "title": "Model Loading (Z-Image Base + SeedVR2 + SDXL)",
+      "bounding": [50, 330, 400, 780],
+      "color": "#3f789e"
+    },
+    {
+      "title": "Character LoRA + Style LoRAs + IPAdapter Identity Lock",
+      "bounding": [460, 330, 900, 580],
+      "color": "#2a9d8f"
+    },
+    {
+      "title": "Step 1: Conditioning & Primary Sampling",
+      "bounding": [1350, 350, 750, 700],
+      "color": "#e76f51"
+    },
+    {
+      "title": "Step 2: Latent Upscale 1.5x + Refinement (denoise 0.2)",
+      "bounding": [2100, 600, 750, 450],
+      "color": "#f4a261"
+    },
+    {
+      "title": "Post-Processing: Decode → FaceDetailer → FilmGrain → Upscale",
+      "bounding": [2800, 600, 1200, 450],
+      "color": "#264653"
+    },
+    {
+      "title": "Output & Optimization",
+      "bounding": [4300, 600, 400, 800],
+      "color": "#e9c46a"
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.5,
+      "offset": [0, 0]
+    },
+    "info": {
+      "pipeline": "vault_image_generation",
+      "model": "Z-Image Base (6B) - NOT Turbo",
+      "target_gpu": "RTX 5090",
+      "vram_requirement": "28-32GB",
+      "step1": "Generate 1024x1024, DPM++ 2M Karras, 40 steps, CFG 4.5, denoise 1.0",
+      "step2": "Latent upscale 1.5x (nearest-exact) + Refine 20 steps, denoise 0.2",
+      "post_processing": "FaceDetailer (YOLOV11m) → FilmGrain → Downscale 70% → SeedVR2 Upscale 2048px",
+      "face_detector": "YOLOV11m-face.pt",
+      "estimated_time_per_image": "90-120 seconds (2-step)",
+      "estimated_time_per_lane_200": "5-7 hours",
+      "estimated_time_per_character_800": "20-28 hours",
+      "estimated_time_all_21_characters": "420-590 hours (18-25 days continuous)",
+      "identity_consistency": "LoRA (0.85) + IPAdapter FaceID (0.75) dual lock",
+      "post_processing_detail": "2-step refine + YOLOV11m FaceDetailer + FilmGrain + SeedVR2 Upscale"
+    }
+  },
+  "version": 0.4
+}
